@@ -1,0 +1,17 @@
+# dependencies
+node_modules
+
+# misc
+.DS_Store
+*.sublime-*
+.phpintel
+coverage
+
+npm-debug.log
+yarn-error.log
+.yarnclean
+.vscode
+.idea
+
+# user notes
+_notes

@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      class="styles"
+      data-theme="dark"
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css"
+      integrity="sha512-zcatBMvxa7rT7dDklfjauWsfiSFParF+hRfCdf4Zr40/MmA1gkFcBRbop0zMpvYF3FmznYFgcL8wlcuO/GwHoA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+      disabled
+    />
+    <link
+      class="styles"
+      data-theme="light"
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+      integrity="sha512-0aPQyyeZrWj9sCA46UlmWgKOP0mUipLQ6OZXu8l4IcAmD2u31EPEy9VcIMvl7SoAaKe8bLXZhYoMaE/in+gcgA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+      disabled
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+      const userPrefersDark =
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const userSetting = window.localStorage.getItem('theme');
+      window.current = userSetting || 'system';
+
+      const styles = document.querySelectorAll('.styles');
+      const setCss = (theme) => {
+        styles.forEach((s) => {
+          if (theme === s.dataset.theme) {
+            s.removeAttribute('disabled');
+          } else {
+            s.setAttribute('disabled', 'true');
+          }
+        });
+      };
+
+      if ((userPrefersDark && !userSetting) || 'dark' === userSetting) {
+        document.documentElement.classList.add('dark');
+        setCss('dark');
+      } else {
+        setCss('light');
+      }
+
+      hljs.highlightAll();
+    </script>
+    <style>
+      /*
+    *  html5 doctor css reset | http://html5doctor.com/html-5-reset-stylesheet
+    */
+      html,
+      body,
+      div,
+      span,
+      object,
+      iframe,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p,
+      blockquote,
+      pre,
+      abbr,
+      address,
+      cite,
+      code,
+      del,
+      dfn,
+      em,
+      img,
+      ins,
+      kbd,
+      q,
+      samp,
+      small,
+      strong,
+      sub,
+      sup,
+      var,
+      b,
+      i,
+      dl,
+      dt,
+      dd,
+      ol,
+      ul,
+      li,
+      fieldset,
+      form,
+      label,
+      legend,
+      table,
+      caption,
+      tbody,
+      tfoot,
+      thead,
+      tr,
+      th,
+      td,
+      article,
+      aside,
+      canvas,
+      details,
+      figcaption,
+      figure,
+      footer,
+      header,
+      hgroup,
+      menu,
+      nav,
+      section,
+      summary,
+      time,
+      mark,
+      audio,
+      video {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        outline: 0;
+        font-size: 100%;
+        vertical-align: baseline;
+        background: transparent;
+      }
+      body {
+        line-height: 1;
+      }
+      article,
+      aside,
+      details,
+      figcaption,
+      figure,
+      footer,
+      header,
+      hgroup,
+      menu,
+      nav,
+      section {
+        display: block;
+      }
+      nav ul {
+        list-style: none;
+      }
+      blockquote,
+      q {
+        quotes: none;
+      }
+      blockquote:before,
+      blockquote:after,
+      q:before,
+      q:after {
+        content: none;
+      }
+      a {
+        margin: 0;
+        padding: 0;
+        font-size: 100%;
+        vertical-align: baseline;
+        background: transparent;
+      }
+      ins {
+        background-color: #ff9;
+        color: #000;
+        text-decoration: none;
+      }
+      mark {
+        background-color: #ff9;
+        color: #000;
+        font-style: italic;
+        font-weight: bold;
+      }
+      del {
+        text-decoration: line-through;
+      }
+      abbr[title],
+      dfn[title] {
+        border-bottom: 1px dotted;
+        cursor: help;
+      }
+      table {
+        border-collapse: collapse;
+        border-spacing: 0;
+      }
+      hr {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 1px solid #ccc;
+        margin: 1em 0;
+        padding: 0;
+      }
+      input,
+      select {
+        vertical-align: middle;
+      }
+      /* end reset */
+
+      body * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #e6e6e6;
+        font-size: 18px;
+        line-height: 1.6em;
+        font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+      }
+
+      pre {
+        font-size: 13px;
+        line-height: 1.3em;
+        margin-bottom: 1em;
+      }
+
+      img {
+        max-width: 100%;
+      }
+
+      h1 {
+        font-size: 2em;
+        margin-bottom: 0.5em;
+      }
+
+      h2 {
+        font-size: 1.6em;
+        margin-bottom: 0.5em;
+      }
+
+      h3 {
+        font-size: 1.4em;
+        margin-bottom: 0.5em;
+      }
+
+      p {
+        margin-bottom: 1em;
+      }
+
+      #modeSwitch {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 10px;
+        line-height: 0em;
+      }
+
+      .panel {
+        padding: 1em;
+        background: rgb(16, 125, 16);
+        display: inline-flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        width: 200px;
+        font-size: 14px;
+      }
+
+      .line {
+        display: inline-flex;
+        flex-flow: row nowrap;
+      }
+
+      .line .label {
+        padding-right: 0.5em;
+      }
+
+      .canvas {
+        background-color: #fff;
+        box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+      }
+
+      .container {
+        max-width: 760px;
+        margin: 1em auto;
+        padding: 40px;
+        overflow: hidden;
+        background-color: #eeeeee;
+      }
+
+      .container > div {
+        margin-bottom: 2em;
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        flex-flow: row nowrap;
+      }
+
+      .row .col {
+        margin-right: 10px;
+        margin-left: 10px;
+      }
+
+      .row > .col50 {
+        width: 50%;
+      }
+
+      .row > .col100 {
+        width: 100%;
+        margin-inline: 0;
+      }
+
+      .row > .col:first-child {
+        margin-left: 0;
+      }
+
+      .row > .col:last-child {
+        margin-right: 0;
+      }
+
+      .dark body {
+        background-color: #222222;
+      }
+
+      .dark .page {
+        background-color: #363636;
+        color: #dadada;
+      }
+
+      .dark .canvas {
+        background-color: #202020;
+      }
+
+      @media screen and (max-width: 767px) {
+        .row > .col {
+          width: 100%;
+          margin-left: 0;
+          margin-right: 0;
+        }
+
+        .row {
+          flex-flow: column wrap;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="darkmode">
+    <div class="container page">
+      <h1>beforeafter</h1>
+      <p>
+        is a „before &amp; after“ image comparison plugin, written in vanilla js
+        (es6) with no dependencies to other libraries.
+      </p>
+      <p>It's free to use for non-commercial projects and websites!</p>
+      <h2>demo 1</h2>
+      <pre><code class="language-xml">&lt;div data-beforeafter&gt;
+  &lt;img src=&quot;../static/assets/03_after.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;../static/assets/03_before.png&quot; alt=&quot;&quot; /&gt;
+&lt;/div&gt;</code></pre>
+      <div class="row">
+        <div class="col col50">
+          <div data-beforeafter>
+            <img src="../static/assets/03_after.png" alt="" />
+            <img src="../static/assets/03_before.png" alt="" />
+          </div>
+        </div>
+        <div class="col col50">
+          <h2>Lorem ipsum</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis
+            pariatur unde odit numquam molestiae laboriosam sint vero
+            perspiciatis mollitia, obcaecati quidem deserunt qui! Dolores
+            obcaecati voluptatem distinctio, debitis itaque nulla exercitationem
+            natus incidunt. Molestiae corporis voluptatem ratione enim itaque
+            esse nisi distinctio, maiores similique officia qui doloribus natus
+            sapiente laborum expedita aperiam sequi architecto explicabo ullam
+            labore ducimus cum voluptatum ad temporibus neque! Fuga sed facere
+            blanditiis!
+          </p>
+        </div>
+      </div>
+      <h2>demo 2</h2>
+      <pre><code class="language-xml">&lt;div class=&quot;beforeafter&quot;
+  data-beforeafter=&quot;{
+    followMouse: true,
+    showToggleButton: true,
+    afterOnTheRight: true,
+  }&quot;&gt;
+  &lt;img src=&quot;../static/assets/01_after.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;../static/assets/01_before.png&quot; alt=&quot;&quot; style=&quot;filter: grayscale()&quot; /&gt;
+&lt;/div&gt;
+</code></pre>
+      <div
+        class="beforeafter"
+        data-beforeafter="{
+          followMouse: true,
+          showToggleButton: true,
+          afterOnTheRight: true,
+        }"
+      >
+        <img src="../static/assets/01_after.png" alt="" />
+        <img
+          src="../static/assets/01_before.png"
+          alt=""
+          style="filter: grayscale()"
+        />
+      </div>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis
+        pariatur unde odit numquam molestiae laboriosam sint vero perspiciatis
+        mollitia, obcaecati quidem deserunt qui! Dolores obcaecati voluptatem
+        distinctio, debitis itaque nulla exercitationem natus incidunt.
+        Molestiae corporis voluptatem ratione enim itaque esse nisi distinctio,
+        maiores similique officia qui doloribus natus sapiente laborum expedita
+        aperiam sequi architecto explicabo ullam labore ducimus cum voluptatum
+        ad temporibus.!
+      </p>
+      <h2>demo 3</h2>
+      <pre><code class="language-xml">&lt;div class=&quot;beforeafter&quot;
+  data-beforeafter=&quot;{
+    'onlyHandleDraggable': true,
+    'beforeLabel': 'before',
+    'afterLabel': 'after',
+    'showToggleButton': true,
+  }&quot;&gt;
+  &lt;img src=&quot;../static/assets/02_after.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;../static/assets/02_before.png&quot; alt=&quot;&quot; /&gt;
+&lt;/div&gt;
+</code></pre>
+      <div style="margin: 0 auto 1em">
+        <div
+          class="beforeafter"
+          data-beforeafter="{
+            'onlyHandleDraggable': true,
+            'beforeLabel': 'before',
+            'afterLabel': 'after',
+            'showToggleButton': true,
+          }"
+        >
+          <img src="../static/assets/02_after.png" alt="" />
+          <img src="../static/assets/02_before.png" alt="" />
+        </div>
+      </div>
+
+      <h2>demo 4</h2>
+      <pre><code class="language-javascript">const options = {
+  afterOnTheRight: true,
+  beforeLabel: 'before',
+  afterLabel: 'after',
+  beforeDescription: 'nice in pink',
+  afterDescription: 'nice in blue',
+};
+
+const ba = new BeforeAfter('#demo4', options);
+</code></pre>
+      <div style="margin: 0 auto 1em">
+        <div id="demo4-events" class="panel">
+          <div class="line">
+            <div class="label">percent (left):</div>
+            <span id="demo4-percent">&nbsp;</span>
+          </div>
+        </div>
+        <div class="beforeafter" id="demo4">
+          <img src="../static/assets/01_after.png" alt="" />
+          <img src="../static/assets/01_before.png" alt="" />
+        </div>
+        <script>
+          const init = () => {
+            document.removeEventListener('DOMContentLoaded', init);
+            const options = {
+              // beforeImage: '../static/assets/01_before.png',
+              // afterImage: '../static/assets/01_after.png',
+              afterOnTheRight: true,
+              beforeLabel: 'before',
+              afterLabel: 'after',
+              beforeDescription: 'nice in pink',
+              afterDescription: 'nice in blue',
+            };
+            const ba = new BeforeAfter('#demo4', options);
+
+            console.log(ba);
+            const percent = document.querySelector('#demo4-percent');
+            ba.addEventListener('init', (e) => console.log('init'));
+            ba.addEventListener('update', (e) => {
+              let p = Math.round(e.detail.percent * 100) / 100;
+              percent.innerHTML = `${p}%`;
+            });
+            window.ba = ba;
+          };
+
+          if ('complete' === document.readyState) {
+            init();
+          } else {
+            document.addEventListener('DOMContentLoaded', init, false);
+          }
+        </script>
+      </div>
+    </div>
+    <div id="modeSwitch"></div>
+    <script>
+      const icons = {
+        dark: '<svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m21.996 12.882c.022-.233-.038-.476-.188-.681-.325-.446-.951-.544-1.397-.219-.95.693-2.06 1.086-3.188 1.162-1.368.092-2.765-.283-3.95-1.158-1.333-.985-2.139-2.415-2.367-3.935s.124-3.124 1.109-4.456c.142-.191.216-.435.191-.691-.053-.55-.542-.952-1.092-.898-2.258.22-4.314 1.18-5.895 2.651-1.736 1.615-2.902 3.847-3.137 6.386-.254 2.749.631 5.343 2.266 7.311s4.022 3.313 6.772 3.567 5.343-.631 7.311-2.266 3.313-4.022 3.567-6.772zm-2.429 1.792c-.49 1.363-1.335 2.543-2.416 3.441-1.576 1.309-3.648 2.016-5.848 1.813s-4.108-1.278-5.417-2.854-2.016-3.648-1.813-5.848c.187-2.032 1.117-3.814 2.507-5.106.782-.728 1.71-1.3 2.731-1.672-.456 1.264-.577 2.606-.384 3.899.303 2.023 1.38 3.934 3.156 5.247 1.578 1.167 3.448 1.668 5.272 1.545.752-.05 1.496-.207 2.21-.465z"/></svg>',
+        light:
+          '<svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m18 12c0-1.657-.673-3.158-1.757-4.243s-2.586-1.757-4.243-1.757-3.158.673-4.243 1.757-1.757 2.586-1.757 4.243.673 3.158 1.757 4.243 2.586 1.757 4.243 1.757 3.158-.673 4.243-1.757 1.757-2.586 1.757-4.243zm-2 0c0 1.105-.447 2.103-1.172 2.828s-1.723 1.172-2.828 1.172-2.103-.447-2.828-1.172-1.172-1.723-1.172-2.828.447-2.103 1.172-2.828 1.723-1.172 2.828-1.172 2.103.447 2.828 1.172 1.172 1.723 1.172 2.828zm-5-11v2c0 .552.448 1 1 1s1-.448 1-1v-2c0-.552-.448-1-1-1s-1 .448-1 1zm0 20v2c0 .552.448 1 1 1s1-.448 1-1v-2c0-.552-.448-1-1-1s-1 .448-1 1zm-7.487-16.073 1.42 1.42c.391.391 1.024.391 1.414 0s.391-1.024 0-1.414l-1.42-1.42c-.391-.391-1.024-.391-1.414 0s-.391 1.024 0 1.414zm14.14 14.14 1.42 1.42c.391.391 1.024.391 1.414 0s.391-1.024 0-1.414l-1.42-1.42c-.391-.391-1.024-.391-1.414 0s-.391 1.024 0 1.414zm-16.653-6.067h2c.552 0 1-.448 1-1s-.448-1-1-1h-2c-.552 0-1 .448-1 1s.448 1 1 1zm20 0h2c.552 0 1-.448 1-1s-.448-1-1-1h-2c-.552 0-1 .448-1 1s.448 1 1 1zm-16.073 7.487 1.42-1.42c.391-.391.391-1.024 0-1.414s-1.024-.391-1.414 0l-1.42 1.42c-.391.391-.391 1.024 0 1.414s1.024.391 1.414 0zm14.14-14.14 1.42-1.42c.391-.391.391-1.024 0-1.414s-1.024-.391-1.414 0l-1.42 1.42c-.391.391-.391 1.024 0 1.414s1.024.391 1.414 0z"/></svg>',
+        system:
+          '<svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m21 14.016v-10.031h-18v10.031zm0-12q.797 0 1.406.586t.609 1.383v12q0 .797-.609 1.406t-1.406.609h-6.984l1.969 3v.984h-7.969v-.984l1.969-3h-6.984q-.797 0-1.406-.609t-.609-1.406v-12q0-.797.609-1.383t1.406-.586h18z"/></svg>',
+      };
+
+      let doc, modeSwitch;
+
+      const change = (value) => {
+        window.current = value;
+        modeSwitch.title = window.current;
+        modeSwitch.innerHTML = icons[window.current];
+
+        if ('light' === window.current) {
+          doc.classList.remove('dark');
+          window.localStorage.theme = 'light';
+          setCss('light');
+        } else if ('dark' === window.current) {
+          doc.classList.add('dark');
+          window.localStorage.theme = 'dark';
+          setCss('dark');
+        } else {
+          if (userPrefersDark) {
+            doc.classList.add('dark');
+          } else {
+            doc.classList.remove('dark');
+          }
+          window.localStorage.removeItem('theme');
+        }
+      };
+
+      const appStart = () => {
+        doc = document.documentElement;
+        modeSwitch = document.querySelector('#modeSwitch');
+
+        const modes = ['light', 'dark', 'system'];
+        let currentIndex = modes.indexOf('' + window.current);
+
+        modeSwitch.title = window.current;
+        modeSwitch.innerHTML = icons[window.current];
+        modeSwitch.addEventListener('click', () => {
+          change(modes[++currentIndex % 3]);
+        });
+        modeSwitch.style.display = 'block';
+      };
+
+      if (
+        'complete' === document.readyState ||
+        'interactive' === document.readyState
+      ) {
+        appStart();
+        document.removeEventListener('DOMContentLoaded', appStart);
+      } else {
+        document.addEventListener('DOMContentLoaded', appStart, false);
+      }
+    </script>
+  </body>
+</html>
