@@ -484,9 +484,7 @@ const ba = new BeforeAfter('#demo4', options);
             };
             const ba = new BeforeAfter('#demo4', options);
 
-            console.log(ba);
             const percent = document.querySelector('#demo4-percent');
-            ba.addEventListener('init', (e) => console.log('init'));
             ba.addEventListener('update', (e) => {
               let p = Math.round(e.detail.percent * 100) / 100;
               percent.innerHTML = `${p}%`;
