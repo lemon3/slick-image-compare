@@ -38,6 +38,7 @@ export default defineConfig({
         'docs/**',
         'test/*.bench.*',
         '.eslintrc.js',
+        'postcss.config.js',
       ],
     },
   },

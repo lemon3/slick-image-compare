@@ -89,7 +89,8 @@ export const imageDimensions = (filename) =>
 
     img.onload = () => {
       const { naturalWidth: width, naturalHeight: height } = img;
-      resolve({ width, height });
+      const ratio = width / height;
+      resolve({ width, height, ratio });
     };
 
     img.onerror = () => {

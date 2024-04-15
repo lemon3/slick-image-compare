@@ -4,7 +4,7 @@
 */
 var A = Object.defineProperty;
 var H = (s, i, t) => i in s ? A(s, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[i] = t;
-var f = (s, i, t) => (H(s, typeof i != "symbol" ? i + "" : i, t), t);
+var d = (s, i, t) => (H(s, typeof i != "symbol" ? i + "" : i, t), t);
 var T = (s, i, t) => new Promise((e, n) => {
   var r = (l) => {
     try {
@@ -55,8 +55,8 @@ const C = {
 }, W = (s) => new Promise((i, t) => {
   const e = new Image();
   e.onload = () => {
-    const { naturalWidth: n, naturalHeight: r } = e;
-    i({ width: n, height: r });
+    const { naturalWidth: n, naturalHeight: r } = e, a = n / r;
+    i({ width: n, height: r, ratio: a });
   }, e.onerror = () => {
     t("error");
   }, e.src = s;
@@ -128,7 +128,7 @@ const _ = (s, i, t) => {
     for (let n in t)
       Object.prototype.hasOwnProperty.call(t, n) && (s.style[n] = t[n]);
   return e && (s.innerHTML = e), s;
-}, d = (s, i, t, e) => F(document.createElement(s), i, t, e), S = {
+}, f = (s, i, t, e) => F(document.createElement(s), i, t, e), S = {
   // Linear: {},
   // Pow: {},
   Quad: {
@@ -230,7 +230,7 @@ class q {
     ), this) : this;
   }
 }
-const w = "beforeafter", $ = "data-" + w, y = "init", M = "drag", I = "update", P = "mousedown";
+const w = "beforeafter", $ = "data-" + w, M = "init", y = "drag", I = "update", P = "mousedown";
 let v = [], D = !1;
 class g extends q {
   constructor(t, e) {
@@ -239,25 +239,28 @@ class g extends q {
     if (t = typeof t == "string" ? document.querySelector(t) : t, t === null || t.length === 0)
       return { error: !0 };
     super();
-    f(this, "_dimensions", () => {
-      this.elementWidth = this.canvas.offsetWidth, this.elementOffsetLeft = this.offsetElements.map((t) => t.offsetLeft).reduce((t, e) => t + e), this.dragHandleWidth = this.dragHandle.offsetWidth, this.minLeftPos = this.elementOffsetLeft + this.settings.handleMinDistance - this.dragHandleWidth / 2, this.maxLeftPos = this.elementOffsetLeft + this.elementWidth - this.dragHandleWidth / 2 - this.settings.handleMinDistance, this.oldElementWidth !== this.elementWidth && (this.oldElementWidth = this.elementWidth, this.elementHeight = this.canvas.offsetHeight, this._setPosition(this.currentPercent, !0));
+    d(this, "_dimensions", () => {
+      this.elementWidth = this.canvas.offsetWidth, this.elementOffsetLeft = this.offsetElements.map((t) => t.offsetLeft).reduce((t, e) => t + e), this.dragHandleWidth = this.dragHandle.offsetWidth, this.minLeftPos = this.elementOffsetLeft + this.settings.handleMinDistance - this.dragHandleWidth / 2, this.maxLeftPos = this.elementOffsetLeft + this.elementWidth - this.dragHandleWidth / 2 - this.settings.handleMinDistance, this.elementHeight = Math.max(
+        this.canvas.offsetHeight,
+        this.canvas.offsetWidth / this.imageDimensions.ratio
+      ), this.oldElementWidth !== this.elementWidth && (this.oldElementWidth = this.elementWidth, this._setPosition(this.currentPercent, !0));
     });
-    f(this, "_onMouseOver", (t) => {
+    d(this, "_onMouseOver", (t) => {
       t.stopPropagation(), this._stopAni(), this.element.classList.add("interacting");
     });
-    f(this, "_onMouseOut", (t) => {
+    d(this, "_onMouseOut", (t) => {
       t.stopPropagation(), this.element.classList.remove("interacting"), this.settings.snapToStart && this._snapToStart();
     });
-    f(this, "_onMouseMove", (t) => {
+    d(this, "_onMouseMove", (t) => {
       this._stopAni();
       let e = this._getPos(t), n = this._calcLeftPercent(e.x);
       n = _(n, 0, 100), this.oldPercent = this.currentPercent, this._setPosition(n);
     });
-    f(this, "_onDragStart", (t) => {
+    d(this, "_onDragStart", (t) => {
       this.startPos = this._getPos(t), this.element.classList.add("interacting"), clearTimeout(this.snapTimeout), this._tapped(t), t.type === "touchstart" ? (window.addEventListener("touchmove", this._onDrag, m), window.addEventListener("touchend", this._onDragEnd), this._mouseStartEvents(!1)) : P === t.type && (this.settings.followMouse || (window.addEventListener("mousemove", this._onDrag, !1), window.addEventListener("mouseup", this._onDragEnd, !1)), this._touchStartEvent(!1));
     });
     // moving
-    f(this, "_onDrag", (t) => {
+    d(this, "_onDrag", (t) => {
       let e = this._getPos(t), n = this._calcLeftPercent(e.x);
       if (this._stopAni(), this.oldPercent = this.currentPercent, this._moved = !0, t.type !== "mousemove" && (t.preventDefault(), this.deltaX = Math.abs(this.startPos.x - e.x), this.deltaY = Math.abs(this.startPos.y - e.y), !this.dirDetected)) {
         if (Math.abs(this.deltaY) > Math.abs(this.deltaX)) {
@@ -270,9 +273,9 @@ class g extends q {
         }
         this.element.classList.add("interacting"), this.dirDetected = !0;
       }
-      this._setPosition(n), this.emit(M, { percent: n });
+      this._setPosition(n), this.emit(y, { percent: n });
     });
-    f(this, "_onDragEnd", (t) => {
+    d(this, "_onDragEnd", (t) => {
       if (this.element.classList.remove("interacting"), t.type === "touchend" ? (window.removeEventListener("touchmove", this._onDrag, m), window.removeEventListener("touchend", this._onDragEnd), setTimeout(() => {
         this._mouseStartEvents();
       }, 1)) : t.type === "mouseup" && (window.removeEventListener("mousemove", this._onDrag, !1), window.removeEventListener("mouseup", this._onDragEnd, !1), this._touchStartEvent()), this.settings.snapToStart) {
@@ -284,16 +287,16 @@ class g extends q {
       this._moved = !1, this.dirDetected = !1;
     });
     // if tapped on canvas
-    f(this, "_tapped", (t) => {
+    d(this, "_tapped", (t) => {
       let e = this._calcLeftPercent(this._getPos(t).x);
       this._stopAni(), this.oldPercent = this.currentPercent, this._animateTo(e, this.settings.animateDuration);
     });
-    f(this, "toggleBeforeAfter", (t) => {
+    d(this, "toggleBeforeAfter", (t) => {
       t && t.stopPropagation(), this._stopAni(), this._afterShown ? this.showBefore() : this.showAfter();
     });
     if (t.dataset.bainitialized)
       return g.getInstance(t);
-    t.dataset.bainitialized = !0, this.allowedEvents = [y, M, I], v.push(this), C.put(t, "instance", this), this.element = t;
+    t.dataset.bainitialized = !0, this.allowedEvents = [M, y, I], v.push(this), C.put(t, "instance", this), this.element = t;
     const n = k(t, w);
     if (this.options = e || {}, this.settings = Object.assign({}, g.defaults, n, e), this.images = this.element.querySelectorAll("img"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || !this.images.length))
       return {
@@ -311,11 +314,11 @@ class g extends q {
   _createGui() {
     const t = this.settings;
     this.createdElements = [];
-    const e = "div", n = d(e, { class: "canvas" });
+    const e = "div", n = f(e, { class: "canvas" });
     this.createdElements.push(n);
     let r, a, o, l, u = !1;
-    t.beforeImage || t.afterImage ? (u = !0, r = d("img", { draggable: !1 }), r.src = t.beforeImage, a = d("img", { draggable: !1 }), a.src = t.afterImage) : ([o, l] = this.originalElements = this.images, r = o.cloneNode(!0), r.setAttribute("draggable", !1), a = l.cloneNode(!0), a.setAttribute("draggable", !1));
-    const c = d(
+    t.beforeImage || t.afterImage ? (u = !0, r = f("img", { draggable: !1 }), r.src = t.beforeImage, a = f("img", { draggable: !1 }), a.src = t.afterImage) : ([o, l] = this.originalElements = this.images, r = o.cloneNode(!0), r.setAttribute("draggable", !1), a = l.cloneNode(!0), a.setAttribute("draggable", !1));
+    const c = f(
       e,
       { class: "clipSlider" },
       { zIndex: 2 }
@@ -323,23 +326,23 @@ class g extends q {
     E.appendChild(r), p.appendChild(a);
     let b;
     if (t.beforeLabel !== "") {
-      const h = d(e, { class: "info-box left" });
-      h.innerHTML = t.beforeLabel, b = d(e, { class: "clipSlider" }), b.append(h), p.appendChild(b);
+      const h = f(e, { class: "info-box left" });
+      h.innerHTML = t.beforeLabel, b = f(e, { class: "clipSlider" }), b.append(h), p.appendChild(b);
     }
     if (t.afterLabel !== "") {
-      const h = d(e, { class: "info-box right" });
+      const h = f(e, { class: "info-box right" });
       h.innerHTML = t.afterLabel, E.appendChild(h);
     }
     c.appendChild(E), u ? (n.append(c), n.append(p), this.element.append(n)) : (o.parentNode.replaceChild(c, o), l.remove(), z([c, p], n));
-    const L = d(e, { class: t.dragElementClass }, { zIndex: 5 }), O = d(e, { class: "overlay" }, { zIndex: 4 }), x = d(e);
+    const L = f(e, { class: t.dragElementClass }, { zIndex: 5 }), O = f(e, { class: "overlay" }, { zIndex: 4 }), x = f(e);
     if (L.appendChild(x), n.appendChild(O), n.appendChild(L), t.beforeDescription !== "" || t.afterDescription !== "") {
-      const h = d(e, {
+      const h = f(e, {
         class: "description"
       });
       h.innerHTML = t.beforeDescription, this.element.appendChild(h), this.createdElements.push(h), this.description = h;
     }
     if (t.showToggleButton) {
-      const h = d(
+      const h = f(
         e,
         {
           class: "toggleButton"
@@ -487,7 +490,7 @@ class g extends q {
           this.settings.animateInEasing
         ),
         this.settings.animateInDelay
-      ), this._addEvents(), this.emit(y);
+      ), this._addEvents(), this.emit(M);
     });
   }
   goto(t, e, n) {

@@ -20,6 +20,8 @@
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-tap-highlight-color: transparent;
 
+  max-width: 100%;
+
   /* * {
     line-height: 1em;
   } */
@@ -28,6 +30,7 @@
     user-select: none;
     -webkit-user-drag: none;
     touch-action: manipulation;
+    max-width: 100%;
   }
 
   /* &:after,

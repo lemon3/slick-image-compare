@@ -375,6 +375,11 @@ class BeforeAfter extends Emitter {
       this.dragHandleWidth / 2 -
       this.settings.handleMinDistance;
 
+    this.elementHeight = Math.max(
+      this.canvas.offsetHeight,
+      this.canvas.offsetWidth / this.imageDimensions.ratio
+    );
+
     if (this.oldElementWidth === this.elementWidth) {
       return;
     }
@@ -383,8 +388,6 @@ class BeforeAfter extends Emitter {
 
     // this.wrapper1.style.width = `${this.elementWidth}px`;
     // this.wrapper2.style.width = `${this.elementWidth}px`;
-
-    this.elementHeight = this.canvas.offsetHeight;
 
     // update leftPos too
     // this.currentPos =
