@@ -359,14 +359,14 @@
       </p>
       <h2>demo 1</h2>
       <pre><code class="language-xml">&lt;div data-beforeafter&gt;
-  &lt;img src=&quot;../static/assets/03_after.png&quot; alt=&quot;&quot; /&gt;
-  &lt;img src=&quot;../static/assets/03_before.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;03_after.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;03_before.png&quot; alt=&quot;&quot; /&gt;
 &lt;/div&gt;</code></pre>
       <div class="row">
         <div class="col col50">
           <div data-beforeafter>
-            <img src="../static/assets/03_after.png" alt="" />
-            <img src="../static/assets/03_before.png" alt="" />
+            <img src="03_after.png" alt="" />
+            <img src="03_before.png" alt="" />
           </div>
         </div>
         <div class="col col50">
@@ -391,8 +391,8 @@
     showToggleButton: true,
     afterOnTheRight: true,
   }&quot;&gt;
-  &lt;img src=&quot;../static/assets/01_after.png&quot; alt=&quot;&quot; /&gt;
-  &lt;img src=&quot;../static/assets/01_before.png&quot; alt=&quot;&quot; style=&quot;filter: grayscale()&quot; /&gt;
+  &lt;img src=&quot;01_after.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;01_before.png&quot; alt=&quot;&quot; style=&quot;filter: grayscale()&quot; /&gt;
 &lt;/div&gt;
 </code></pre>
       <div
@@ -403,9 +403,9 @@
           afterOnTheRight: true,
         }"
       >
-        <img src="../static/assets/01_after.png" alt="" />
+        <img src="01_after.png" alt="" />
         <img
-          src="../static/assets/01_before.png"
+          src="01_before.png"
           alt=""
           style="filter: grayscale()"
         />
@@ -428,8 +428,8 @@
     'afterLabel': 'after',
     'showToggleButton': true,
   }&quot;&gt;
-  &lt;img src=&quot;../static/assets/02_after.png&quot; alt=&quot;&quot; /&gt;
-  &lt;img src=&quot;../static/assets/02_before.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;02_after.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;02_before.png&quot; alt=&quot;&quot; /&gt;
 &lt;/div&gt;
 </code></pre>
       <div style="margin: 0 auto 1em">
@@ -442,8 +442,8 @@
             'showToggleButton': true,
           }"
         >
-          <img src="../static/assets/02_after.png" alt="" />
-          <img src="../static/assets/02_before.png" alt="" />
+          <img src="02_after.png" alt="" />
+          <img src="02_before.png" alt="" />
         </div>
       </div>
 
@@ -466,16 +466,16 @@ const ba = new BeforeAfter('#demo4', options);
           </div>
         </div>
         <div class="beforeafter" id="demo4">
-          <img src="../static/assets/01_after.png" alt="" />
-          <img src="../static/assets/01_before.png" alt="" />
+          <img src="01_after.png" alt="" />
+          <img src="01_before.png" alt="" />
         </div>
         <script type="module">
           import BeforeAfter from './src/index.js';
           const init = () => {
             document.removeEventListener('DOMContentLoaded', init);
             const options = {
-              // beforeImage: '../static/assets/01_before.png',
-              // afterImage: '../static/assets/01_after.png',
+              // beforeImage: '01_before.png',
+              // afterImage: '01_after.png',
               afterOnTheRight: true,
               beforeLabel: 'before',
               afterLabel: 'after',

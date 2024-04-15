@@ -23,6 +23,7 @@ export default defineConfig({
         return `beforeafter${format}.js`;
       },
     },
+    copyPublicDir: false,
   },
 
   test: {

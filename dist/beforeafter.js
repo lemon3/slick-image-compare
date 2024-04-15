@@ -311,9 +311,7 @@ class g extends q {
   _createGui() {
     const t = this.settings;
     this.createdElements = [];
-    const e = "div", n = d(e, {
-      class: "canvas"
-    });
+    const e = "div", n = d(e, { class: "canvas" });
     this.createdElements.push(n);
     let r, a, o, l, u = !1;
     t.beforeImage || t.afterImage ? (u = !0, r = d("img", { draggable: !1 }), r.src = t.beforeImage, a = d("img", { draggable: !1 }), a.src = t.afterImage) : ([o, l] = this.originalElements = this.images, r = o.cloneNode(!0), r.setAttribute("draggable", !1), a = l.cloneNode(!0), a.setAttribute("draggable", !1));
@@ -325,30 +323,15 @@ class g extends q {
     E.appendChild(r), p.appendChild(a);
     let b;
     if (t.beforeLabel !== "") {
-      const h = d(e, {
-        class: "info-box left"
-      });
-      h.innerHTML = t.beforeLabel, b = d(e, {
-        class: "clipSlider"
-      }), b.append(h), p.appendChild(b);
+      const h = d(e, { class: "info-box left" });
+      h.innerHTML = t.beforeLabel, b = d(e, { class: "clipSlider" }), b.append(h), p.appendChild(b);
     }
     if (t.afterLabel !== "") {
-      const h = d(e, {
-        class: "info-box right"
-      });
+      const h = d(e, { class: "info-box right" });
       h.innerHTML = t.afterLabel, E.appendChild(h);
     }
     c.appendChild(E), u ? (n.append(c), n.append(p), this.element.append(n)) : (o.parentNode.replaceChild(c, o), l.remove(), z([c, p], n));
-    const L = d(
-      e,
-      {
-        class: t.dragElementClass
-      },
-      {
-        zIndex: 5
-        //   touchAction: 'none',
-      }
-    ), O = d(e, { class: "overlay" }, { zIndex: 4 }), x = d(e);
+    const L = d(e, { class: t.dragElementClass }, { zIndex: 5 }), O = d(e, { class: "overlay" }, { zIndex: 4 }), x = d(e);
     if (L.appendChild(x), n.appendChild(O), n.appendChild(L), t.beforeDescription !== "" || t.afterDescription !== "") {
       const h = d(e, {
         class: "description"
@@ -441,26 +424,6 @@ class g extends q {
     } while (e.nodeName !== "BODY");
     return t;
   }
-  // _onTapEnd = (e) => {
-  //   this._stopAni();
-  //   console.log('_onTapEnd', e.type);
-  //   this.oldPercent = this.currentPercent;
-  //   document.removeEventListener('mouseup', this._onTapEnd);
-  //   document.removeEventListener('touchend', this._onTapEnd);
-  //   // this.element.classList.remove('interacting');
-  //   this._snapToStart();
-  // };
-  // _onTap = (e) => {
-  //   console.log('_onTap', e.type);
-  //   // e.preventDefault();
-  //   // e.stopPropagation();
-  //   // this.element.classList.add('interacting');
-  //   this._tapped(e);
-  //   if (this.settings.snapToStart) {
-  //     document.addEventListener('mouseup', this._onTapEnd);
-  //     document.addEventListener('touchend', this._onTapEnd);
-  //   }
-  // };
   _setToggleValues(t, e, n) {
     this.toggleBtn && (this.toggleBtn.innerHTML = e), this.description && (this.description.innerHTML = n), this._afterShown = t === 1;
   }
