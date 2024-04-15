@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import {
   wrap,
   passiveIfSupported,
@@ -7,48 +6,59 @@ import {
   imageDimensions,
   getJSONData,
   createEl,
-  getElements,
+  dataStorage,
 } from '@/js/utils';
-import { defaults } from '@/js/defaults';
 
-// const passive = passiveSupported ? { passive: true } : false;
+import { defaults } from '@/js/defaults';
+import { Emitter } from '@/js/emitter';
+
+const pluginName = 'beforeafter';
+const dataName = 'data-' + pluginName;
+
+// event names
+const INIT = 'init';
+const DRAG = 'drag';
+const UPDATE = 'update';
+
+const MOUSEDOWN = 'mousedown';
 
 let instances = [];
-const allowedEvents = ['init', 'drag', 'update'];
-const trigger = (elem, name, data) => {
-  let funData = elem.getAttribute(`on + ${name}`);
-  let func = new Function('e', `{${funData}}`);
-  func.call(elem, data);
-};
+let initialized = false;
 
-class BeforeAfter {
+class BeforeAfter extends Emitter {
   constructor(element, options) {
-    // TODO: if multiple: initialize with BeforeAfter.setup
-    element = getElements(element, true);
-
     if (!element) {
-      return {
-        error: true,
-      };
+      return { error: true };
     }
+
+    element =
+      'string' === typeof element ? document.querySelector(element) : element;
+
+    if (null === element || 0 === element.length) {
+      return { error: true };
+    }
+
+    super();
 
     if (element.dataset.bainitialized) {
-      // TODO: return stored instance
-      return {
-        error: true,
-      };
+      return BeforeAfter.getInstance(element);
     }
     element.dataset.bainitialized = true;
-    instances.push(this);
 
-    this.options = options;
+    this.allowedEvents = [INIT, DRAG, UPDATE];
+
+    instances.push(this);
+    dataStorage.put(element, 'instance', this);
+
     this.element = element;
 
-    const data = getJSONData(element, 'beforeafter');
+    // from data api
+    const data = getJSONData(element, pluginName);
+
+    this.options = options || {}; // user options
     this.settings = Object.assign({}, BeforeAfter.defaults, data, options);
 
     // no images are given
-    // TODO: check options for firstImage and secondImage
     this.images = this.element.querySelectorAll('img');
     if (
       (!this.settings.beforeImage || !this.settings.afterImage) &&
@@ -60,10 +70,9 @@ class BeforeAfter {
     }
 
     this.snapTimeout = null;
-    // this.touchDuration = null;
 
-    if (!this.element.classList.contains('beforeafter')) {
-      this.element.classList.add('beforeafter');
+    if (!this.element.classList.contains(pluginName)) {
+      this.element.classList.add(pluginName);
     }
 
     this.deltaX = 0;
@@ -96,9 +105,7 @@ class BeforeAfter {
     this.createdElements = [];
     const div = 'div';
 
-    const canvas = createEl(div, {
-      class: 'canvas',
-    });
+    const canvas = createEl(div, { class: 'canvas' });
     this.createdElements.push(canvas);
 
     // images
@@ -106,6 +113,7 @@ class BeforeAfter {
     let secondImg;
     let first, second;
     let createDomImage = false;
+
     if (s.beforeImage || s.afterImage) {
       createDomImage = true;
       firstImg = createEl('img', { draggable: false });
@@ -126,20 +134,6 @@ class BeforeAfter {
       { class: 'clipSlider' },
       { zIndex: 2 }
     );
-    // const wrapper1 = createEl(
-    //   div,
-    //   {
-    //     class: 'imageWrapper',
-    //   },
-    //   { zIndex: 1 }
-    // );
-    // const wrapper2 = createEl(
-    //   div,
-    //   {
-    //     class: 'imageWrapper',
-    //   },
-    //   { zIndex: 0 }
-    // );
 
     const wrapper1 = document.createDocumentFragment();
     const wrapper2 = document.createDocumentFragment();
@@ -149,21 +143,15 @@ class BeforeAfter {
 
     let clip;
     if ('' !== s.beforeLabel) {
-      const info1 = createEl(div, {
-        class: 'info-box left',
-      });
+      const info1 = createEl(div, { class: 'info-box left' });
       info1.innerHTML = s.beforeLabel;
-      clip = createEl(div, {
-        class: 'clipSlider',
-      });
+      clip = createEl(div, { class: 'clipSlider' });
       clip.append(info1);
       wrapper2.appendChild(clip);
     }
 
     if ('' !== s.afterLabel) {
-      const info2 = createEl(div, {
-        class: 'info-box right',
-      });
+      const info2 = createEl(div, { class: 'info-box right' });
       info2.innerHTML = s.afterLabel;
       wrapper1.appendChild(info2);
     }
@@ -176,22 +164,12 @@ class BeforeAfter {
       this.element.append(canvas);
     } else {
       first.parentNode.replaceChild(clippingElement, first);
-      // second.parentNode.replaceChild(wrapper2, second);
       second.remove();
       wrap([clippingElement, wrapper2], canvas);
     }
 
     // Create drag element
-    const drag = createEl(
-      div,
-      {
-        class: s.dragElementClass,
-      },
-      {
-        zIndex: 5,
-        //   touchAction: 'none',
-      }
-    );
+    const drag = createEl(div, { class: s.dragElementClass }, { zIndex: 5 });
     const overlay1 = createEl(div, { class: 'overlay' }, { zIndex: 4 });
 
     const dragHandle = createEl(div);
@@ -199,8 +177,6 @@ class BeforeAfter {
 
     canvas.appendChild(overlay1);
     canvas.appendChild(drag);
-
-    // this.element.appendChild(canvas);
 
     if ('' !== s.beforeDescription || '' !== s.afterDescription) {
       const description = createEl(div, {
@@ -241,7 +217,7 @@ class BeforeAfter {
   }
 
   _removeAllEvents() {
-    this.dragElementTrigger.removeEventListener('mousedown', this._onDragStart);
+    this.dragElementTrigger.removeEventListener(MOUSEDOWN, this._onDragStart);
     this.dragElementTrigger.removeEventListener(
       'touchstart',
       this._onDragStart,
@@ -253,37 +229,40 @@ class BeforeAfter {
     window.removeEventListener('resize', this._dimensions);
   }
 
-  _addFollowMouseEvents() {
-    this.canvas.addEventListener('mouseenter', this._onMouseOver);
-    this.canvas.addEventListener('mouseleave', this._onMouseOut);
-    this.canvas.addEventListener('mousemove', this._onMouseMove);
-  }
-
-  _removeFollowMouseEvents() {
-    this.canvas.removeEventListener('mouseenter', this._onMouseOver);
-    this.canvas.removeEventListener('mouseleave', this._onMouseOut);
-    this.canvas.removeEventListener('mousemove', this._onMouseMove);
-  }
-
-  _addEventListeners() {
+  /**
+   * to remove or add mouse events
+   *
+   * @param {Boolean} add true or false
+   */
+  _mouseStartEvents(add = true) {
+    const fun = (add ? 'add' : 'remove') + 'EventListener';
+    const c = this.canvas;
     if (this.settings.followMouse) {
-      // no touch device
-      this._addFollowMouseEvents();
-
-      // touch device
-      this.dragElementTrigger.addEventListener(
-        'touchstart',
-        this._onDragStart,
-        passiveIfSupported
-      );
+      c[fun]('mouseenter', this._onMouseOver);
+      c[fun]('mouseleave', this._onMouseOut);
+      c[fun]('mousemove', this._onMouseMove);
     } else {
-      this.dragElementTrigger.addEventListener('mousedown', this._onDragStart);
-      this.dragElementTrigger.addEventListener(
-        'touchstart',
-        this._onDragStart,
-        passiveIfSupported
-      );
+      this.dragElementTrigger[fun](MOUSEDOWN, this._onDragStart);
     }
+  }
+
+  /**
+   * to remove or add touch events
+   *
+   * @param {Boolean} add true or false
+   */
+  _touchStartEvent(add = true) {
+    const fun = (add ? 'add' : 'remove') + 'EventListener';
+    this.dragElementTrigger[fun](
+      'touchstart',
+      this._onDragStart,
+      passiveIfSupported
+    );
+  }
+
+  _addEvents() {
+    this._mouseStartEvents();
+    this._touchStartEvent();
 
     if (this.toggleBtn) {
       this.toggleBtn.addEventListener('click', this.toggleBeforeAfter);
@@ -298,8 +277,7 @@ class BeforeAfter {
       window.cancelAnimationFrame(this.requestId);
       this.requestId = undefined;
     }
-    this.timing.then = 0;
-    this.timing.curTime = 0;
+    this.timing.then = this.timing.curTime = 0;
   }
 
   _renderLoop() {
@@ -446,7 +424,6 @@ class BeforeAfter {
 
   _onDragStart = (e) => {
     // console.log('_onDragStart', e.type);
-    // this.touchDuration = new Date().getTime();
     this.startPos = this._getPos(e);
     this.element.classList.add('interacting');
 
@@ -456,38 +433,15 @@ class BeforeAfter {
     if ('touchstart' === e.type) {
       window.addEventListener('touchmove', this._onDrag, passiveIfSupported);
       window.addEventListener('touchend', this._onDragEnd);
-
-      if (this.settings.followMouse) {
-        this._removeFollowMouseEvents();
-      } else {
-        this.dragElementTrigger.removeEventListener(
-          'mousedown',
-          this._onDragStart
-        );
-      }
-    } else if ('mousedown' === e.type) {
+      this._mouseStartEvents(false);
+    } else if (MOUSEDOWN === e.type) {
       if (!this.settings.followMouse) {
         window.addEventListener('mousemove', this._onDrag, false);
         window.addEventListener('mouseup', this._onDragEnd, false);
       }
-
-      this.dragElementTrigger.removeEventListener(
-        'touchstart',
-        this._onDragStart
-      );
+      this._touchStartEvent(false);
     }
   };
-
-  // _onDragMouse = (e) => {
-  //   console.log('_onDragMouse', e.type);
-
-  //   this._stopAni();
-  //   this.currentPos = this._getPos(e);
-
-  //   let percent = this._calcLeftPercent(this.currentPos.x);
-  //   this.oldPercent = this.currentPercent;
-  //   this._setPosition(percent);
-  // };
 
   // moving
   _onDrag = (e) => {
@@ -521,7 +475,8 @@ class BeforeAfter {
     }
 
     this._setPosition(percent);
-    this._triggerEvent(allowedEvents[1], { percent });
+
+    this.emit(DRAG, { percent });
   };
 
   _onDragEnd = (e) => {
@@ -532,37 +487,23 @@ class BeforeAfter {
       window.removeEventListener('touchmove', this._onDrag, passiveIfSupported);
       window.removeEventListener('touchend', this._onDragEnd);
 
+      // test if changed from
       setTimeout(() => {
-        if (this.settings.followMouse) {
-          this._addFollowMouseEvents();
-        } else {
-          this.dragElementTrigger.addEventListener(
-            'mousedown',
-            this._onDragStart
-          );
-        }
+        this._mouseStartEvents();
       }, 1);
     } else if ('mouseup' === e.type) {
       window.removeEventListener('mousemove', this._onDrag, false);
       window.removeEventListener('mouseup', this._onDragEnd, false);
-
-      this.dragElementTrigger.addEventListener(
-        'touchstart',
-        this._onDragStart,
-        passiveIfSupported
-      );
+      this._touchStartEvent();
     }
 
     if (this.settings.snapToStart) {
       let percent = this._calcLeftPercent(this._getPos(e).x);
       let delta = Math.abs(percent - this.currentPercent);
 
-      // clearTimeout(this.snapTimeout);
       if (this._moved || 0.5 > delta) {
         this._snapToStart();
       } else {
-        // this._stopAni();
-        // this._animateTo(percent, this.settings.animateDuration);
         this.snapTimeout = setTimeout(() => {
           this.oldPercent = percent;
           this._snapToStart();
@@ -581,31 +522,6 @@ class BeforeAfter {
     this.oldPercent = this.currentPercent;
     this._animateTo(percent, this.settings.animateDuration);
   };
-
-  // _onTapEnd = (e) => {
-  //   this._stopAni();
-  //   console.log('_onTapEnd', e.type);
-  //   this.oldPercent = this.currentPercent;
-
-  //   document.removeEventListener('mouseup', this._onTapEnd);
-  //   document.removeEventListener('touchend', this._onTapEnd);
-
-  //   // this.element.classList.remove('interacting');
-  //   this._snapToStart();
-  // };
-
-  // _onTap = (e) => {
-  //   console.log('_onTap', e.type);
-  //   // e.preventDefault();
-  //   // e.stopPropagation();
-  //   // this.element.classList.add('interacting');
-  //   this._tapped(e);
-
-  //   if (this.settings.snapToStart) {
-  //     document.addEventListener('mouseup', this._onTapEnd);
-  //     document.addEventListener('touchend', this._onTapEnd);
-  //   }
-  // };
 
   _setToggleValues(status, toggleText, text) {
     // console.log('change', status);
@@ -661,7 +577,7 @@ class BeforeAfter {
       );
     }
 
-    this._triggerEvent(allowedEvents[2], { percent });
+    this.emit(UPDATE, { percent });
   }
 
   /**
@@ -689,21 +605,6 @@ class BeforeAfter {
       this.elementOffsetLeft -
       this.dragHandleWidth * 0.5
     );
-  }
-
-  _triggerEvent(eventName, data) {
-    let eventData = {
-      detail: {
-        instance: this,
-        ...data,
-      },
-    };
-    let ce = new CustomEvent(eventName, eventData);
-    this.element.dispatchEvent(ce);
-    this.eventFired[eventName] = ce;
-
-    // for inline events
-    trigger(this.element, eventName, ce);
   }
 
   // public user function
@@ -759,7 +660,7 @@ class BeforeAfter {
     if (s.onlyHandleDraggable) {
       this.dragElementTrigger = this.dragHandle;
       if (s.clickable) {
-        this.canvas.addEventListener('mousedown', this._tapped);
+        this.canvas.addEventListener(MOUSEDOWN, this._tapped);
         this.canvas.addEventListener('touchstart', this._tapped);
       }
     }
@@ -776,10 +677,6 @@ class BeforeAfter {
     this.currentPercent =
       this._animationDuration > 0 ? s.animateStartPos : s.startPos;
     this.oldPercent = this.currentPercent;
-    // this.currentPos = {
-    //   x: this._calcLeftValue(this.currentPercent),
-    //   y: 0,
-    // };
 
     this.element.style.opacity = 0;
     this._moved = false;
@@ -807,29 +704,8 @@ class BeforeAfter {
       );
     }
 
-    this._addEventListeners();
-    this._triggerEvent(allowedEvents[0]);
-  }
-
-  addEventListener(eventName, listener, option) {
-    if (
-      allowedEvents.indexOf(eventName) < 0 ||
-      'function' !== typeof listener
-    ) {
-      return false;
-    }
-
-    this.element.addEventListener(eventName, listener, option);
-    this._registeredEventListeners.push({ eventName, listener, option });
-
-    // already fired
-    if (this.eventFired[eventName]) {
-      listener.call(this.element, this.eventFired[eventName]);
-    }
-  }
-
-  removeEventListener(eventName, listener, option) {
-    this.element.removeEventListener(eventName, listener, option);
+    this._addEvents();
+    this.emit(INIT);
   }
 
   goto(percent, duration, easing) {
@@ -874,7 +750,6 @@ class BeforeAfter {
     if (evt) {
       evt.stopPropagation();
     }
-
     this._stopAni();
 
     if (this._afterShown) {
@@ -909,7 +784,7 @@ class BeforeAfter {
 
     this.createdElements = this.originalElements = [];
 
-    // remove all eventlisteners
+    // remove all eventlistener
     this._removeAllEvents();
   }
 }
@@ -919,51 +794,34 @@ BeforeAfter.init = () => {
     return true;
   }
   initialized = true;
-  BeforeAfter.setupAll('[data-beforeafter]');
-  return true;
-};
-
-// helper for multiple
-BeforeAfter.setupAll = (element, options) => {
-  element = getElements(element);
-  if (!element) {
-    return !1;
+  let element = document.querySelectorAll('[' + dataName + ']');
+  if (0 === element.length) {
+    return false;
   }
 
   element.forEach((el) => {
-    if (el.dataset.bainitialized) {
-      return false;
-    }
-    new BeforeAfter(el, options);
-    // if (!ba.error) {
-    //   instances.push(ba);
-    // }
+    new BeforeAfter(el);
   });
 
   return instances;
 };
 
-let initialized = false;
+BeforeAfter.destroyAll = () => {
+  if (!instances.length) {
+    return false;
+  }
 
-/**
- * static bestroy
- * @param  {Object} id the before initialized Object
- * @return {[type]}    [description]
- */
-BeforeAfter.destroy = () => {
-  const len = instances.length;
-  instances.forEach((inst) => {
-    inst.destroy();
+  instances.forEach((instance) => {
+    instance.destroy();
   });
+
   initialized = false;
   instances = [];
-  return len;
+  return true;
 };
 
-/**
- * static defaults settings
- * @type {Object}
- */
+BeforeAfter.getInstance = (el) => dataStorage.get(el, 'instance');
+
 BeforeAfter.defaults = defaults;
 
 docReady(BeforeAfter.init);

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <title>before after demo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       class="styles"
@@ -355,9 +355,8 @@
       <h1>beforeafter</h1>
       <p>
         is a „before &amp; after“ image comparison plugin, written in vanilla js
-        (es6) with no dependencies to other libraries.
+        with no dependencies to other libraries.
       </p>
-      <p>It's free to use for non-commercial projects and websites!</p>
       <h2>demo 1</h2>
       <pre><code class="language-xml">&lt;div data-beforeafter&gt;
   &lt;img src=&quot;../static/assets/03_after.png&quot; alt=&quot;&quot; /&gt;
@@ -470,7 +469,8 @@ const ba = new BeforeAfter('#demo4', options);
           <img src="../static/assets/01_after.png" alt="" />
           <img src="../static/assets/01_before.png" alt="" />
         </div>
-        <script>
+        <script type="module">
+          import BeforeAfter from './src/index.js';
           const init = () => {
             document.removeEventListener('DOMContentLoaded', init);
             const options = {

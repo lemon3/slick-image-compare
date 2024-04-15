@@ -1,8 +1,5 @@
-/**
- * @jest-environment jsdom
- */
+import { afterEach, vi, describe, test, expect } from 'vitest';
 
-/* global afterEach, jest, describe, test, expect */
 import {
   addProps,
   getJSONData,
@@ -32,8 +29,8 @@ document.body.innerHTML += `
   <div id="helper-data6"
     data-heels="'color':'red',height:10,size:39"
   ></div>
-  <div id="helper-data7" class="beaf"
-    data-beaf="{
+  <div id="helper-data7" class="beforeafter"
+    data-beforeafter="{
       followMouse: true,
       'showToggleButton': true
     }">
@@ -43,9 +40,9 @@ document.body.innerHTML += `
 `;
 
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   // only for spyOn mocked Equivalent to .mockRestore()
-  jest.restoreAllMocks();
+  vi.restoreAllMocks();
 });
 
 describe('test addProps function', () => {
@@ -85,24 +82,24 @@ describe('test wrap function', () => {
   let el = document.createElement('span');
   let wrappingEl = document.createElement('div');
 
-  describe('no element given, should return false', () => {
+  test('no element given, should return false', () => {
     const result = wrap(null, wrappingEl);
     expect(result).toBe(false);
   });
 
-  describe('element given but no wrapper, should return element', () => {
+  test('element given but no wrapper, should return element', () => {
     el.id = '12345';
     const result = wrap(el, null);
     expect(result.id).toBe(el.id);
   });
 
-  describe('element & wrappingEl given, should return html obj.', () => {
+  test('element & wrappingEl given, should return html obj.', () => {
     const el1 = document.createElement('span');
     const result = wrap(el1, wrappingEl);
     expect(result.outerHTML).toBe('<div><span></span></div>');
   });
 
-  describe('element & wrappingEl given, should return html obj.', () => {
+  test('element & wrappingEl given, should return html obj.', () => {
     const el1 = document.createElement('span');
     el1.id='id1';
     const el2 = document.createElement('span');
@@ -176,7 +173,7 @@ describe('test getJSONData function', () => {
 
   test('element settings-string', () => {
     let helperData7 = document.getElementById('helper-data7');
-    let data = getJSONData(helperData7, 'beaf');
+    let data = getJSONData(helperData7, 'beforeafter');
     expect(data.followMouse).toBe(true);
     expect(data.showToggleButton).toBe(true);
   });
@@ -239,7 +236,7 @@ describe('test restrict function', () => {
 
 describe('test docReady function', () => {
   test('function should be fired', () => {
-    const hmm = jest.fn();
+    const hmm = vi.fn();
     docReady(hmm);
     expect(hmm).toHaveBeenCalled();
   });
@@ -258,7 +255,7 @@ describe('test docReady function', () => {
   });
 
   test('docReady callback called via addEventListener', () => {
-    const cb = jest.fn();
+    const cb = vi.fn();
     // fake states
     Object.defineProperty(document, 'readyState', {
       get() {
@@ -266,12 +263,12 @@ describe('test docReady function', () => {
       },
     });
 
-    document.addEventListener = jest
+    document.addEventListener = vi
       .fn()
       .mockImplementationOnce((event, callback) => {
         callback();
       });
-    const mockedDocReady = jest.mocked(docReady);
+    const mockedDocReady = vi.mocked(docReady);
     mockedDocReady(cb);
 
     expect(document.addEventListener).toBeCalledWith(

@@ -6,6 +6,7 @@ node_modules
 *.sublime-*
 .phpintel
 coverage
+docs
 
 npm-debug.log
 yarn-error.log

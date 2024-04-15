@@ -65,7 +65,7 @@
     /* text-align: center; */
     /* opacity: 0.9; */
     line-height: 1em;
-    background: var(--beafBgColor);
+    background: var(--beforeafterBgColor);
     color: #fff;
     touch-action: manipulation;
     min-height: 48px;

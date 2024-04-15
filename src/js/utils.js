@@ -1,3 +1,51 @@
+export const dataStorage = {
+  // storage
+  _s: new WeakMap(),
+  put(el, ...keyVal) {
+    if (!this._s.has(el)) {
+      this._s.set(el, new Map());
+    }
+    let storeEl = this._s.get(el);
+    if (keyVal.length > 1) {
+      storeEl.set(keyVal[0], keyVal[1]);
+      return this;
+    }
+    if ('object' === typeof keyVal[0]) {
+      for (const k in keyVal[0]) {
+        storeEl.set(k, keyVal[0][k]);
+      }
+    } else {
+      // just a key
+      storeEl.set(keyVal[0]);
+    }
+    return this;
+  },
+  get(el, key) {
+    if (!this._s.has(el)) {
+      return false;
+      // return new Map();
+    }
+    if (key) {
+      return this._s.get(el).get(key);
+    }
+    return this._s.get(el);
+  },
+  has(el, key) {
+    return this._s.has(el) && this._s.get(el).has(key);
+  },
+  // todo if no key given: remove all
+  remove(el, key) {
+    if (!this._s.has(el)) {
+      return false;
+    }
+    let ret = this._s.get(el).delete(key);
+    if (this._s.get(el).size === 0) {
+      this._s.delete(el);
+    }
+    return ret;
+  },
+};
+
 /**
  * a short document Ready Implementation
  * @param  {Function} cb - The Callback function
@@ -52,7 +100,7 @@ export const imageDimensions = (filename) =>
   });
 
 /**
- * Helper funtion to get all dataset values for a given name
+ * Helper function to get all dataset values for a given name
  *
  * @param  {Object} el The dom element, e.g. a selected div-element
  * @param  {String} name The name to look for
@@ -71,10 +119,11 @@ export const getJSONData = (el, name, defaults = null) => {
 
   let data;
   try {
-    // eslint-disable-next-line quotes
     data = JSON.parse(el.dataset[name].replace(/'/g, '"'));
-    // eslint-disable-next-line no-empty
-  } catch (e) {}
+  // eslint-disable-next-line no-unused-vars
+  } catch (e) {
+    //
+  }
 
   if ('object' !== typeof data) {
     data = el.dataset[name];
@@ -148,7 +197,8 @@ try {
       },
     })
   );
-} catch (err) {
+// eslint-disable-next-line no-unused-vars
+} catch (e) {
   passiveIfSupported = false;
 }
 
@@ -215,7 +265,7 @@ export const wrap = (el, wrapper) => {
 /**
  * add properties and style attributes to a given HTML object
  * @param  {object} el - The HTML object to add properties and styles too.
- * @param  {object} properties - An object with vaild HTML properties
+ * @param  {object} properties - An object with valid HTML properties
  * @param  {object} style - An object with valid CSS styles
  * @return {object} HTML object with the applied properties and styles
  */

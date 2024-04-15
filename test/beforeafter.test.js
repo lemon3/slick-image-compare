@@ -1,9 +1,4 @@
-/**
- * @jest-environment jsdom
- */
-
-/* global describe, test, expect */
-
+import { describe, test, expect } from 'vitest';
 import BeforeAfter from '../src/index.js';
 
 describe('testing class BeforeAfter', () => {
@@ -37,24 +32,13 @@ describe('test static methods', () => {
     });
   });
 
-  describe('- BeforeAfter.setupAll', () => {
+  describe('- BeforeAfter.destroyAll', () => {
     test('should be a function', () => {
-      expect(typeof BeforeAfter.setupAll).toBe('function');
+      expect(typeof BeforeAfter.destroyAll).toBe('function');
     });
-    test('if element is null should return false', () => {
-      expect(BeforeAfter.setupAll(null, null)).not.toBeTruthy();
-      expect(BeforeAfter.setupAll(null)).not.toBeTruthy();
-    });
-  });
-
-  describe('- BeforeAfter.destroy', () => {
-    test('should be a function', () => {
-      expect(typeof BeforeAfter.destroy).toBe('function');
-    });
-    test('should return a number', () => {
-      const destroy = BeforeAfter.destroy();
-      expect(typeof destroy).toBe('number');
-      expect(destroy).toBeGreaterThanOrEqual(0);
+    test('should return false', () => {
+      const destroy = BeforeAfter.destroyAll();
+      expect(destroy).toBe(false);
     });
   });
 });
@@ -75,7 +59,7 @@ describe('test initialization', () => {
     expect(ba.error).toBe(true);
   });
 
-  test('element is already initialized should return false', () => {
+  test('element is already initialized should return true', () => {
     const div = document.createElement('div');
     ['03_after.jpg', '03_before.jpg'].forEach((img) => {
       const el = document.createElement('img');
@@ -87,10 +71,9 @@ describe('test initialization', () => {
     const ba = new BeforeAfter(div);
     expect(typeof ba).toBe('object');
     expect(ba instanceof BeforeAfter).toBe(true);
-    ba.tt = 1;
+
     const ba2 = new BeforeAfter(div);
-    expect(ba2 instanceof BeforeAfter).toBe(false);
-    expect(ba2.error).toEqual(true);
+    expect(ba2 instanceof BeforeAfter).toBe(true);
   });
 });
 

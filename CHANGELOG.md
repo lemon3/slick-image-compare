@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.2.0
+- switching to vite / vitest
+
 ## v0.1.2
 - bug fixes and improvements
 - update getJSONData in helper

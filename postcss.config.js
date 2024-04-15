@@ -1,9 +1,7 @@
-const postcssPresetEnv = require('postcss-preset-env');
-const postcssNested = require('postcss-nested');
-// const postcssColorFunction = require('@csstools/postcss-color-function');
+import postcssPresetEnv from 'postcss-preset-env';
+import postcssNested from 'postcss-nested';
 
-/* global module, require */
-module.exports = {
+export default {
   plugins: [
     postcssPresetEnv({
       stage: 1,
