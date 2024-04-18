@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.1
+- performance update
+- bug fixing
+- event emitter
+
 ## v0.2.0
 - switching to vite / vitest
 

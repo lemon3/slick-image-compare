@@ -96,8 +96,9 @@
     }
   }
 
-  .info-box {
+  .label {
     position: absolute;
+    font-size: 14px;
     top: 5px;
     /* white-space: nowrap; */
     padding: 5px 10px;
@@ -116,14 +117,16 @@
     right: 5px;
   }
 
-  .overlay {
+  /* .overlay {
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0;
     left: 0;
+    pointer-events: none;
     transform: translate3d(0, 0, 0);
-  }
+    background-color: rgba(0, 0, 0, 0.5);
+  } */
 
   .description {
     line-height: 1em;
@@ -135,12 +138,8 @@
 }
 
 .beforeafter-handle {
-  /* touch-action: none; */
-  background: #fff;
-  /* bottom: 0; */
-  /* cursor: ew-resize; */
+  background: rgba(255, 255, 255, 0.6);
   cursor: col-resize;
-  /* left: 50%; */
   margin-left: -1px;
   position: absolute;
   top: 0;
@@ -156,7 +155,7 @@
     height: 40px;
     margin-top: -20px;
     margin-left: -20px;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.6);
     border-radius: 50%;
     position: absolute;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);

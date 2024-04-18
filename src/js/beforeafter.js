@@ -12,15 +12,22 @@ import {
 import { defaults } from '@/js/defaults';
 import { Emitter } from '@/js/emitter';
 
-const pluginName = 'beforeafter';
-const dataName = 'data-' + pluginName;
+// const names
+const PLUGINNAME = 'beforeafter';
+const DATANAME = 'data-' + PLUGINNAME;
+const INTERACTING = 'interacting'; // classname
 
-// event names
+// event names for emitting
 const INIT = 'init';
 const DRAG = 'drag';
 const UPDATE = 'update';
+const BEFORESHOWN = 'beforeshown';
+const AFTERSHOWN = 'aftershown';
+const INTERACTIONEND = 'interactionend';
 
+// app event name
 const MOUSEDOWN = 'mousedown';
+const RESIZE = 'resize';
 
 let instances = [];
 let initialized = false;
@@ -45,7 +52,14 @@ class BeforeAfter extends Emitter {
     }
     element.dataset.bainitialized = true;
 
-    this.allowedEvents = [INIT, DRAG, UPDATE];
+    this.allowedEvents = [
+      INIT,
+      DRAG,
+      UPDATE,
+      BEFORESHOWN,
+      AFTERSHOWN,
+      INTERACTIONEND,
+    ];
 
     instances.push(this);
     dataStorage.put(element, 'instance', this);
@@ -53,7 +67,7 @@ class BeforeAfter extends Emitter {
     this.element = element;
 
     // from data api
-    const data = getJSONData(element, pluginName);
+    const data = getJSONData(element, PLUGINNAME);
 
     this.options = options || {}; // user options
     this.settings = Object.assign({}, BeforeAfter.defaults, data, options);
@@ -69,30 +83,32 @@ class BeforeAfter extends Emitter {
       };
     }
 
-    this.snapTimeout = null;
-
-    if (!this.element.classList.contains(pluginName)) {
-      this.element.classList.add(pluginName);
+    if (!this.element.classList.contains(PLUGINNAME)) {
+      this.element.classList.add(PLUGINNAME);
     }
 
+    this.snapTimeout = null;
     this.deltaX = 0;
     this.deltaY = 0;
-
     this.dirDetected = false;
-    this.eventFired = {};
-    this._registeredEventListeners = [];
 
     if (this.settings.autoInit) {
       this.init();
     }
   }
 
-  _getPos(e) {
+  /**
+   * Method to return the current position
+   *
+   * @param {Event} evt The current event used (e.g. touchmove)
+   * @returns {Object} containing the x an y position
+   */
+  _getPos(evt) {
     let t;
-    if ('undefined' !== typeof e.pageX) {
-      t = e;
+    if ('undefined' !== typeof evt.pageX) {
+      t = evt;
     } else {
-      t = e.touches[0] || e.changedTouches[0];
+      t = evt.touches[0] || evt.changedTouches[0];
     }
     return {
       x: t.pageX,
@@ -100,8 +116,12 @@ class BeforeAfter extends Emitter {
     };
   }
 
+  /**
+   * Method to create the gui for this plugin
+   */
   _createGui() {
     const s = this.settings;
+    this.originalElements = [];
     this.createdElements = [];
     const div = 'div';
 
@@ -143,7 +163,7 @@ class BeforeAfter extends Emitter {
 
     let clip;
     if ('' !== s.beforeLabel) {
-      const info1 = createEl(div, { class: 'info-box left' });
+      const info1 = createEl(div, { class: 'label left' });
       info1.innerHTML = s.beforeLabel;
       clip = createEl(div, { class: 'clipSlider' });
       clip.append(info1);
@@ -151,7 +171,7 @@ class BeforeAfter extends Emitter {
     }
 
     if ('' !== s.afterLabel) {
-      const info2 = createEl(div, { class: 'info-box right' });
+      const info2 = createEl(div, { class: 'label right' });
       info2.innerHTML = s.afterLabel;
       wrapper1.appendChild(info2);
     }
@@ -170,12 +190,12 @@ class BeforeAfter extends Emitter {
 
     // Create drag element
     const drag = createEl(div, { class: s.dragElementClass }, { zIndex: 5 });
-    const overlay1 = createEl(div, { class: 'overlay' }, { zIndex: 4 });
+    // const overlay1 = createEl(div, { class: 'overlay' }, { zIndex: 4 });
 
     const dragHandle = createEl(div);
     drag.appendChild(dragHandle);
 
-    canvas.appendChild(overlay1);
+    // canvas.appendChild(overlay1);
     canvas.appendChild(drag);
 
     if ('' !== s.beforeDescription || '' !== s.afterDescription) {
@@ -216,100 +236,122 @@ class BeforeAfter extends Emitter {
     this.canvas = canvas;
   }
 
-  _removeAllEvents() {
-    this.dragElementTrigger.removeEventListener(MOUSEDOWN, this._onDragStart);
-    this.dragElementTrigger.removeEventListener(
-      'touchstart',
-      this._onDragStart,
-      passiveIfSupported
-    );
-    if (this.toggleBtn) {
-      this.toggleBtn.removeEventListener('click', this.toggleBeforeAfter);
-    }
-    window.removeEventListener('resize', this._dimensions);
-  }
-
   /**
-   * to remove or add mouse events
+   * Method to remove or add mouse events
    *
    * @param {Boolean} add true or false
    */
   _mouseStartEvents(add = true) {
     const fun = (add ? 'add' : 'remove') + 'EventListener';
-    const c = this.canvas;
-    if (this.settings.followMouse) {
-      c[fun]('mouseenter', this._onMouseOver);
-      c[fun]('mouseleave', this._onMouseOut);
-      c[fun]('mousemove', this._onMouseMove);
+    // console.log('mouseevents', fun);
+    const s = this.settings;
+    if (s.followMouse) {
+      const c = this.canvas;
+      c[fun]('mouseenter', this._mouseOver, false);
+      c[fun]('mouseleave', this._mouseOut, false);
+      c[fun]('mousemove', this._mouseMove, false);
     } else {
-      this.dragElementTrigger[fun](MOUSEDOWN, this._onDragStart);
+      this.dragElementTrigger[fun](MOUSEDOWN, this._dragStart);
+      if (s.onlyHandleDraggable && s.clickable) {
+        this.canvas[fun](MOUSEDOWN, this._tapstart, false);
+        this.canvas[fun]('mouseup', this._dragEnd, false);
+      }
     }
   }
 
   /**
-   * to remove or add touch events
+   * Method to remove or add touch events
    *
    * @param {Boolean} add true or false
    */
   _touchStartEvent(add = true) {
     const fun = (add ? 'add' : 'remove') + 'EventListener';
+    // console.log('touchStartEvent', fun);
     this.dragElementTrigger[fun](
       'touchstart',
-      this._onDragStart,
+      this._dragStart,
       passiveIfSupported
     );
+    if (this.settings.clickable) {
+      this.canvas[fun]('touchstart', this._tapstart, false);
+      this.canvas[fun]('touchend', this._dragEnd, false);
+    }
+  }
+
+  _removeAllEvents() {
+    this._mouseStartEvents(false);
+    this._touchStartEvent(false);
+
+    if (this.toggleBtn) {
+      this.toggleBtn.removeEventListener('click', this.toggleBeforeAfter);
+    }
+    window.removeEventListener(RESIZE, this._dimensions);
+    this.removeEventListener(INTERACTIONEND, this._interactionEnd);
   }
 
   _addEvents() {
-    this._mouseStartEvents();
     this._touchStartEvent();
+    this._mouseStartEvents();
 
     if (this.toggleBtn) {
-      this.toggleBtn.addEventListener('click', this.toggleBeforeAfter);
+      this.toggleBtn.addEventListener('click', this.toggleBeforeAfter, false);
     }
-
-    window.addEventListener('resize', this._dimensions);
+    window.addEventListener(RESIZE, this._dimensions);
+    this.addEventListener(INTERACTIONEND, this._interactionEnd);
   }
 
   // TODO: jumpToEnd
   _stopAni() {
-    if (this.requestId) {
-      window.cancelAnimationFrame(this.requestId);
-      this.requestId = undefined;
+    // console.log('_stopAni', this._renderId);
+    if (this._renderId) {
+      window.cancelAnimationFrame(this._renderId);
+      this._renderId = undefined;
+      this.timing.then = this.timing.curTime = 0;
     }
-    this.timing.then = this.timing.curTime = 0;
   }
 
-  _renderLoop() {
-    let now, dt;
-    now = new Date().getTime();
-    dt = now - (this.timing.then || now);
-    this.timing.curTime += dt;
-    this.progress = this.timing.curTime / this._animationDuration;
-
-    if (this.progress > 1) {
-      this.progress = 1;
+  _testInteractionEnd() {
+    if (this._endInteraction && undefined === this._renderId) {
+      this._endInteraction = false;
+      this.emit(INTERACTIONEND);
     }
+  }
 
-    // render
-    const ease = this.easing(this.progress);
-    this._setPosition(this.oldPercent + this._delta * ease);
+  /**
+   *
+   * @param {float} from the from percent value
+   * @param {float} to the to percent value
+   * @param {float} delta the delta percent value
+   * @returns {boolean} true if stopped
+   */
+  _renderLoop(from, to, delta) {
+    const render = () => {
+      const now = new Date().getTime();
+      const dt = now - (this.timing.then || now);
+      this.timing.curTime += dt;
+      this.progress = this.timing.curTime / this._animationDuration;
 
-    this.timing.then = now;
+      if (this.progress >= 1) {
+        this.progress = 1;
+        this._setPosition(to);
+        this._stopAni();
+        this._testInteractionEnd();
+        return;
+      }
 
-    if (this.progress < 1) {
-      this.requestId = window.requestAnimationFrame(
-        this._renderLoop.bind(this)
-      );
-    } else {
-      // finished
-      this.oldPercent = this.currentPercent;
-    }
+      // render
+      this._setPosition(from + delta * this.easing(this.progress));
+
+      this.timing.then = now;
+      this._renderId = window.requestAnimationFrame(render);
+    };
+    render();
   }
 
   _animateTo(percent, duration, easing) {
     percent = restrict(+percent, 0, 100);
-    this._delta = percent - this.oldPercent;
+    this._delta = percent - this.currentPercent;
+    // console.log('from:', this.currentPercent, 'to:', percent, duration);
 
     if (Math.abs(this._delta) < 1) {
       return;
@@ -323,10 +365,9 @@ class BeforeAfter extends Emitter {
     this._animationDuration = duration;
     this.easing = easing || this.settings.animateEasing;
     this.progress = 0;
-    this.timing.curTime = 0;
+    this.timing.then = this.timing.curTime = 0;
 
-    // start render loop
-    this._renderLoop();
+    this._renderLoop(this.currentPercent, percent, this._delta);
   }
 
   _snapToStart(delay = this.settings.snapToStartDelay) {
@@ -357,28 +398,50 @@ class BeforeAfter extends Emitter {
     return offsetElements;
   }
 
+  _interactionEnd = () => {
+    // console.log('isTouch:', this.isTouch);
+    this.element.classList.remove(INTERACTING);
+
+    // make it a little bit async
+    // setTimeout(() => {
+    if (this.isTouch) {
+      // reenable mouse events
+      this._mouseStartEvents();
+    } else {
+      this._touchStartEvent();
+    }
+
+    if (this.settings.snapToStart) {
+      this._snapToStart();
+    }
+    // }, 1);
+  };
+
   _dimensions = () => {
     this.elementWidth = this.canvas.offsetWidth;
     this.elementOffsetLeft = this.offsetElements
       .map((offsetEl) => offsetEl.offsetLeft)
       .reduce((prev, cur) => prev + cur);
 
+    // TODO: is always 2
     this.dragHandleWidth = this.dragHandle.offsetWidth;
 
     this.minLeftPos =
       this.elementOffsetLeft +
       this.settings.handleMinDistance -
       this.dragHandleWidth / 2;
+
     this.maxLeftPos =
       this.elementOffsetLeft +
       this.elementWidth -
       this.dragHandleWidth / 2 -
       this.settings.handleMinDistance;
 
-    this.elementHeight = Math.max(
-      this.canvas.offsetHeight,
-      this.canvas.offsetWidth / this.imageDimensions.ratio
-    );
+    this.elementHeight = this.canvas.offsetHeight;
+    // Math.max(
+    //   this.canvas.offsetHeight,
+    //   this.canvas.offsetWidth / this.imageDimensions.ratio
+    // );
 
     if (this.oldElementWidth === this.elementWidth) {
       return;
@@ -386,156 +449,132 @@ class BeforeAfter extends Emitter {
 
     this.oldElementWidth = this.elementWidth;
 
-    // this.wrapper1.style.width = `${this.elementWidth}px`;
-    // this.wrapper2.style.width = `${this.elementWidth}px`;
-
-    // update leftPos too
-    // this.currentPos =
-    //   this.minLeftPos + (this.currentPercent * this.elementWidth) / 100;
-    // this.currentPercent = this._calcLeftPercent(this.currentPos);
-
     this._setPosition(this.currentPercent, true);
   };
 
-  _onMouseOver = (e) => {
-    // console.log('_onMouseOver');
-    // this.canvas.addEventListener('mousemove', this._onMouseMove);
-    e.stopPropagation();
+  _mouseOver = () => {
+    // console.log('_mouseOver');
+    // this.canvas.addEventListener('mousemove', this._mouseMove);
     this._stopAni();
-    this.element.classList.add('interacting');
+    this.element.classList.add(INTERACTING);
   };
 
-  _onMouseOut = (e) => {
-    // console.log('_onMouseOut');
-    // this.canvas.removeEventListener('mousemove', this._onMouseMove);
-    e.stopPropagation();
-    this.element.classList.remove('interacting');
+  _mouseOut = () => {
+    // console.log('_mouseOut');
+    // this.canvas.removeEventListener('mousemove', this._mouseMove);
+    this.element.classList.remove(INTERACTING);
     if (this.settings.snapToStart) {
       this._snapToStart();
     }
   };
 
-  _onMouseMove = (e) => {
+  _mouseMove = (e) => {
+    // console.log('_mouseMove');
     this._stopAni();
-    // console.log('_onMouseMove');
     let currentPos = this._getPos(e);
     let percent = this._calcLeftPercent(currentPos.x);
-    percent = restrict(percent, 0, 100);
-    this.oldPercent = this.currentPercent;
     this._setPosition(percent);
   };
 
-  _onDragStart = (e) => {
-    // console.log('_onDragStart', e.type);
-    this.startPos = this._getPos(e);
-    this.element.classList.add('interacting');
-
+  // if tapped on canvas
+  _tapstart = (e) => {
+    this._endInteraction = false;
+    this._stopAni();
     clearTimeout(this.snapTimeout);
-    this._tapped(e);
 
     if ('touchstart' === e.type) {
-      window.addEventListener('touchmove', this._onDrag, passiveIfSupported);
-      window.addEventListener('touchend', this._onDragEnd);
+      this.isTouch = true;
       this._mouseStartEvents(false);
     } else if (MOUSEDOWN === e.type) {
-      if (!this.settings.followMouse) {
-        window.addEventListener('mousemove', this._onDrag, false);
-        window.addEventListener('mouseup', this._onDragEnd, false);
-      }
+      this.isTouch = false;
       this._touchStartEvent(false);
+    }
+
+    const percent = this._calcLeftPercent(this._getPos(e).x);
+    this._animateTo(percent, this.settings.animateDuration);
+  };
+
+  _dragStart = (e) => {
+    e.stopPropagation();
+    // console.log('_dragStart', e.type);
+    this.startPos = this._getPos(e);
+    this.element.classList.add(INTERACTING);
+    this._tapstart(e);
+
+    if ('touchstart' === e.type) {
+      window.addEventListener('touchmove', this._drag, passiveIfSupported);
+      window.addEventListener('touchend', this._dragEnd, false);
+    } else if (MOUSEDOWN === e.type) {
+      if (!this.settings.followMouse) {
+        window.addEventListener('mousemove', this._drag, false);
+        window.addEventListener('mouseup', this._dragEnd, false);
+      }
     }
   };
 
   // moving
-  _onDrag = (e) => {
-    // console.log('_onDrag', e.type);
+  _drag = (e) => {
+    // console.log('_drag', e.type);
+    this._stopAni();
     let currentPos = this._getPos(e);
     let percent = this._calcLeftPercent(currentPos.x);
 
-    this._stopAni();
-    this.oldPercent = this.currentPercent;
-    this._moved = true;
-
-    if ('mousemove' !== e.type) {
+    if (this.isTouch) {
       e.preventDefault();
       this.deltaX = Math.abs(this.startPos.x - currentPos.x);
       this.deltaY = Math.abs(this.startPos.y - currentPos.y);
 
       if (!this.dirDetected) {
-        if (Math.abs(this.deltaY) > Math.abs(this.deltaX)) {
-          this.element.classList.remove('interacting');
+        if (this.deltaY > this.deltaX) {
+          // console.log('scroll down');
+          this.element.classList.remove(INTERACTING);
           window.removeEventListener(
             'touchmove',
-            this._onDrag,
+            this._drag,
             passiveIfSupported
           );
           return;
         }
 
-        this.element.classList.add('interacting');
+        this.element.classList.add(INTERACTING);
         this.dirDetected = true;
       }
     }
 
     this._setPosition(percent);
-
     this.emit(DRAG, { percent });
   };
 
-  _onDragEnd = (e) => {
-    // console.log('_onDragEnd', e.type);
-    this.element.classList.remove('interacting');
+  _dragEnd = (e) => {
+    // console.log('_dragEnd', e.type);
+    this._endInteraction = true;
 
     if ('touchend' === e.type) {
-      window.removeEventListener('touchmove', this._onDrag, passiveIfSupported);
-      window.removeEventListener('touchend', this._onDragEnd);
-
-      // test if changed from
-      setTimeout(() => {
-        this._mouseStartEvents();
-      }, 1);
+      this.isTouch = true;
+      window.removeEventListener('touchmove', this._drag, passiveIfSupported);
+      window.removeEventListener('touchend', this._dragEnd);
     } else if ('mouseup' === e.type) {
-      window.removeEventListener('mousemove', this._onDrag, false);
-      window.removeEventListener('mouseup', this._onDragEnd, false);
-      this._touchStartEvent();
-    }
-
-    if (this.settings.snapToStart) {
-      let percent = this._calcLeftPercent(this._getPos(e).x);
-      let delta = Math.abs(percent - this.currentPercent);
-
-      if (this._moved || 0.5 > delta) {
-        this._snapToStart();
-      } else {
-        this.snapTimeout = setTimeout(() => {
-          this.oldPercent = percent;
-          this._snapToStart();
-        }, this.settings.animateDuration + 1);
+      this.isTouch = false;
+      if (!this.settings.followMouse) {
+        window.removeEventListener('mousemove', this._drag, false);
+        window.removeEventListener('mouseup', this._dragEnd, false);
       }
     }
 
-    this._moved = false;
+    this._testInteractionEnd();
+
     this.dirDetected = false;
   };
 
-  // if tapped on canvas
-  _tapped = (e) => {
-    let percent = this._calcLeftPercent(this._getPos(e).x);
-    this._stopAni();
-    this.oldPercent = this.currentPercent;
-    this._animateTo(percent, this.settings.animateDuration);
-  };
-
   _setToggleValues(status, toggleText, text) {
-    // console.log('change', status);
     if (this.toggleBtn) {
       this.toggleBtn.innerHTML = toggleText;
-      // this.toggleBtn.dataset.status = status;
     }
     if (this.description) {
       this.description.innerHTML = text;
     }
     this._afterShown = 1 === status ? true : false;
+    this._oneTime = false;
   }
 
   /**
@@ -565,19 +604,22 @@ class BeforeAfter extends Emitter {
     this.clippingElement.style.clipPath = clipL;
     this.dragHandle.style.transform = `translate(${left}px, 0)`;
 
+    // console.log(this._afterShown);
     // change state and button text
-    if (percent > 75 && !this._afterShown) {
+    if (percent > 75 && (!this._afterShown || this._oneTime)) {
       this._setToggleValues(
         1,
         this.settings.toggleBeforeText,
         this.settings.afterDescription
       );
-    } else if (percent < 25 && this._afterShown) {
+      this.emit(this.afterOnTheRight ? AFTERSHOWN : BEFORESHOWN);
+    } else if (percent < 25 && (this._afterShown || this._oneTime)) {
       this._setToggleValues(
         0,
         this.settings.toggleAfterText,
         this.settings.beforeDescription
       );
+      this.emit(this.afterOnTheRight ? BEFORESHOWN : AFTERSHOWN);
     }
 
     this.emit(UPDATE, { percent });
@@ -611,11 +653,12 @@ class BeforeAfter extends Emitter {
   }
 
   // public user function
-  async init() {
+  init() {
     if (this._initialized) {
       return this;
     }
     this._initialized = true;
+    this._oneTime = true;
 
     const s = this.settings;
     this._afterShown = false;
@@ -634,10 +677,6 @@ class BeforeAfter extends Emitter {
       s.toggleAfterText = s.toggleBeforeText;
       s.toggleBeforeText = toggleAfterText;
 
-      // let afterLabel = s.afterLabel;
-      // s.afterLabel = s.beforeLabel;
-      // s.beforeLabel = afterLabel;
-
       this._afterShown = true;
       this._buttonStartText = this.settings.toggleBeforeText;
       this._clipFromLeft = false;
@@ -645,29 +684,11 @@ class BeforeAfter extends Emitter {
 
     this._createGui();
     this.offsetElements = this._getOffsetElements();
+    this.timing = { time: 0, curTime: 0 };
 
-    // get offset left element
-    // if (this.element.offsetParent.nodeName !== 'BODY') {
-    //   this.offsetElement = this.element.offsetParent;
-    // } else {
-    //   this.offsetElement = this.element;
-    // }
-
-    this.timing = {
-      time: 0,
-      curTime: 0,
-    };
-
-    this.dragElementTrigger = this.canvas;
-
-    if (s.onlyHandleDraggable) {
-      this.dragElementTrigger = this.dragHandle;
-      if (s.clickable) {
-        this.canvas.addEventListener(MOUSEDOWN, this._tapped);
-        this.canvas.addEventListener('touchstart', this._tapped);
-      }
-    }
-    // this.canvas.classList.add('touch');
+    this.dragElementTrigger = s.onlyHandleDraggable
+      ? this.dragHandle
+      : this.canvas;
     this._animationDuration = s.animateInDuration || 0;
 
     if (!s.startPos) {
@@ -679,36 +700,41 @@ class BeforeAfter extends Emitter {
 
     this.currentPercent =
       this._animationDuration > 0 ? s.animateStartPos : s.startPos;
-    this.oldPercent = this.currentPercent;
-
     this.element.style.opacity = 0;
-    this._moved = false;
+
+    this.isTouch =
+      'ontouchstart' in window ||
+      (window.DocumentTouch && document instanceof window.DocumentTouch) ||
+      navigator.maxTouchPoints > 0 ||
+      window.navigator.msMaxTouchPoints > 0;
 
     // read the first image
     let file = this.settings.beforeImage || this.images[0].src;
-    this.imageDimensions = await imageDimensions(file);
-    this._dimensions();
-    this._setPosition(this.currentPercent);
+    imageDimensions(file).then((dimensions) => {
+      this.imageDimensions = dimensions;
+      this._dimensions();
+      this._setPosition(this.currentPercent);
 
-    this.element.style.opacity = 1;
+      this.element.style.opacity = 1;
 
-    if (
-      this._animationDuration > 0 &&
-      this.settings.animateStartPos !== this.settings.startPos
-    ) {
-      setTimeout(
-        () =>
-          this._animateTo(
-            this.settings.startPos,
-            this._animationDuration,
-            this.settings.animateInEasing
-          ),
-        this.settings.animateInDelay
-      );
-    }
+      if (
+        this._animationDuration > 0 &&
+        this.settings.animateStartPos !== this.settings.startPos
+      ) {
+        setTimeout(
+          () =>
+            this._animateTo(
+              this.settings.startPos,
+              this._animationDuration,
+              this.settings.animateInEasing
+            ),
+          this.settings.animateInDelay
+        );
+      }
 
-    this._addEvents();
-    this.emit(INIT);
+      this._addEvents();
+      this.emit(INIT);
+    });
   }
 
   goto(percent, duration, easing) {
@@ -722,27 +748,16 @@ class BeforeAfter extends Emitter {
     if (percent === this.currentPercent) {
       return !1;
     }
-    this.oldPercent = this.currentPercent;
     this._stopAni();
     this._animateTo(percent, duration, easing);
   }
 
   showAfter() {
-    // console.log('showAfter');
-    // this._stopAni();
-    this.oldPercent = 100;
     this._setPosition(100);
-    // this.toggleBtn.innerHTML = this.settings.toggleBeforeText;
-    // this._afterShown = true;
   }
 
   showBefore() {
-    // console.log('showBefore');
-    // this._stopAni();
-    this.oldPercent = 0;
     this._setPosition(0);
-    // this.toggleBtn.innerHTML = this.settings.toggleAfterText;
-    // this._afterShown = false;
   }
 
   get elem() {
@@ -769,26 +784,14 @@ class BeforeAfter extends Emitter {
       return false;
     }
 
-    let i;
-    // remove elements
-    if (this.createdElements) {
-      for (i = 0; i < this.createdElements.length; i++) {
-        // console.log(this.createdElements[i]);
-        this.element.removeChild(this.createdElements[i]);
-      }
-    }
-
-    // add original elements
-    if (this.originalElements) {
-      for (i = 0; i < this.originalElements.length; i++) {
-        this.element.appendChild(this.originalElements[i]);
-      }
-    }
-
-    this.createdElements = this.originalElements = [];
+    this.createdElements.forEach((el) => this.element.removeChild(el));
+    this.originalElements.forEach((el) => this.element.appendChild(el));
+    this.createdElements = [];
+    this.originalElements = [];
 
     // remove all eventlistener
     this._removeAllEvents();
+    this._initialized = false;
   }
 }
 
@@ -797,7 +800,7 @@ BeforeAfter.init = () => {
     return true;
   }
   initialized = true;
-  let element = document.querySelectorAll('[' + dataName + ']');
+  let element = document.querySelectorAll('[' + DATANAME + ']');
   if (0 === element.length) {
     return false;
   }

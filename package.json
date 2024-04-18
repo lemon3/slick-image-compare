@@ -1,6 +1,6 @@
 {
   "name": "beforeafter",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "before and after image comparison slider",
   "author": "wolfgang jungmayer",
   "license": "MIT",
@@ -38,8 +38,22 @@
   ],
   "keywords": [
     "beforeafter",
+    "before-after",
+    "before-after-slider",
     "images",
-    "slider"
+    "slider",
+    "compare",
+    "compare-slider",
+    "compare-viewer",
+    "comparison",
+    "comparison-slider",
+    "comparison-viewer",
+    "image-compare",
+    "image-compare-viewer",
+    "image-compare-slider",
+    "image-comparison",
+    "image-comparison-slider",
+    "image-comparison-viewer"
   ],
   "repository": {
     "type": "git",

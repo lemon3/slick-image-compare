@@ -404,11 +404,7 @@
         }"
       >
         <img src="01_after.png" alt="" />
-        <img
-          src="01_before.png"
-          alt=""
-          style="filter: grayscale()"
-        />
+        <img src="01_before.png" alt="" style="filter: grayscale()" />
       </div>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis
@@ -437,9 +433,11 @@
           class="beforeafter"
           data-beforeafter="{
             'onlyHandleDraggable': true,
+            clickable: true,
             'beforeLabel': 'before',
             'afterLabel': 'after',
             'showToggleButton': true,
+            snapToStart: true,
           }"
         >
           <img src="02_after.png" alt="" />
@@ -464,18 +462,29 @@ const ba = new BeforeAfter('#demo4', options);
             <div class="label">percent (left):</div>
             <span id="demo4-percent">&nbsp;</span>
           </div>
+          <div class="line">
+            <div class="label">slider:</div>
+            <input
+              id="demo4-range"
+              type="range"
+              step="0.5"
+              min="0"
+              max="100"
+              value="50"
+            />
+          </div>
+          <div class="line">
+            <button id="demo4-destroy">destroy</button>
+          </div>
         </div>
-        <div class="beforeafter" id="demo4">
-          <img src="01_after.png" alt="" />
-          <img src="01_before.png" alt="" />
-        </div>
+        <div class="beforeafter" id="demo4"></div>
         <script type="module">
           import BeforeAfter from './src/index.js';
           const init = () => {
             document.removeEventListener('DOMContentLoaded', init);
             const options = {
-              // beforeImage: '01_before.png',
-              // afterImage: '01_after.png',
+              beforeImage: '01_before.png',
+              afterImage: '01_after.png',
               afterOnTheRight: true,
               beforeLabel: 'before',
               afterLabel: 'after',
@@ -485,10 +494,34 @@ const ba = new BeforeAfter('#demo4', options);
             const ba = new BeforeAfter('#demo4', options);
 
             const percent = document.querySelector('#demo4-percent');
+            const range = document.querySelector('#demo4-range');
+            const destroy = document.querySelector('#demo4-destroy');
+
             ba.addEventListener('update', (e) => {
               let p = Math.round(e.detail.percent * 100) / 100;
               percent.innerHTML = `${p}%`;
+              range.value = p;
             });
+
+            range.addEventListener('input', (e) => {
+              ba.goto(e.target.value);
+            });
+
+            destroy.addEventListener('click', (e) => {
+              ba.destroy();
+              setTimeout(() => {
+                ba.init();
+              }, 2000);
+            });
+
+            ba.addEventListener('beforeshown', (e) => {
+              console.log('beforeshown', e);
+            });
+
+            ba.addEventListener('aftershown', (e) => {
+              console.log('aftershown', e);
+            });
+
             window.ba = ba;
           };
 

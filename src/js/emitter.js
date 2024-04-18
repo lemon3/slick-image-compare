@@ -22,10 +22,19 @@ export const trigger = (elem, name, data) => {
  * The Emitter class
  */
 export class Emitter {
+  /**
+   * class constructor
+   */
   constructor() {
     this._eventCallbacks = this._eventCallbacks || {};
   }
 
+  /**
+   * Method to emit specific events
+   *
+   * @param {string} eventName the name of the event to be triggered
+   * @param {Object} detail additional event data
+   */
   emit(eventName, detail) {
     let eventCallbacks = this._eventCallbacks[eventName];
     const eventData = { bubbles: false, cancelable: false, detail };
@@ -45,7 +54,13 @@ export class Emitter {
     }
   }
 
-  // on
+  /**
+   * Register an event handler
+   *
+   * @param {string} eventName the name of the eventlistener
+   * @param {function} listener the handler function to be called if the event triggers
+   * @returns
+   */
   addEventListener(eventName, listener) {
     if (
       (this.allowedEvents && this.allowedEvents.indexOf(eventName) < 0) ||
@@ -62,7 +77,14 @@ export class Emitter {
     return this;
   }
 
-  // off
+  /**
+   * Remove previously register event handler
+   *
+   *
+   * @param {[string]} eventName the name of the eventlistener
+   * @param {[function]} listener the handler function
+   * @returns
+   */
   removeEventListener(eventName, listener) {
     // clear all
     if (!this._eventCallbacks || 0 === arguments.length) {

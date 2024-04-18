@@ -3,19 +3,13 @@ import easing from '@/js/easing';
 export const defaults = {
   autoInit: true,
 
-  // silder: true, // show slider true, false
-
   beforeImage: null,
   afterImage: null,
 
-  followMouse: false, // mouse move interaction instead of drag (on desktop)
-
-  // todo: if onlyHandleDraggable and clickable = true => same as if both are false
+  followMouse: false, // mouse move interaction (desktop only)
   onlyHandleDraggable: false,
   clickable: false, // only works if onlyHandleDraggable is set to true
-
-  // todo: desktop and mobile snap values(!!!)
-  snapToStart: false, // after moveout or dragfinish handle jumps to start position
+  snapToStart: false, // after mouseout or drag stop handle jumps to start position
   snapToStartDelay: 250,
   // snapToStartDelayTap: 10, // todo
 
