@@ -9,11 +9,11 @@ export const defaults = {
   followMouse: false, // mouse move interaction (desktop only)
   onlyHandleDraggable: false,
   clickable: false, // only works if onlyHandleDraggable is set to true
-  snapToStart: false, // after mouseout or drag stop handle jumps to start position
+  snapToStart: false, // after mouse out or drag stop handle jumps to start position
   snapToStartDelay: 250,
   // snapToStartDelayTap: 10, // todo
 
-  afterOnTheRight: false,
+  ltr: true,
 
   handleMinDistance: 0, // min distance to left and right border in px
   dragElementClass: 'beforeafter-handle',
@@ -30,7 +30,7 @@ export const defaults = {
   animateDuration: 250, // ms
   animateEasing: easing.Cubic.easeOut,
 
-  // showInfo: false,
+  // showLabels: false,
   beforeLabel: '', // before Image
   afterLabel: '', // after Image
 

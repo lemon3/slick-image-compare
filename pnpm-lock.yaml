@@ -36,17 +36,17 @@ devDependencies:
     specifier: ^6.0.1
     version: 6.0.1(postcss@8.4.38)
   postcss-preset-env:
-    specifier: ^9.5.5
-    version: 9.5.5(postcss@8.4.38)
+    specifier: ^9.5.6
+    version: 9.5.6(postcss@8.4.38)
   prettier:
     specifier: ^3.2.5
     version: 3.2.5
   vite:
-    specifier: ^5.2.8
-    version: 5.2.8
+    specifier: ^5.2.9
+    version: 5.2.9
   vite-plugin-babel:
     specifier: ^1.2.0
-    version: 1.2.0(@babel/core@7.24.4)(vite@5.2.8)
+    version: 1.2.0(@babel/core@7.24.4)(vite@5.2.9)
   vite-plugin-banner:
     specifier: ^0.7.1
     version: 0.7.1
@@ -2294,7 +2294,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.23.0
-      caniuse-lite: 1.0.30001610
+      caniuse-lite: 1.0.30001611
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -2354,7 +2354,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001610
+      caniuse-lite: 1.0.30001611
       electron-to-chromium: 1.4.736
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.23.0)
@@ -2374,8 +2374,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /caniuse-lite@1.0.30001610:
-    resolution: {integrity: sha512-QFutAY4NgaelojVMjY63o6XlZyORPaLfyMnsl3HgnWdJUcX6K0oaJymHjH8PT5Gk7sTm8rvC/c5COUQKXqmOMA==}
+  /caniuse-lite@1.0.30001611:
+    resolution: {integrity: sha512-19NuN1/3PjA3QI8Eki55N8my4LzfkMCRLgCVfrl/slbSAchQfV0+GwjPrK3rq37As4UCLlM/DHajbKkAqbv92Q==}
     dev: true
 
   /chai@4.4.1:
@@ -2469,8 +2469,8 @@ packages:
       which: 2.0.2
     dev: true
 
-  /css-blank-pseudo@6.0.1(postcss@8.4.38):
-    resolution: {integrity: sha512-goSnEITByxTzU4Oh5oJZrEWudxTqk7L6IXj1UW69pO6Hv0UdX+Vsrt02FFu5DweRh2bLu6WpX/+zsQCu5O1gKw==}
+  /css-blank-pseudo@6.0.2(postcss@8.4.38):
+    resolution: {integrity: sha512-J/6m+lsqpKPqWHOifAFtKFeGLOzw3jR92rxQcwRUfA/eTuZzKfKlxOmYDx2+tqOPQAueNvBiY8WhAeHu5qNmTg==}
     engines: {node: ^14 || ^16 || >=18}
     peerDependencies:
       postcss: ^8.4
@@ -3599,8 +3599,8 @@ packages:
       postcss-value-parser: 4.2.0
     dev: true
 
-  /postcss-preset-env@9.5.5(postcss@8.4.38):
-    resolution: {integrity: sha512-tg71KfEgTHMM+C4LpWtKfHFWEunfWj1JThq/Odsw60MOowcffBrMAcSBDE+imftW5/BD3mpOiiTL6c+KcnGaLQ==}
+  /postcss-preset-env@9.5.6(postcss@8.4.38):
+    resolution: {integrity: sha512-sSfCYe178J99q8brBMBOjXhyhdJo1IYwvxjUm/uHeOGnXwWR5lbMWMyUFso45CG1lNkt6aIlYDf7J5Epi8mb9Q==}
     engines: {node: ^14 || ^16 || >=18}
     peerDependencies:
       postcss: ^8.4
@@ -3636,7 +3636,7 @@ packages:
       '@csstools/postcss-unset-value': 3.0.1(postcss@8.4.38)
       autoprefixer: 10.4.19(postcss@8.4.38)
       browserslist: 4.23.0
-      css-blank-pseudo: 6.0.1(postcss@8.4.38)
+      css-blank-pseudo: 6.0.2(postcss@8.4.38)
       css-has-pseudo: 6.0.3(postcss@8.4.38)
       css-prefers-color-scheme: 9.0.1(postcss@8.4.38)
       cssdb: 8.0.0
@@ -4133,7 +4133,7 @@ packages:
       debug: 4.3.4
       pathe: 1.1.2
       picocolors: 1.0.0
-      vite: 5.2.8
+      vite: 5.2.9
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -4145,22 +4145,22 @@ packages:
       - terser
     dev: true
 
-  /vite-plugin-babel@1.2.0(@babel/core@7.24.4)(vite@5.2.8):
+  /vite-plugin-babel@1.2.0(@babel/core@7.24.4)(vite@5.2.9):
     resolution: {integrity: sha512-ltAnq535Ubf9sDbVCkztAdkwx5aQbNrwPFs+iZTJ5FaAhTdxjqmLGpxsAaRfJWEKBJ/kFf9KwMoTdArm0IRUUw==}
     peerDependencies:
       '@babel/core': ^7.0.0
       vite: ^2.7.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
     dependencies:
       '@babel/core': 7.24.4
-      vite: 5.2.8
+      vite: 5.2.9
     dev: true
 
   /vite-plugin-banner@0.7.1:
     resolution: {integrity: sha512-Bww2Xd5tOGsZ1yZ9rQiGneryvsL1u86znPrqeQjCsXPsG72pnSdV5lcQA+cy8UNDguMqyTJiCevlNUbLnT85UA==}
     dev: true
 
-  /vite@5.2.8:
-    resolution: {integrity: sha512-OyZR+c1CE8yeHw5V5t59aXsUPPVTHMDjEZz8MgguLL/Q7NblxhZUlTu9xSPqlsUO/y+X7dlU05jdhvyycD55DA==}
+  /vite@5.2.9:
+    resolution: {integrity: sha512-uOQWfuZBlc6Y3W/DTuQ1Sr+oIXWvqljLvS881SVmAj00d5RdgShLcuXWxseWPd4HXwiYBFW/vXHfKFeqj9uQnw==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -4237,7 +4237,7 @@ packages:
       strip-literal: 2.1.0
       tinybench: 2.7.0
       tinypool: 0.8.4
-      vite: 5.2.8
+      vite: 5.2.9
       vite-node: 1.5.0
       why-is-node-running: 2.2.2
     transitivePeerDependencies:

@@ -121,7 +121,7 @@ export const getJSONData = (el, name, defaults = null) => {
   let data;
   try {
     data = JSON.parse(el.dataset[name].replace(/'/g, '"'));
-  // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
   } catch (e) {
     //
   }
@@ -198,7 +198,7 @@ try {
       },
     })
   );
-// eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
 } catch (e) {
   passiveIfSupported = false;
 }

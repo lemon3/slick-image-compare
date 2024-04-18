@@ -332,7 +332,13 @@
         color: #dadada;
       }
 
-      .dark .canvas {
+      div[data-beforeafter],
+      .beforeafter {
+        background-color: #fff;
+      }
+
+      .dark div[data-beforeafter],
+      .dark .beforeafter {
         background-color: #202020;
       }
 
@@ -359,14 +365,14 @@
       </p>
       <h2>demo 1</h2>
       <pre><code class="language-xml">&lt;div data-beforeafter&gt;
-  &lt;img src=&quot;03_after.png&quot; alt=&quot;&quot; /&gt;
   &lt;img src=&quot;03_before.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;03_after.png&quot; alt=&quot;&quot; /&gt;
 &lt;/div&gt;</code></pre>
       <div class="row">
         <div class="col col50">
           <div data-beforeafter>
-            <img src="03_after.png" alt="" />
             <img src="03_before.png" alt="" />
+            <img src="03_after.png" alt="" />
           </div>
         </div>
         <div class="col col50">
@@ -384,27 +390,64 @@
           </p>
         </div>
       </div>
+      <h2>demo 2b</h2>
+      <div class="row">
+        <div class="col col50">
+          <pre><code class="language-xml">&lt;div data-beforeafter&gt;
+  &lt;img src=&quot;03_before.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;03_after.png&quot; alt=&quot;&quot; /&gt;
+&lt;/div&gt;</code></pre>
+          <div
+            data-beforeafter="{
+              ltr: false,
+              beforeLabel: 'before',
+              afterLabel: 'after',
+            }"
+          >
+            <img src="03_before.png" alt="" />
+            <img src="03_after.png" alt="" />
+          </div>
+        </div>
+        <div class="col col50">
+          <pre><code class="language-xml">&lt;div data-beforeafter&gt;
+  &lt;img src=&quot;03_before.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;03_after.png&quot; alt=&quot;&quot; /&gt;
+&lt;/div&gt;</code></pre>
+          <div
+            data-beforeafter="{
+              lrt: true,
+              beforeLabel: 'before',
+              afterLabel: 'after',
+            }"
+          >
+            <img src="03_before.png" alt="" />
+            <img src="03_after.png" alt="" />
+          </div>
+        </div>
+      </div>
       <h2>demo 2</h2>
       <pre><code class="language-xml">&lt;div class=&quot;beforeafter&quot;
   data-beforeafter=&quot;{
     followMouse: true,
-    showToggleButton: true,
     afterOnTheRight: true,
+    beforeLabel: 'before',
+    afterLabel: 'after',
   }&quot;&gt;
-  &lt;img src=&quot;01_after.png&quot; alt=&quot;&quot; /&gt;
   &lt;img src=&quot;01_before.png&quot; alt=&quot;&quot; style=&quot;filter: grayscale()&quot; /&gt;
+  &lt;img src=&quot;01_after.png&quot; alt=&quot;&quot; /&gt;
 &lt;/div&gt;
 </code></pre>
       <div
         class="beforeafter"
         data-beforeafter="{
           followMouse: true,
-          showToggleButton: true,
           afterOnTheRight: true,
+          beforeLabel: 'before',
+          afterLabel: 'after',
         }"
       >
-        <img src="01_after.png" alt="" />
         <img src="01_before.png" alt="" style="filter: grayscale()" />
+        <img src="01_after.png" alt="" />
       </div>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis
@@ -476,6 +519,9 @@ const ba = new BeforeAfter('#demo4', options);
           <div class="line">
             <button id="demo4-destroy">destroy</button>
           </div>
+          <div class="line">
+            <button id="demo4-toggle">toggle</button>
+          </div>
         </div>
         <div class="beforeafter" id="demo4"></div>
         <script type="module">
@@ -496,6 +542,26 @@ const ba = new BeforeAfter('#demo4', options);
             const percent = document.querySelector('#demo4-percent');
             const range = document.querySelector('#demo4-range');
             const destroy = document.querySelector('#demo4-destroy');
+            const toggle = document.querySelector('#demo4-toggle');
+            let destroyed = false;
+
+            range.addEventListener('input', (e) => {
+              ba.goto(e.target.value, 250);
+            });
+
+            destroy.addEventListener('click', (e) => {
+              if (!destroyed) {
+                ba.destroy();
+                destroy.innerHTML = 'init';
+                destroyed = true;
+              } else {
+                ba.init()
+                destroy.innerHTML = 'destroy';
+                destroyed = false;
+              }
+            });
+
+            toggle.addEventListener('click', () => ba.toggle());
 
             ba.addEventListener('update', (e) => {
               let p = Math.round(e.detail.percent * 100) / 100;
@@ -503,15 +569,9 @@ const ba = new BeforeAfter('#demo4', options);
               range.value = p;
             });
 
-            range.addEventListener('input', (e) => {
-              ba.goto(e.target.value);
-            });
-
-            destroy.addEventListener('click', (e) => {
-              ba.destroy();
-              setTimeout(() => {
-                ba.init();
-              }, 2000);
+            ba.addEventListener('viewchanged', (e) => {
+              const afterShown = e.detail.afterShown;
+              toggle.innerHTML = 'Show ' + (afterShown ? 'before' : 'after');
             });
 
             ba.addEventListener('beforeshown', (e) => {

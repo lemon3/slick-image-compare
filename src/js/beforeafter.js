@@ -1,5 +1,4 @@
 import {
-  wrap,
   passiveIfSupported,
   restrict,
   docReady,
@@ -15,12 +14,13 @@ import { Emitter } from '@/js/emitter';
 // const names
 const PLUGINNAME = 'beforeafter';
 const DATANAME = 'data-' + PLUGINNAME;
-const INTERACTING = 'interacting'; // classname
+const INTERACTING = 'interacting'; // class name
 
 // event names for emitting
 const INIT = 'init';
 const DRAG = 'drag';
 const UPDATE = 'update';
+const VIEWCHANGED = 'viewchanged';
 const BEFORESHOWN = 'beforeshown';
 const AFTERSHOWN = 'aftershown';
 const INTERACTIONEND = 'interactionend';
@@ -59,6 +59,7 @@ class BeforeAfter extends Emitter {
       BEFORESHOWN,
       AFTERSHOWN,
       INTERACTIONEND,
+      VIEWCHANGED,
     ];
 
     instances.push(this);
@@ -88,13 +89,22 @@ class BeforeAfter extends Emitter {
     }
 
     this.snapTimeout = null;
-    this.deltaX = 0;
-    this.deltaY = 0;
     this.dirDetected = false;
 
     if (this.settings.autoInit) {
       this.init();
     }
+  }
+
+  _triggerEvent(eventName, detail) {
+    // default detail data
+    detail = {
+      instance: this,
+      percent: this.currentPercent,
+      afterShown: this._afterShown,
+      ...detail,
+    };
+    this.emit(eventName, detail);
   }
 
   /**
@@ -124,116 +134,68 @@ class BeforeAfter extends Emitter {
     this.originalElements = [];
     this.createdElements = [];
     const div = 'div';
+    let firstImg, secondImg;
 
-    const canvas = createEl(div, { class: 'canvas' });
-    this.createdElements.push(canvas);
-
-    // images
-    let firstImg;
-    let secondImg;
-    let first, second;
-    let createDomImage = false;
+    const clippingElement = createEl(div, { class: 'clipSlider' });
 
     if (s.beforeImage || s.afterImage) {
-      createDomImage = true;
-      firstImg = createEl('img', { draggable: false });
-      firstImg.src = s.beforeImage;
-      secondImg = createEl('img', { draggable: false });
-      secondImg.src = s.afterImage;
-    } else {
-      [first, second] = this.originalElements = this.images;
-      firstImg = first.cloneNode(true);
-      firstImg.setAttribute('draggable', false);
+      this.images = [firstImg, secondImg] = [
+        s.beforeImage,
+        s.afterImage,
+      ].reduce((arr, src) => {
+        arr.push(createEl('img', { draggable: false, src }));
+        return arr;
+      }, []);
 
+      this.element.append(firstImg);
+      clippingElement.append(secondImg);
+      this.element.append(clippingElement);
+
+      this.createdElements.push(firstImg);
+    } else {
+      const [first, second] = this.images;
+      firstImg = first;
+      firstImg.setAttribute('draggable', false);
       secondImg = second.cloneNode(true);
       secondImg.setAttribute('draggable', false);
+
+      clippingElement.append(secondImg);
+      second.parentNode.replaceChild(clippingElement, second);
+      this.originalElements.push(second);
     }
+    this.createdElements.push(clippingElement);
 
-    const clippingElement = createEl(
-      div,
-      { class: 'clipSlider' },
-      { zIndex: 2 }
-    );
-
-    const wrapper1 = document.createDocumentFragment();
-    const wrapper2 = document.createDocumentFragment();
-
-    wrapper1.appendChild(firstImg);
-    wrapper2.appendChild(secondImg);
-
-    let clip;
+    // create labels
+    let info1, info2;
     if ('' !== s.beforeLabel) {
-      const info1 = createEl(div, { class: 'label left' });
+      info1 = createEl(div, { class: 'label label-one' });
       info1.innerHTML = s.beforeLabel;
-      clip = createEl(div, { class: 'clipSlider' });
-      clip.append(info1);
-      wrapper2.appendChild(clip);
+      this.element.appendChild(info1);
+      this.createdElements.push(info1);
     }
 
     if ('' !== s.afterLabel) {
-      const info2 = createEl(div, { class: 'label right' });
+      info2 = createEl(div, { class: 'label label-two' });
       info2.innerHTML = s.afterLabel;
-      wrapper1.appendChild(info2);
+      this.element.appendChild(info2);
+      this.createdElements.push(info2);
     }
-
-    clippingElement.appendChild(wrapper1);
-
-    if (createDomImage) {
-      canvas.append(clippingElement);
-      canvas.append(wrapper2);
-      this.element.append(canvas);
-    } else {
-      first.parentNode.replaceChild(clippingElement, first);
-      second.remove();
-      wrap([clippingElement, wrapper2], canvas);
-    }
+    this.info1 = s.ltr ? info1 : info2;
+    this.info2 = s.ltr ? info2 : info1;
 
     // Create drag element
     const drag = createEl(div, { class: s.dragElementClass }, { zIndex: 5 });
-    // const overlay1 = createEl(div, { class: 'overlay' }, { zIndex: 4 });
-
     const dragHandle = createEl(div);
     drag.appendChild(dragHandle);
 
-    // canvas.appendChild(overlay1);
-    canvas.appendChild(drag);
-
-    if ('' !== s.beforeDescription || '' !== s.afterDescription) {
-      const description = createEl(div, {
-        class: 'description',
-      });
-
-      description.innerHTML = s.beforeDescription;
-      this.element.appendChild(description);
-      this.createdElements.push(description);
-      this.description = description;
-    }
-
-    if (s.showToggleButton) {
-      const button = createEl(
-        div,
-        {
-          class: 'toggleButton',
-        },
-        { zIndex: 5 }
-      );
-      button.innerHTML = this._buttonStartText;
-
-      this.element.appendChild(button);
-      this.createdElements.push(button);
-      this.toggleBtn = button;
-    }
+    this.element.appendChild(drag);
+    this.createdElements.push(drag);
 
     this.element.style.visibility = 'visible';
 
     // global elements
-    this.wrapper1 = wrapper1;
-    this.wrapper2 = wrapper2;
     this.dragHandle = drag;
-
-    this.clip = clip;
     this.clippingElement = clippingElement;
-    this.canvas = canvas;
   }
 
   /**
@@ -243,18 +205,18 @@ class BeforeAfter extends Emitter {
    */
   _mouseStartEvents(add = true) {
     const fun = (add ? 'add' : 'remove') + 'EventListener';
-    // console.log('mouseevents', fun);
+    // console.log('_mouseStartEvents', fun);
     const s = this.settings;
     if (s.followMouse) {
-      const c = this.canvas;
+      const c = this.element;
       c[fun]('mouseenter', this._mouseOver, false);
       c[fun]('mouseleave', this._mouseOut, false);
       c[fun]('mousemove', this._mouseMove, false);
     } else {
       this.dragElementTrigger[fun](MOUSEDOWN, this._dragStart);
       if (s.onlyHandleDraggable && s.clickable) {
-        this.canvas[fun](MOUSEDOWN, this._tapstart, false);
-        this.canvas[fun]('mouseup', this._dragEnd, false);
+        this.element[fun](MOUSEDOWN, this._tapstart, false);
+        this.element[fun]('mouseup', this._dragEnd, false);
       }
     }
   }
@@ -266,41 +228,27 @@ class BeforeAfter extends Emitter {
    */
   _touchStartEvent(add = true) {
     const fun = (add ? 'add' : 'remove') + 'EventListener';
-    // console.log('touchStartEvent', fun);
+    // console.log('_touchStartEvent', fun);
     this.dragElementTrigger[fun](
       'touchstart',
       this._dragStart,
       passiveIfSupported
     );
     if (this.settings.clickable) {
-      this.canvas[fun]('touchstart', this._tapstart, false);
-      this.canvas[fun]('touchend', this._dragEnd, false);
+      this.element[fun]('touchstart', this._tapstart, false);
+      this.element[fun]('touchend', this._dragEnd, false);
     }
   }
 
-  _removeAllEvents() {
-    this._mouseStartEvents(false);
-    this._touchStartEvent(false);
-
-    if (this.toggleBtn) {
-      this.toggleBtn.removeEventListener('click', this.toggleBeforeAfter);
-    }
-    window.removeEventListener(RESIZE, this._dimensions);
-    this.removeEventListener(INTERACTIONEND, this._interactionEnd);
+  _appEvents(add) {
+    const fun = (add ? 'add' : 'remove') + 'EventListener';
+    this._touchStartEvent(add);
+    this._mouseStartEvents(add);
+    window[fun](RESIZE, this._dimensions);
+    this[fun](INTERACTIONEND, this._interactionEnd);
   }
 
-  _addEvents() {
-    this._touchStartEvent();
-    this._mouseStartEvents();
-
-    if (this.toggleBtn) {
-      this.toggleBtn.addEventListener('click', this.toggleBeforeAfter, false);
-    }
-    window.addEventListener(RESIZE, this._dimensions);
-    this.addEventListener(INTERACTIONEND, this._interactionEnd);
-  }
-
-  // TODO: jumpToEnd
+  // TODO: jumpToEnd parameter?
   _stopAni() {
     // console.log('_stopAni', this._renderId);
     if (this._renderId) {
@@ -313,7 +261,7 @@ class BeforeAfter extends Emitter {
   _testInteractionEnd() {
     if (this._endInteraction && undefined === this._renderId) {
       this._endInteraction = false;
-      this.emit(INTERACTIONEND);
+      this._triggerEvent(INTERACTIONEND);
     }
   }
 
@@ -348,14 +296,18 @@ class BeforeAfter extends Emitter {
     render();
   }
 
+  /**
+   * Method to animate to the given percentage
+   *
+   * @param {float} percent The percentage to move to (0 - 100)
+   * @param {int} duration The duration in ms (e.g. 250)
+   * @param {Object} easing The the easing function
+   * @returns
+   */
   _animateTo(percent, duration, easing) {
     percent = restrict(+percent, 0, 100);
     this._delta = percent - this.currentPercent;
     // console.log('from:', this.currentPercent, 'to:', percent, duration);
-
-    if (Math.abs(this._delta) < 1) {
-      return;
-    }
 
     if (!duration) {
       this._setPosition(percent);
@@ -402,8 +354,6 @@ class BeforeAfter extends Emitter {
     // console.log('isTouch:', this.isTouch);
     this.element.classList.remove(INTERACTING);
 
-    // make it a little bit async
-    // setTimeout(() => {
     if (this.isTouch) {
       // reenable mouse events
       this._mouseStartEvents();
@@ -414,11 +364,10 @@ class BeforeAfter extends Emitter {
     if (this.settings.snapToStart) {
       this._snapToStart();
     }
-    // }, 1);
   };
 
   _dimensions = () => {
-    this.elementWidth = this.canvas.offsetWidth;
+    this.elementWidth = this.element.offsetWidth;
     this.elementOffsetLeft = this.offsetElements
       .map((offsetEl) => offsetEl.offsetLeft)
       .reduce((prev, cur) => prev + cur);
@@ -437,10 +386,10 @@ class BeforeAfter extends Emitter {
       this.dragHandleWidth / 2 -
       this.settings.handleMinDistance;
 
-    this.elementHeight = this.canvas.offsetHeight;
+    this.elementHeight = this.element.offsetHeight;
     // Math.max(
-    //   this.canvas.offsetHeight,
-    //   this.canvas.offsetWidth / this.imageDimensions.ratio
+    //   this.element.offsetHeight,
+    //   this.element.offsetWidth / this.imageDimensions.ratio
     // );
 
     if (this.oldElementWidth === this.elementWidth) {
@@ -454,14 +403,14 @@ class BeforeAfter extends Emitter {
 
   _mouseOver = () => {
     // console.log('_mouseOver');
-    // this.canvas.addEventListener('mousemove', this._mouseMove);
+    // this.element.addEventListener('mousemove', this._mouseMove);
     this._stopAni();
     this.element.classList.add(INTERACTING);
   };
 
   _mouseOut = () => {
     // console.log('_mouseOut');
-    // this.canvas.removeEventListener('mousemove', this._mouseMove);
+    // this.element.removeEventListener('mousemove', this._mouseMove);
     this.element.classList.remove(INTERACTING);
     if (this.settings.snapToStart) {
       this._snapToStart();
@@ -521,11 +470,11 @@ class BeforeAfter extends Emitter {
 
     if (this.isTouch) {
       e.preventDefault();
-      this.deltaX = Math.abs(this.startPos.x - currentPos.x);
-      this.deltaY = Math.abs(this.startPos.y - currentPos.y);
+      const deltaX = Math.abs(this.startPos.x - currentPos.x);
+      const deltaY = Math.abs(this.startPos.y - currentPos.y);
 
       if (!this.dirDetected) {
-        if (this.deltaY > this.deltaX) {
+        if (deltaY > deltaX) {
           // console.log('scroll down');
           this.element.classList.remove(INTERACTING);
           window.removeEventListener(
@@ -542,7 +491,7 @@ class BeforeAfter extends Emitter {
     }
 
     this._setPosition(percent);
-    this.emit(DRAG, { percent });
+    this._triggerEvent(DRAG);
   };
 
   _dragEnd = (e) => {
@@ -562,18 +511,21 @@ class BeforeAfter extends Emitter {
     }
 
     this._testInteractionEnd();
-
     this.dirDetected = false;
   };
 
-  _setToggleValues(status, toggleText, text) {
-    if (this.toggleBtn) {
-      this.toggleBtn.innerHTML = toggleText;
-    }
-    if (this.description) {
-      this.description.innerHTML = text;
-    }
-    this._afterShown = 1 === status ? true : false;
+  _changeStatus(status) {
+    this._afterShown = status;
+    let eventName = this._afterShown
+      ? this.settings.ltr
+        ? AFTERSHOWN
+        : BEFORESHOWN
+      : this.settings.ltr
+        ? BEFORESHOWN
+        : AFTERSHOWN;
+
+    this._triggerEvent(eventName);
+    this._triggerEvent(VIEWCHANGED);
     this._oneTime = false;
   }
 
@@ -598,31 +550,23 @@ class BeforeAfter extends Emitter {
       clipR = tmp;
     }
 
-    if (this.clip) {
-      this.clip.style.clipPath = clipR;
+    if (this.info1) {
+      this.info1.style.opacity = percent < 50 ? 1 : (100 - percent) / 50;
     }
+    if (this.info2) {
+      this.info2.style.opacity = percent > 50 ? 1 : percent / 50;
+    }
+
     this.clippingElement.style.clipPath = clipL;
     this.dragHandle.style.transform = `translate(${left}px, 0)`;
 
-    // console.log(this._afterShown);
-    // change state and button text
     if (percent > 75 && (!this._afterShown || this._oneTime)) {
-      this._setToggleValues(
-        1,
-        this.settings.toggleBeforeText,
-        this.settings.afterDescription
-      );
-      this.emit(this.afterOnTheRight ? AFTERSHOWN : BEFORESHOWN);
+      this._changeStatus(true);
     } else if (percent < 25 && (this._afterShown || this._oneTime)) {
-      this._setToggleValues(
-        0,
-        this.settings.toggleAfterText,
-        this.settings.beforeDescription
-      );
-      this.emit(this.afterOnTheRight ? BEFORESHOWN : AFTERSHOWN);
+      this._changeStatus(false);
     }
 
-    this.emit(UPDATE, { percent });
+    this._triggerEvent(UPDATE);
   }
 
   /**
@@ -657,30 +601,12 @@ class BeforeAfter extends Emitter {
     if (this._initialized) {
       return this;
     }
+    const s = this.settings;
+
     this._initialized = true;
     this._oneTime = true;
-
-    const s = this.settings;
     this._afterShown = false;
-
-    // how to clip the image (from which side)
-    this._clipFromLeft = true;
-    this._buttonStartText = this.settings.toggleAfterText;
-
-    // change texts
-    if (!s.afterOnTheRight) {
-      let afterDescription = s.afterDescription;
-      s.afterDescription = s.beforeDescription;
-      s.beforeDescription = afterDescription;
-
-      let toggleAfterText = s.toggleAfterText;
-      s.toggleAfterText = s.toggleBeforeText;
-      s.toggleBeforeText = toggleAfterText;
-
-      this._afterShown = true;
-      this._buttonStartText = this.settings.toggleBeforeText;
-      this._clipFromLeft = false;
-    }
+    this._clipFromLeft = s.ltr ? true : false;
 
     this._createGui();
     this.offsetElements = this._getOffsetElements();
@@ -688,7 +614,7 @@ class BeforeAfter extends Emitter {
 
     this.dragElementTrigger = s.onlyHandleDraggable
       ? this.dragHandle
-      : this.canvas;
+      : this.element;
     this._animationDuration = s.animateInDuration || 0;
 
     if (!s.startPos) {
@@ -709,12 +635,10 @@ class BeforeAfter extends Emitter {
       window.navigator.msMaxTouchPoints > 0;
 
     // read the first image
-    let file = this.settings.beforeImage || this.images[0].src;
-    imageDimensions(file).then((dimensions) => {
+    imageDimensions(this.images[0].src).then((dimensions) => {
       this.imageDimensions = dimensions;
       this._dimensions();
       this._setPosition(this.currentPercent);
-
       this.element.style.opacity = 1;
 
       if (
@@ -732,8 +656,9 @@ class BeforeAfter extends Emitter {
         );
       }
 
-      this._addEvents();
-      this.emit(INIT);
+      this._appEvents();
+      this._triggerEvent(INIT);
+      this._triggerEvent(VIEWCHANGED);
     });
   }
 
@@ -764,33 +689,24 @@ class BeforeAfter extends Emitter {
     return this.element;
   }
 
-  toggleBeforeAfter = (evt) => {
-    if (evt) {
-      evt.stopPropagation();
-    }
+  toggle() {
     this._stopAni();
-
     if (this._afterShown) {
       this.showBefore();
     } else {
       this.showAfter();
     }
-  };
+  }
 
   destroy() {
     this.element.removeAttribute('data-bainitialized');
-
-    if ('undefined' === typeof this.createdElements) {
-      return false;
-    }
-
     this.createdElements.forEach((el) => this.element.removeChild(el));
     this.originalElements.forEach((el) => this.element.appendChild(el));
     this.createdElements = [];
     this.originalElements = [];
 
     // remove all eventlistener
-    this._removeAllEvents();
+    this._appEvents(false);
     this._initialized = false;
   }
 }
