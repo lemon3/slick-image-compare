@@ -240,7 +240,7 @@ class BeforeAfter extends Emitter {
     }
   }
 
-  _appEvents(add) {
+  _appEvents(add = true) {
     const fun = (add ? 'add' : 'remove') + 'EventListener';
     this._touchStartEvent(add);
     this._mouseStartEvents(add);
