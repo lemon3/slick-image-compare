@@ -147,9 +147,9 @@ class BeforeAfter extends Emitter {
         return arr;
       }, []);
 
-      this.element.append(firstImg);
-      clippingElement.append(secondImg);
-      this.element.append(clippingElement);
+      this.element.appendChild(firstImg);
+      clippingElement.appendChild(secondImg);
+      this.element.appendChild(clippingElement);
 
       this.createdElements.push(firstImg);
     } else {
@@ -159,10 +159,11 @@ class BeforeAfter extends Emitter {
       secondImg = second.cloneNode(true);
       secondImg.setAttribute('draggable', false);
 
-      clippingElement.append(secondImg);
+      clippingElement.appendChild(secondImg);
       second.parentNode.replaceChild(clippingElement, second);
       this.originalElements.push(second);
     }
+
     this.createdElements.push(clippingElement);
 
     // create labels
@@ -184,8 +185,21 @@ class BeforeAfter extends Emitter {
     this.info2 = s.ltr ? info2 : info1;
 
     // Create drag element
-    const drag = createEl(div, { class: s.dragElementClass }, { zIndex: 5 });
-    const dragHandle = createEl(div);
+    const drag = createEl(
+      div,
+      {
+        class:
+          s.dragElementClass +
+          ' ' +
+          (this._horizontal ? 'horizontal' : 'vertical'),
+      },
+      { zIndex: 5 }
+    );
+    const line1 = createEl(div, { class: 'line line-1' });
+    const line2 = createEl(div, { class: 'line line-2' });
+    const dragHandle = createEl(div, { class: 'circle' });
+    drag.appendChild(line1);
+    drag.appendChild(line2);
     drag.appendChild(dragHandle);
 
     this.element.appendChild(drag);
@@ -334,22 +348,6 @@ class BeforeAfter extends Emitter {
     }, delay);
   }
 
-  _getOffsetElements() {
-    const offsetElements = [this.element];
-    let parent = this.element.offsetParent;
-    if (!parent) {
-      return offsetElements;
-    }
-    do {
-      offsetElements.push(parent);
-      if (!parent.offsetParent) {
-        break;
-      }
-      parent = parent.offsetParent;
-    } while ('BODY' !== parent.nodeName);
-    return offsetElements;
-  }
-
   _interactionEnd = () => {
     // console.log('isTouch:', this.isTouch);
     this.element.classList.remove(INTERACTING);
@@ -366,33 +364,46 @@ class BeforeAfter extends Emitter {
     }
   };
 
-  _dimensions = () => {
-    this.elementWidth = this.element.offsetWidth;
-    this.elementOffsetLeft = this.offsetElements
-      .map((offsetEl) => offsetEl.offsetLeft)
-      .reduce((prev, cur) => prev + cur);
+  _dimensions = (force) => {
+    const bounding = this.element.getBoundingClientRect();
+    const cs = getComputedStyle(this.element);
+    const borderX =
+      parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth);
+    const borderY =
+      parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth);
+
+    this.elementWidth = bounding.width - borderX;
+    this.elementHeight = bounding.height - borderY;
+    this.elementX = bounding.x;
+    // const a = this.offsetElements
+    //   .map((offsetEl) => offsetEl.offsetLeft)
+    //   .reduce((prev, cur) => prev + cur);
+
+    // optimized version for _setPosition method
+    this.elementDim =
+      (this._horizontal ? this.elementWidth : this.elementHeight) * 0.01;
 
     // TODO: is always 2
     this.dragHandleWidth = this.dragHandle.offsetWidth;
 
     this.minLeftPos =
-      this.elementOffsetLeft +
+      this.elementX +
       this.settings.handleMinDistance -
       this.dragHandleWidth / 2;
 
     this.maxLeftPos =
-      this.elementOffsetLeft +
+      this.elementX +
       this.elementWidth -
       this.dragHandleWidth / 2 -
       this.settings.handleMinDistance;
 
-    this.elementHeight = this.element.offsetHeight;
+    // this.elementHeight = this.element.offsetHeight - paddingY - borderY;
     // Math.max(
     //   this.element.offsetHeight,
     //   this.element.offsetWidth / this.imageDimensions.ratio
     // );
 
-    if (this.oldElementWidth === this.elementWidth) {
+    if (!force && this.oldElementWidth === this.elementWidth) {
       return;
     }
 
@@ -475,7 +486,8 @@ class BeforeAfter extends Emitter {
 
       if (!this.dirDetected) {
         if (deltaY > deltaX) {
-          // console.log('scroll down');
+          console.log('scroll down or up');
+
           this.element.classList.remove(INTERACTING);
           window.removeEventListener(
             'touchmove',
@@ -514,16 +526,24 @@ class BeforeAfter extends Emitter {
     this.dirDetected = false;
   };
 
+  _getClipRect(pos) {
+    if (this._horizontal) {
+      if (this._clipFromLeft) {
+        return `rect(0 ${pos}px ${this.elementHeight}px 0)`;
+      }
+      return `rect(0 ${this.elementWidth}px ${this.elementHeight}px ${pos}px)`;
+    }
+
+    // vertical
+    if (this._clipFromLeft) {
+      return `rect(0 ${this.elementWidth}px ${pos}px 0)`;
+    }
+    return `rect(${pos}px ${this.elementWidth}px ${this.elementHeight}px 0)`;
+  }
+
   _changeStatus(status) {
     this._afterShown = status;
-    let eventName = this._afterShown
-      ? this.settings.ltr
-        ? AFTERSHOWN
-        : BEFORESHOWN
-      : this.settings.ltr
-        ? BEFORESHOWN
-        : AFTERSHOWN;
-
+    let eventName = this._afterShown ? AFTERSHOWN : BEFORESHOWN;
     this._triggerEvent(eventName);
     this._triggerEvent(VIEWCHANGED);
     this._oneTime = false;
@@ -539,16 +559,11 @@ class BeforeAfter extends Emitter {
     }
     this.currentPercent = percent;
 
-    let left = this.elementWidth * percent * 0.01;
-    let clipL = `rect(0 ${left}px ${this.elementHeight}px 0)`;
-    let clipR = `rect(0 ${this.elementWidth}px ${this.elementHeight}px ${left}px)`;
-    let tmp;
-
-    if (!this._clipFromLeft) {
-      tmp = clipL;
-      clipL = clipR;
-      clipR = tmp;
-    }
+    const pos = this.elementDim * percent; // this.elementWidth * percent * 0.01;
+    this.clippingElement.style.clipPath = this._getClipRect(pos);
+    this.dragHandle.style.transform = this._horizontal
+      ? `translate(${pos}px, 0)`
+      : `translate(0, ${pos}px)`;
 
     if (this.info1) {
       this.info1.style.opacity = percent < 50 ? 1 : (100 - percent) / 50;
@@ -557,13 +572,11 @@ class BeforeAfter extends Emitter {
       this.info2.style.opacity = percent > 50 ? 1 : percent / 50;
     }
 
-    this.clippingElement.style.clipPath = clipL;
-    this.dragHandle.style.transform = `translate(${left}px, 0)`;
-
-    if (percent > 75 && (!this._afterShown || this._oneTime)) {
-      this._changeStatus(true);
-    } else if (percent < 25 && (this._afterShown || this._oneTime)) {
-      this._changeStatus(false);
+    let test = this.settings.ltr ? this._afterShown : !this._afterShown;
+    if (percent > 75 && (this._oneTime || !test)) {
+      this._changeStatus(this.settings.ltr);
+    } else if (percent < 25 && (this._oneTime || test)) {
+      this._changeStatus(!this.settings.ltr);
     }
 
     this._triggerEvent(UPDATE);
@@ -577,7 +590,7 @@ class BeforeAfter extends Emitter {
   _calcLeftPercent(leftPos) {
     leftPos = restrict(leftPos, this.minLeftPos, this.maxLeftPos);
     return (
-      ((leftPos + this.dragHandleWidth * 0.5 - this.elementOffsetLeft) * 100) /
+      ((leftPos + this.dragHandleWidth * 0.5 - this.elementX) * 100) /
       this.elementWidth
     );
   }
@@ -590,9 +603,7 @@ class BeforeAfter extends Emitter {
   _calcLeftValue(leftPercent) {
     const percent = restrict(leftPercent, 0, 100) * 0.01;
     return (
-      percent * this.elementWidth +
-      this.elementOffsetLeft -
-      this.dragHandleWidth * 0.5
+      percent * this.elementWidth + this.elementX - this.dragHandleWidth * 0.5
     );
   }
 
@@ -606,10 +617,12 @@ class BeforeAfter extends Emitter {
     this._initialized = true;
     this._oneTime = true;
     this._afterShown = false;
+
+    // form settings
     this._clipFromLeft = s.ltr ? true : false;
+    this._horizontal = s.horizontal;
 
     this._createGui();
-    this.offsetElements = this._getOffsetElements();
     this.timing = { time: 0, curTime: 0 };
 
     this.dragElementTrigger = s.onlyHandleDraggable
@@ -675,6 +688,14 @@ class BeforeAfter extends Emitter {
     }
     this._stopAni();
     this._animateTo(percent, duration, easing);
+  }
+
+  changeDirection() {
+    const prev = this._horizontal;
+    this._horizontal = !prev;
+    this.dragHandle.classList.remove(prev ? 'horizontal' : 'vertical');
+    this.dragHandle.classList.add(this._horizontal ? 'horizontal' : 'vertical');
+    this._dimensions(true);
   }
 
   showAfter() {

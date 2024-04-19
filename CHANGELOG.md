@@ -2,6 +2,11 @@
 
 ## v0.2.3
 ### Added or Changed
+- style update
+- dimension calculation update
+
+## v0.2.3
+### Added or Changed
 - changed options afterOnTheRight with ltr true|false
 - added viewchanged event (fired when the before or after image is 70 percent or more visible)
 

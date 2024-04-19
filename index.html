@@ -342,6 +342,10 @@
         background-color: #202020;
       }
 
+      .info-box {
+        position: absolute;
+      }
+
       @media screen and (max-width: 767px) {
         .row > .col {
           width: 100%;
@@ -370,12 +374,6 @@
 &lt;/div&gt;</code></pre>
       <div class="row">
         <div class="col col50">
-          <div data-beforeafter>
-            <img src="03_before.png" alt="" />
-            <img src="03_after.png" alt="" />
-          </div>
-        </div>
-        <div class="col col50">
           <h2>Lorem ipsum</h2>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis
@@ -389,37 +387,8 @@
             blanditiis!
           </p>
         </div>
-      </div>
-      <h2>demo 2b</h2>
-      <div class="row">
         <div class="col col50">
-          <pre><code class="language-xml">&lt;div data-beforeafter&gt;
-  &lt;img src=&quot;03_before.png&quot; alt=&quot;&quot; /&gt;
-  &lt;img src=&quot;03_after.png&quot; alt=&quot;&quot; /&gt;
-&lt;/div&gt;</code></pre>
-          <div
-            data-beforeafter="{
-              ltr: false,
-              beforeLabel: 'before',
-              afterLabel: 'after',
-            }"
-          >
-            <img src="03_before.png" alt="" />
-            <img src="03_after.png" alt="" />
-          </div>
-        </div>
-        <div class="col col50">
-          <pre><code class="language-xml">&lt;div data-beforeafter&gt;
-  &lt;img src=&quot;03_before.png&quot; alt=&quot;&quot; /&gt;
-  &lt;img src=&quot;03_after.png&quot; alt=&quot;&quot; /&gt;
-&lt;/div&gt;</code></pre>
-          <div
-            data-beforeafter="{
-              lrt: true,
-              beforeLabel: 'before',
-              afterLabel: 'after',
-            }"
-          >
+          <div data-beforeafter>
             <img src="03_before.png" alt="" />
             <img src="03_after.png" alt="" />
           </div>
@@ -429,7 +398,7 @@
       <pre><code class="language-xml">&lt;div class=&quot;beforeafter&quot;
   data-beforeafter=&quot;{
     followMouse: true,
-    afterOnTheRight: true,
+    ltr: true,
     beforeLabel: 'before',
     afterLabel: 'after',
   }&quot;&gt;
@@ -441,7 +410,7 @@
         class="beforeafter"
         data-beforeafter="{
           followMouse: true,
-          afterOnTheRight: true,
+          ltr: true,
           beforeLabel: 'before',
           afterLabel: 'after',
         }"
@@ -462,10 +431,11 @@
       <h2>demo 3</h2>
       <pre><code class="language-xml">&lt;div class=&quot;beforeafter&quot;
   data-beforeafter=&quot;{
-    'onlyHandleDraggable': true,
-    'beforeLabel': 'before',
-    'afterLabel': 'after',
-    'showToggleButton': true,
+    onlyHandleDraggable: true,
+    clickable: true,
+    beforeLabel: 'before',
+    afterLabel: 'after',
+    snapToStart: true,
   }&quot;&gt;
   &lt;img src=&quot;02_after.png&quot; alt=&quot;&quot; /&gt;
   &lt;img src=&quot;02_before.png&quot; alt=&quot;&quot; /&gt;
@@ -475,11 +445,10 @@
         <div
           class="beforeafter"
           data-beforeafter="{
-            'onlyHandleDraggable': true,
+            onlyHandleDraggable: true,
             clickable: true,
-            'beforeLabel': 'before',
-            'afterLabel': 'after',
-            'showToggleButton': true,
+            beforeLabel: 'before',
+            afterLabel: 'after',
             snapToStart: true,
           }"
         >
@@ -490,11 +459,12 @@
 
       <h2>demo 4</h2>
       <pre><code class="language-javascript">const options = {
-  afterOnTheRight: true,
-  beforeLabel: 'before',
+  beforeImage: '01_before.png',
+  afterImage: '01_after.png',
   afterLabel: 'after',
-  beforeDescription: 'nice in pink',
-  afterDescription: 'nice in blue',
+  beforeLabel: 'before',
+  horizontal: true,
+  ltr: true,
 };
 
 const ba = new BeforeAfter('#demo4', options);
@@ -522,8 +492,14 @@ const ba = new BeforeAfter('#demo4', options);
           <div class="line">
             <button id="demo4-toggle">toggle</button>
           </div>
+          <!-- <div class="line">
+            <button id="demo4-direction">change direction</button>
+          </div> -->
         </div>
-        <div class="beforeafter" id="demo4"></div>
+        <div class="beforeafter" id="demo4">
+          <!-- <div class="info-box"><h1>info box</h1></div> -->
+        </div>
+        <div id="demo4-caption" style="text-align: center">&nbsp;</div>
         <script type="module">
           import BeforeAfter from './src/index.js';
           const init = () => {
@@ -531,11 +507,10 @@ const ba = new BeforeAfter('#demo4', options);
             const options = {
               beforeImage: '01_before.png',
               afterImage: '01_after.png',
-              afterOnTheRight: true,
-              beforeLabel: 'before',
               afterLabel: 'after',
-              beforeDescription: 'nice in pink',
-              afterDescription: 'nice in blue',
+              beforeLabel: 'before',
+              horizontal: true,
+              ltr: true,
             };
             const ba = new BeforeAfter('#demo4', options);
 
@@ -543,7 +518,11 @@ const ba = new BeforeAfter('#demo4', options);
             const range = document.querySelector('#demo4-range');
             const destroy = document.querySelector('#demo4-destroy');
             const toggle = document.querySelector('#demo4-toggle');
+            const caption = document.querySelector('#demo4-caption');
+            // const direction = document.querySelector('#demo4-direction');
+
             let destroyed = false;
+            let slide = false;
 
             range.addEventListener('input', (e) => {
               ba.goto(e.target.value, 250);
@@ -555,7 +534,7 @@ const ba = new BeforeAfter('#demo4', options);
                 destroy.innerHTML = 'init';
                 destroyed = true;
               } else {
-                ba.init()
+                ba.init();
                 destroy.innerHTML = 'destroy';
                 destroyed = false;
               }
@@ -563,10 +542,16 @@ const ba = new BeforeAfter('#demo4', options);
 
             toggle.addEventListener('click', () => ba.toggle());
 
+            // direction.addEventListener('click', () => {
+            //   ba.changeDirection();
+            // });
+
             ba.addEventListener('update', (e) => {
               let p = Math.round(e.detail.percent * 100) / 100;
+              // if (!slide) {
+              //   range.value = p;
+              // }
               percent.innerHTML = `${p}%`;
-              range.value = p;
             });
 
             ba.addEventListener('viewchanged', (e) => {
@@ -576,10 +561,12 @@ const ba = new BeforeAfter('#demo4', options);
 
             ba.addEventListener('beforeshown', (e) => {
               console.log('beforeshown', e);
+              caption.innerHTML = 'pink';
             });
 
             ba.addEventListener('aftershown', (e) => {
               console.log('aftershown', e);
+              caption.innerHTML = 'blue';
             });
 
             window.ba = ba;
