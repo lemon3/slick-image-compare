@@ -528,14 +528,14 @@ class BeforeAfter extends Emitter {
 
   _getClipRect(pos) {
     if (this._horizontal) {
-      if (this._clipFromLeft) {
+      if (this._ltr) {
         return `rect(0 ${pos}px ${this.elementHeight}px 0)`;
       }
       return `rect(0 ${this.elementWidth}px ${this.elementHeight}px ${pos}px)`;
     }
 
     // vertical
-    if (this._clipFromLeft) {
+    if (this._ltr) {
       return `rect(0 ${this.elementWidth}px ${pos}px 0)`;
     }
     return `rect(${pos}px ${this.elementWidth}px ${this.elementHeight}px 0)`;
@@ -619,7 +619,7 @@ class BeforeAfter extends Emitter {
     this._afterShown = false;
 
     // form settings
-    this._clipFromLeft = s.ltr ? true : false;
+    this._ltr = s.ltr ? true : false;
     this._horizontal = s.horizontal;
 
     this._createGui();
@@ -690,7 +690,18 @@ class BeforeAfter extends Emitter {
     this._animateTo(percent, duration, easing);
   }
 
+  /**
+   * ltr = true  (before, 0%) L -> R (after, 100%)
+   * ltr = false (after, 0%)  R -> L (before, 100%)
+   */
   changeDirection() {
+
+  }
+
+  /**
+   * horizontal or vertical slider
+   */
+  changeOrientation() {
     const prev = this._horizontal;
     this._horizontal = !prev;
     this.dragHandle.classList.remove(prev ? 'horizontal' : 'vertical');
@@ -727,6 +738,7 @@ class BeforeAfter extends Emitter {
     this.originalElements = [];
 
     // remove all eventlistener
+    this.currentPercent = this.startPos;
     this._appEvents(false);
     this._initialized = false;
   }

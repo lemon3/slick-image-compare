@@ -3,14 +3,14 @@
 * undefined
 */
 var N = Object.defineProperty;
-var I = Object.getOwnPropertySymbols;
-var F = Object.prototype.hasOwnProperty, k = Object.prototype.propertyIsEnumerable;
-var P = (s, i, t) => i in s ? N(s, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[i] = t, D = (s, i) => {
+var D = Object.getOwnPropertySymbols;
+var k = Object.prototype.hasOwnProperty, $ = Object.prototype.propertyIsEnumerable;
+var P = (s, i, t) => i in s ? N(s, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[i] = t, y = (s, i) => {
   for (var t in i || (i = {}))
-    F.call(i, t) && P(s, t, i[t]);
-  if (I)
-    for (var t of I(i))
-      k.call(i, t) && P(s, t, i[t]);
+    k.call(i, t) && P(s, t, i[t]);
+  if (D)
+    for (var t of D(i))
+      $.call(i, t) && P(s, t, i[t]);
   return s;
 };
 var o = (s, i, t) => (P(s, typeof i != "symbol" ? i + "" : i, t), t);
@@ -42,7 +42,7 @@ const H = {
     let t = this._s.get(s).delete(i);
     return this._s.get(s).size === 0 && this._s.delete(s), t;
   }
-}, $ = (s) => {
+}, F = (s) => {
   const i = "DOMContentLoaded";
   document.readyState === "complete" || document.readyState === "interactive" ? (s(), document.removeEventListener(i, s)) : document.addEventListener(i, s, !1);
 }, R = (s) => new Promise((i, t) => {
@@ -111,7 +111,7 @@ const v = (s, i, t) => {
     for (let n in t)
       Object.prototype.hasOwnProperty.call(t, n) && (s.style[n] = t[n]);
   return e && (s.innerHTML = e), s;
-}, f = (s, i, t, e) => X(document.createElement(s), i, t, e), y = {
+}, g = (s, i, t, e) => X(document.createElement(s), i, t, e), T = {
   // Linear: {},
   // Pow: {},
   Quad: {
@@ -132,8 +132,11 @@ const v = (s, i, t) => {
       return s === 0 || s === 1 ? s : Math.pow(2, -10 * s) * Math.sin((s * 10 - 0.75) * i) + 1;
     }
   }
-}, B = {
+}, G = {
   autoInit: !0,
+  horizontal: !0,
+  // true is the default, if false vertical
+  ltr: !0,
   beforeImage: null,
   afterImage: null,
   followMouse: !1,
@@ -143,9 +146,11 @@ const v = (s, i, t) => {
   // only works if onlyHandleDraggable is set to true
   snapToStart: !1,
   // after mouse out or drag stop handle jumps to start position
-  snapToStartDelay: 250,
-  // snapToStartDelayTap: 10, // todo
-  ltr: !0,
+  snapToStartDelay: 1250,
+  snapToStartDuration: 1250,
+  // ms TODO: implement
+  snapToStartEasing: T.Elastic.easeOut,
+  // TODO: implement
   handleMinDistance: 0,
   // min distance to left and right border in px
   dragElementClass: "beforeafter-handle",
@@ -154,7 +159,7 @@ const v = (s, i, t) => {
   // animateIn: true,
   animateInDuration: 1250,
   // ms
-  animateInEasing: y.Elastic.easeOut,
+  animateInEasing: T.Elastic.easeOut,
   animateInDelay: 100,
   // in ms
   animateStartPos: 40,
@@ -164,20 +169,13 @@ const v = (s, i, t) => {
   // clickAnimate: true,
   animateDuration: 250,
   // ms
-  animateEasing: y.Cubic.easeOut,
+  animateEasing: T.Cubic.easeOut,
   // showLabels: false,
   beforeLabel: "",
   // before Image
-  afterLabel: "",
+  afterLabel: ""
   // after Image
-  beforeDescription: "",
-  // before Image
-  afterDescription: "",
-  // after Image
-  showToggleButton: !1,
-  toggleBeforeText: "show before",
-  toggleAfterText: "show after"
-}, G = (s, i, t) => {
+}, q = (s, i, t) => {
   let e = s.getAttribute("on" + i);
   new Function(
     "e",
@@ -187,7 +185,7 @@ const v = (s, i, t) => {
     // + '}'
   ).call(s, t);
 };
-class q {
+class B {
   /**
    * class constructor
    */
@@ -203,7 +201,7 @@ class q {
   emit(i, t) {
     let e = this._eventCallbacks[i];
     const n = { bubbles: !1, cancelable: !1, detail: t }, a = new CustomEvent(i, n);
-    e && e.forEach((r) => r.call(this, a)), this.element && (this.element.dispatchEvent(a), G(this.element, i, a));
+    e && e.forEach((r) => r.call(this, a)), this.element && (this.element.dispatchEvent(a), q(this.element, i, a));
   }
   /**
    * Register an event handler
@@ -232,9 +230,9 @@ class q {
     ), this) : this;
   }
 }
-const b = "beforeafter", U = "data-" + b, m = "interacting", C = "init", A = "drag", M = "update", T = "viewchanged", O = "beforeshown", W = "aftershown", L = "interactionend", w = "mousedown", Y = "resize";
-let p = [], S = !1;
-class d extends q {
+const b = "beforeafter", U = "data-" + b, m = "interacting", C = "init", M = "drag", O = "update", S = "viewchanged", A = "beforeshown", W = "aftershown", L = "interactionend", w = "mousedown", Y = "resize";
+let p = [], I = !1;
+class d extends B {
   constructor(t, e) {
     if (!t)
       return { error: !0 };
@@ -287,7 +285,7 @@ class d extends q {
           this.element.classList.add(m), this.dirDetected = !0;
         }
       }
-      this._setPosition(n), this._triggerEvent(A);
+      this._setPosition(n), this._triggerEvent(M);
     });
     o(this, "_dragEnd", (t) => {
       this._endInteraction = !0, t.type === "touchend" ? (this.isTouch = !0, window.removeEventListener("touchmove", this._drag, _), window.removeEventListener("touchend", this._dragEnd)) : t.type === "mouseup" && (this.isTouch = !1, this.settings.followMouse || (window.removeEventListener("mousemove", this._drag, !1), window.removeEventListener("mouseup", this._dragEnd, !1))), this._testInteractionEnd(), this.dirDetected = !1;
@@ -296,12 +294,12 @@ class d extends q {
       return d.getInstance(t);
     t.dataset.bainitialized = !0, this.allowedEvents = [
       C,
-      A,
       M,
       O,
+      A,
       W,
       L,
-      T
+      S
     ], p.push(this), H.put(t, "instance", this), this.element = t;
     const n = j(t, b);
     if (this.options = e || {}, this.settings = Object.assign({}, d.defaults, n, e), this.images = this.element.querySelectorAll("img"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || !this.images.length))
@@ -311,7 +309,7 @@ class d extends q {
     this.element.classList.contains(b) || this.element.classList.add(b), this.snapTimeout = null, this.dirDetected = !1, this.settings.autoInit && this.init();
   }
   _triggerEvent(t, e) {
-    e = D({
+    e = y({
       instance: this,
       percent: this.currentPercent,
       afterShown: this._afterShown
@@ -338,27 +336,27 @@ class d extends q {
     this.originalElements = [], this.createdElements = [];
     const e = "div";
     let n, a;
-    const r = f(e, { class: "clipSlider" });
+    const r = g(e, { class: "clipSlider" });
     if (t.beforeImage || t.afterImage)
       this.images = [n, a] = [
         t.beforeImage,
         t.afterImage
-      ].reduce((E, g) => (E.push(f("img", { draggable: !1, src: g })), E), []), this.element.appendChild(n), r.appendChild(a), this.element.appendChild(r), this.createdElements.push(n);
+      ].reduce((E, f) => (E.push(g("img", { draggable: !1, src: f })), E), []), this.element.appendChild(n), r.appendChild(a), this.element.appendChild(r), this.createdElements.push(n);
     else {
-      const [E, g] = this.images;
-      n = E, n.setAttribute("draggable", !1), a = g.cloneNode(!0), a.setAttribute("draggable", !1), r.appendChild(a), g.parentNode.replaceChild(r, g), this.originalElements.push(g);
+      const [E, f] = this.images;
+      n = E, n.setAttribute("draggable", !1), a = f.cloneNode(!0), a.setAttribute("draggable", !1), r.appendChild(a), f.parentNode.replaceChild(r, f), this.originalElements.push(f);
     }
     this.createdElements.push(r);
     let h, l;
-    t.beforeLabel !== "" && (h = f(e, { class: "label label-one" }), h.innerHTML = t.beforeLabel, this.element.appendChild(h), this.createdElements.push(h)), t.afterLabel !== "" && (l = f(e, { class: "label label-two" }), l.innerHTML = t.afterLabel, this.element.appendChild(l), this.createdElements.push(l)), this.info1 = t.ltr ? h : l, this.info2 = t.ltr ? l : h;
-    const u = f(
+    t.beforeLabel !== "" && (h = g(e, { class: "label label-one" }), h.innerHTML = t.beforeLabel, this.element.appendChild(h), this.createdElements.push(h)), t.afterLabel !== "" && (l = g(e, { class: "label label-two" }), l.innerHTML = t.afterLabel, this.element.appendChild(l), this.createdElements.push(l)), this.info1 = t.ltr ? h : l, this.info2 = t.ltr ? l : h;
+    const u = g(
       e,
       {
         class: t.dragElementClass + " " + (this._horizontal ? "horizontal" : "vertical")
       },
       { zIndex: 5 }
-    ), c = f(e, { class: "line line-1" }), x = f(e, { class: "line line-2" }), z = f(e, { class: "circle" });
-    u.appendChild(c), u.appendChild(x), u.appendChild(z), this.element.appendChild(u), this.createdElements.push(u), this.element.style.visibility = "visible", this.dragHandle = u, this.clippingElement = r;
+    ), c = g(e, { class: "line line-1" }), z = g(e, { class: "line line-2" }), x = g(e, { class: "circle" });
+    u.appendChild(c), u.appendChild(z), u.appendChild(x), this.element.appendChild(u), this.createdElements.push(u), this.element.style.visibility = "visible", this.dragHandle = u, this.clippingElement = r;
   }
   /**
    * Method to remove or add mouse events
@@ -440,12 +438,12 @@ class d extends q {
     }, t);
   }
   _getClipRect(t) {
-    return this._horizontal ? this._clipFromLeft ? `rect(0 ${t}px ${this.elementHeight}px 0)` : `rect(0 ${this.elementWidth}px ${this.elementHeight}px ${t}px)` : this._clipFromLeft ? `rect(0 ${this.elementWidth}px ${t}px 0)` : `rect(${t}px ${this.elementWidth}px ${this.elementHeight}px 0)`;
+    return this._horizontal ? this._ltr ? `rect(0 ${t}px ${this.elementHeight}px 0)` : `rect(0 ${this.elementWidth}px ${this.elementHeight}px ${t}px)` : this._ltr ? `rect(0 ${this.elementWidth}px ${t}px 0)` : `rect(${t}px ${this.elementWidth}px ${this.elementHeight}px 0)`;
   }
   _changeStatus(t) {
     this._afterShown = t;
-    let e = this._afterShown ? W : O;
-    this._triggerEvent(e), this._triggerEvent(T), this._oneTime = !1;
+    let e = this._afterShown ? W : A;
+    this._triggerEvent(e), this._triggerEvent(S), this._oneTime = !1;
   }
   /**
    * set the handle to a defined position (in percent from left)
@@ -458,7 +456,7 @@ class d extends q {
     const n = this.elementDim * t;
     this.clippingElement.style.clipPath = this._getClipRect(n), this.dragHandle.style.transform = this._horizontal ? `translate(${n}px, 0)` : `translate(0, ${n}px)`, this.info1 && (this.info1.style.opacity = t < 50 ? 1 : (100 - t) / 50), this.info2 && (this.info2.style.opacity = t > 50 ? 1 : t / 50);
     let a = this.settings.ltr ? this._afterShown : !this._afterShown;
-    t > 75 && (this._oneTime || !a) ? this._changeStatus(this.settings.ltr) : t < 25 && (this._oneTime || a) && this._changeStatus(!this.settings.ltr), this._triggerEvent(M);
+    t > 75 && (this._oneTime || !a) ? this._changeStatus(this.settings.ltr) : t < 25 && (this._oneTime || a) && this._changeStatus(!this.settings.ltr), this._triggerEvent(O);
   }
   /**
    * convert pixel position to percent from left
@@ -481,7 +479,7 @@ class d extends q {
     if (this._initialized)
       return this;
     const t = this.settings;
-    this._initialized = !0, this._oneTime = !0, this._afterShown = !1, this._clipFromLeft = !!t.ltr, this._horizontal = t.horizontal, this._createGui(), this.timing = { time: 0, curTime: 0 }, this.dragElementTrigger = t.onlyHandleDraggable ? this.dragHandle : this.element, this._animationDuration = t.animateInDuration || 0, t.startPos || (t.startPos = 0), t.animateStartPos || (t.animateStartPos = 0), this.currentPercent = this._animationDuration > 0 ? t.animateStartPos : t.startPos, this.element.style.opacity = 0, this.isTouch = "ontouchstart" in window || window.DocumentTouch && document instanceof window.DocumentTouch || navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0, R(this.images[0].src).then((e) => {
+    this._initialized = !0, this._oneTime = !0, this._afterShown = !1, this._ltr = !!t.ltr, this._horizontal = t.horizontal, this._createGui(), this.timing = { time: 0, curTime: 0 }, this.dragElementTrigger = t.onlyHandleDraggable ? this.dragHandle : this.element, this._animationDuration = t.animateInDuration || 0, t.startPos || (t.startPos = 0), t.animateStartPos || (t.animateStartPos = 0), this.currentPercent = this._animationDuration > 0 ? t.animateStartPos : t.startPos, this.element.style.opacity = 0, this.isTouch = "ontouchstart" in window || window.DocumentTouch && document instanceof window.DocumentTouch || navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0, R(this.images[0].src).then((e) => {
       this.imageDimensions = e, this._dimensions(), this._setPosition(this.currentPercent), this.element.style.opacity = 1, this._animationDuration > 0 && this.settings.animateStartPos !== this.settings.startPos && setTimeout(
         () => this._animateTo(
           this.settings.startPos,
@@ -489,7 +487,7 @@ class d extends q {
           this.settings.animateInEasing
         ),
         this.settings.animateInDelay
-      ), this._appEvents(), this._triggerEvent(C), this._triggerEvent(T);
+      ), this._appEvents(), this._triggerEvent(C), this._triggerEvent(S);
     });
   }
   goto(t, e, n) {
@@ -497,7 +495,16 @@ class d extends q {
       return !1;
     this._stopAni(), this._animateTo(t, e, n);
   }
+  /**
+   * ltr = true  (before, 0%) L -> R (after, 100%)
+   * ltr = false (after, 0%)  R -> L (before, 100%)
+   */
   changeDirection() {
+  }
+  /**
+   * horizontal or vertical slider
+   */
+  changeOrientation() {
     const t = this._horizontal;
     this._horizontal = !t, this.dragHandle.classList.remove(t ? "horizontal" : "vertical"), this.dragHandle.classList.add(this._horizontal ? "horizontal" : "vertical"), this._dimensions(!0);
   }
@@ -514,13 +521,13 @@ class d extends q {
     this._stopAni(), this._afterShown ? this.showBefore() : this.showAfter();
   }
   destroy() {
-    this.element.removeAttribute("data-bainitialized"), this.createdElements.forEach((t) => this.element.removeChild(t)), this.originalElements.forEach((t) => this.element.appendChild(t)), this.createdElements = [], this.originalElements = [], this._appEvents(!1), this._initialized = !1;
+    this.element.removeAttribute("data-bainitialized"), this.createdElements.forEach((t) => this.element.removeChild(t)), this.originalElements.forEach((t) => this.element.appendChild(t)), this.createdElements = [], this.originalElements = [], this.currentPercent = this.startPos, this._appEvents(!1), this._initialized = !1;
   }
 }
 d.init = () => {
-  if (S)
+  if (I)
     return !0;
-  S = !0;
+  I = !0;
   let s = document.querySelectorAll("[" + U + "]");
   return s.length === 0 ? !1 : (s.forEach((i) => {
     new d(i);
@@ -528,10 +535,10 @@ d.init = () => {
 };
 d.destroyAll = () => p.length ? (p.forEach((s) => {
   s.destroy();
-}), S = !1, p = [], !0) : !1;
+}), I = !1, p = [], !0) : !1;
 d.getInstance = (s) => H.get(s, "instance");
-d.defaults = B;
-$(d.init);
+d.defaults = G;
+F(d.init);
 export {
   d as default
 };

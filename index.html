@@ -232,12 +232,13 @@
 
       h1 {
         font-size: 2em;
-        margin-bottom: 0.5em;
+        margin-bottom: 1.5em;
       }
 
       h2 {
         font-size: 1.6em;
-        margin-bottom: 0.5em;
+        margin-top: 0.75em;
+        margin-bottom: 0.75em;
       }
 
       h3 {
@@ -250,21 +251,28 @@
       }
 
       #modeSwitch {
-        position: absolute;
-        top: 0;
-        right: 0;
+        position: fixed;
+        top: 1em;
+        left: 1em;
         padding: 10px;
         line-height: 0em;
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: 0px 5px 10px -4px rgba(0, 0, 0, 0.2);
       }
 
       .panel {
         padding: 1em;
-        background: rgb(16, 125, 16);
+        background: rgba(18, 187, 18, 0.6);
         display: inline-flex;
         flex-direction: column;
         flex-wrap: wrap;
         align-items: flex-start;
         font-size: 14px;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        border-radius: 1em;
+        box-shadow: 0px 5px 10px -4px rgba(0, 0, 0, 0.2);
       }
 
       .line {
@@ -290,8 +298,8 @@
         background-color: #eeeeee;
       }
 
-      .container > div {
-        margin-bottom: 2em;
+      .section {
+        margin-bottom: 3em;
       }
 
       .row {
@@ -334,6 +342,7 @@
       div[data-beforeafter],
       .beforeafter {
         background-color: #fff;
+        margin-bottom: 1em;
       }
 
       .dark div[data-beforeafter],
@@ -366,38 +375,35 @@
         is a „before &amp; after“ image comparison plugin, written in vanilla js
         with no dependencies to other libraries.
       </p>
-      <h2>demo 1</h2>
-      <pre><code class="language-xml">&lt;div data-beforeafter&gt;
-  &lt;img src=&quot;03_before.png&quot; alt=&quot;&quot; /&gt;
-  &lt;img src=&quot;03_after.png&quot; alt=&quot;&quot; /&gt;
+
+      <section class="section">
+        <h2>Default Settings</h2>
+        <div class="row">
+          <div class="col col50">
+            <pre><code class="language-xml">&lt;div data-beforeafter&gt;
+  &lt;img src=&quot;03_before.png&quot; /&gt;
+  &lt;img src=&quot;03_after.png&quot; /&gt;
 &lt;/div&gt;</code></pre>
-      <div class="row">
-        <div class="col col50">
-          <h2>Lorem ipsum</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis
-            pariatur unde odit numquam molestiae laboriosam sint vero
-            perspiciatis mollitia, obcaecati quidem deserunt qui! Dolores
-            obcaecati voluptatem distinctio, debitis itaque nulla exercitationem
-            natus incidunt. Molestiae corporis voluptatem ratione enim itaque
-            esse nisi distinctio, maiores similique officia qui doloribus natus
-            sapiente laborum expedita aperiam sequi architecto explicabo ullam
-            labore ducimus cum voluptatum ad temporibus neque! Fuga sed facere
-            blanditiis!
-          </p>
-        </div>
-        <div class="col col50">
-          <div data-beforeafter>
-            <img src="03_before.png" alt="" />
-            <img src="03_after.png" alt="" />
+          </div>
+          <div class="col col50">
+            <div data-beforeafter>
+              <img src="03_before.png" alt="" />
+              <img src="03_after.png" alt="" />
+            </div>
           </div>
         </div>
-      </div>
-      <h2>demo 2</h2>
-      <pre><code class="language-xml">&lt;div class=&quot;beforeafter&quot;
+      </section>
+
+      <section class="section">
+        <h2>Follow Mouse movement</h2>
+        <p>
+          the slider follows the mouse movement (only on desktop-devices, where
+          a trackpad or mouse is available). On touch devices the default slider
+          will be used!
+        </p>
+        <pre><code class="language-xml">&lt;div class=&quot;beforeafter&quot;
   data-beforeafter=&quot;{
     followMouse: true,
-    ltr: true,
     beforeLabel: 'before',
     afterLabel: 'after',
   }&quot;&gt;
@@ -405,29 +411,21 @@
   &lt;img src=&quot;01_after.png&quot; alt=&quot;&quot; /&gt;
 &lt;/div&gt;
 </code></pre>
-      <div
-        class="beforeafter"
-        data-beforeafter="{
+        <div
+          class="beforeafter"
+          data-beforeafter="{
           followMouse: true,
-          ltr: true,
           beforeLabel: 'before',
           afterLabel: 'after',
         }"
-      >
-        <img src="01_before.png" alt="" style="filter: grayscale()" />
-        <img src="01_after.png" alt="" />
-      </div>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis
-        pariatur unde odit numquam molestiae laboriosam sint vero perspiciatis
-        mollitia, obcaecati quidem deserunt qui! Dolores obcaecati voluptatem
-        distinctio, debitis itaque nulla exercitationem natus incidunt.
-        Molestiae corporis voluptatem ratione enim itaque esse nisi distinctio,
-        maiores similique officia qui doloribus natus sapiente laborum expedita
-        aperiam sequi architecto explicabo ullam labore ducimus cum voluptatum
-        ad temporibus.!
-      </p>
-      <h2>demo 3</h2>
+        >
+          <img src="01_before.png" alt="" style="filter: grayscale()" />
+          <img src="01_after.png" alt="" />
+        </div>
+      </section>
+      <!--
+      <section class="section">
+        <h2>demo 3</h2>
       <pre><code class="language-xml">&lt;div class=&quot;beforeafter&quot;
   data-beforeafter=&quot;{
     onlyHandleDraggable: true,
@@ -455,9 +453,42 @@
           <img src="02_before.png" alt="" />
         </div>
       </div>
+    </section>-->
 
-      <h2>demo 4</h2>
-      <pre><code class="language-javascript">const options = {
+      <section class="section">
+        <h2>Snap to Start</h2>
+        <p>
+          if set to true, the slider will animate back to the defined start
+          position when user interaction ends
+        </p>
+        <pre><code class="language-xml">&lt;div class=&quot;beforeafter&quot;
+  data-beforeafter=&quot;{
+    snapToStart: true,
+    beforeLabel: 'before',
+    afterLabel: 'after',
+  }&quot;&gt;
+  &lt;img src=&quot;02_after.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;02_before.png&quot; alt=&quot;&quot; /&gt;
+&lt;/div&gt;
+</code></pre>
+        <div style="margin: 0 auto 1em">
+          <div
+            class="beforeafter"
+            data-beforeafter="{
+            snapToStart: true,
+            beforeLabel: 'before',
+            afterLabel: 'after',
+          }"
+          >
+            <img src="02_after.png" alt="" />
+            <img src="02_before.png" alt="" />
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Advanced Demo with custom options</h2>
+        <pre><code class="language-javascript">const options = {
   beforeImage: '01_before.png',
   afterImage: '01_after.png',
   afterLabel: 'after',
@@ -468,125 +499,137 @@
 
 const ba = new BeforeAfter('#demo4', options);
 </code></pre>
-      <div style="margin: 0 auto 1em">
-        <div id="demo4-events" class="panel">
-          <div class="line">
-            <div class="label">percent (left):</div>
-            <span id="demo4-percent">&nbsp;</span>
-          </div>
-          <div class="line">
-            <div class="label">slider:</div>
-            <input
-              id="demo4-range"
-              type="range"
-              step="0.5"
-              min="0"
-              max="100"
-              value="50"
-            />
-            <input id="demo4-smooth" type="checkbox" value="smooth">
-          </div>
-          <div class="line">
-            <button id="demo4-destroy">destroy</button>
-          </div>
-          <div class="line">
-            <button id="demo4-toggle">toggle</button>
-          </div>
-          <div class="line">
+        <div style="margin: 0 auto 1em">
+          <div id="demo4-events" class="panel">
+            <div class="line">
+              <div class="label">percent (left):</div>
+              <span id="demo4-percent">&nbsp;</span>
+            </div>
+            <div class="line">
+              <div class="label">slider:</div>
+              <input
+                id="demo4-range"
+                type="range"
+                step="0.5"
+                min="0"
+                max="100"
+                value="50"
+              />
+              <input id="demo4-smooth" type="checkbox" checked value="smooth" />
+              <label for="demo4-smooth">smooth</label>
+            </div>
+            <div class="line">
+              <button id="demo4-destroy">destroy</button>
+            </div>
+            <div class="line">
+              <button id="demo4-toggle">toggle</button>
+            </div>
+            <!-- <div class="line">
             <button id="demo4-direction">change direction</button>
+          </div> -->
           </div>
-        </div>
-        <div class="beforeafter" id="demo4">
-          <!-- <div class="info-box"><h1>info box</h1></div> -->
-        </div>
-        <div id="demo4-caption" style="text-align: center">&nbsp;</div>
-        <script type="module">
-          import BeforeAfter from './src/index.js';
-          const init = () => {
-            document.removeEventListener('DOMContentLoaded', init);
-            const options = {
-              beforeImage: '01_before.png',
-              afterImage: '01_after.png',
-              afterLabel: 'after',
-              beforeLabel: 'before',
-              horizontal: true,
-              ltr: true,
+          <div class="beforeafter" id="demo4">
+            <!-- <div class="info-box"><h1>info box</h1></div> -->
+          </div>
+          <div id="demo4-caption" style="text-align: center">&nbsp;</div>
+          <script type="module">
+            import BeforeAfter from './src/index.js';
+            const init = () => {
+              document.removeEventListener('DOMContentLoaded', init);
+              const options = {
+                beforeImage: '01_before.png',
+                afterImage: '01_after.png',
+                afterLabel: 'after',
+                beforeLabel: 'before',
+                horizontal: true,
+                ltr: true,
+              };
+              const ba = new BeforeAfter('#demo4', options);
+
+              const percent = document.querySelector('#demo4-percent');
+              const range = document.querySelector('#demo4-range');
+              const destroy = document.querySelector('#demo4-destroy');
+              const toggle = document.querySelector('#demo4-toggle');
+              const caption = document.querySelector('#demo4-caption');
+              // const direction = document.querySelector('#demo4-direction');
+              const smoothCheckbox = document.querySelector('#demo4-smooth');
+
+              let destroyed = false;
+              let slide = false;
+              let smooth = false;
+              let smoothTime = 500;
+              let smoothTo;
+              let smoothValue;
+
+              smoothCheckbox.addEventListener('change', (e) => {
+                smoothValue = e.target.checked ? smoothTime : 0;
+              });
+              smoothValue = smoothCheckbox.checked ? smoothTime : 0;
+
+              range.addEventListener('mousedown', (e) => {
+                clearTimeout(smoothTo);
+                slide = true;
+              });
+              range.addEventListener('input', (e) => {
+                ba.goto(e.target.value, smoothValue);
+              });
+              range.addEventListener('mouseup', (e) => {
+                smoothTo = setTimeout(() => {
+                  clearTimeout(smoothTo);
+                  slide = false;
+                }, smoothTime);
+              });
+
+              destroy.addEventListener('click', (e) => {
+                if (!destroyed) {
+                  ba.destroy();
+                  destroy.innerHTML = 'init';
+                  destroyed = true;
+                } else {
+                  ba.init();
+                  destroy.innerHTML = 'destroy';
+                  destroyed = false;
+                }
+              });
+
+              toggle.addEventListener('click', () => ba.toggle());
+
+              // direction.addEventListener('click', () => {
+              //   ba.changeDirection();
+              // });
+
+              ba.addEventListener('update', (e) => {
+                let p = Math.round(e.detail.percent * 100) / 100;
+                if (!slide) range.value = p;
+                percent.innerHTML = `${p}%`;
+              });
+
+              ba.addEventListener('viewchanged', (e) => {
+                const afterShown = e.detail.afterShown;
+                toggle.innerHTML = 'Show ' + (afterShown ? 'before' : 'after');
+              });
+
+              ba.addEventListener('beforeshown', (e) => {
+                console.log('beforeshown', e);
+                caption.innerHTML = 'pink';
+              });
+
+              ba.addEventListener('aftershown', (e) => {
+                console.log('aftershown', e);
+                caption.innerHTML = 'blue';
+              });
+
+              window.ba = ba;
             };
-            const ba = new BeforeAfter('#demo4', options);
 
-            const percent = document.querySelector('#demo4-percent');
-            const range = document.querySelector('#demo4-range');
-            const destroy = document.querySelector('#demo4-destroy');
-            const toggle = document.querySelector('#demo4-toggle');
-            const caption = document.querySelector('#demo4-caption');
-            const direction = document.querySelector('#demo4-direction');
-            const smoothCheckbox = document.querySelector('#demo4-smooth');
-
-            let destroyed = false;
-            let slide = false;
-            let smooth = false;
-            let smoothValue = smooth ? 250 : 0;
-
-            smoothCheckbox.addEventListener('change', (e) => {
-              console.log(e.target.value); // TODO:
-              smoothValue = smooth ? 250 : 0;
-            });
-
-            range.addEventListener('input', (e) => {
-              ba.goto(e.target.value, smoothValue);
-            });
-
-            destroy.addEventListener('click', (e) => {
-              if (!destroyed) {
-                ba.destroy();
-                destroy.innerHTML = 'init';
-                destroyed = true;
-              } else {
-                ba.init();
-                destroy.innerHTML = 'destroy';
-                destroyed = false;
-              }
-            });
-
-            toggle.addEventListener('click', () => ba.toggle());
-
-            direction.addEventListener('click', () => {
-              ba.changeDirection();
-            });
-
-            ba.addEventListener('update', (e) => {
-              let p = Math.round(e.detail.percent * 100) / 100;
-              // if (!slide) {
-              //   range.value = p;
-              // }
-              percent.innerHTML = `${p}%`;
-            });
-
-            ba.addEventListener('viewchanged', (e) => {
-              const afterShown = e.detail.afterShown;
-              toggle.innerHTML = 'Show ' + (afterShown ? 'before' : 'after');
-            });
-
-            ba.addEventListener('beforeshown', (e) => {
-              console.log('beforeshown', e);
-              caption.innerHTML = 'pink';
-            });
-
-            ba.addEventListener('aftershown', (e) => {
-              console.log('aftershown', e);
-              caption.innerHTML = 'blue';
-            });
-
-            window.ba = ba;
-          };
-
-          if ('complete' === document.readyState) {
-            init();
-          } else {
-            document.addEventListener('DOMContentLoaded', init, false);
-          }
-        </script>
-      </div>
+            if ('complete' === document.readyState) {
+              init();
+            } else {
+              document.addEventListener('DOMContentLoaded', init, false);
+            }
+          </script>
+        </div>
+      </section>
     </div>
     <div id="modeSwitch"></div>
     <script>
