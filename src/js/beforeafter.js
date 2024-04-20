@@ -88,8 +88,8 @@ class BeforeAfter extends Emitter {
       this.element.classList.add(PLUGINNAME);
     }
 
-    this.snapTimeout = null;
-    this.dirDetected = false;
+    this._snapTimeout = null;
+    this._dirDetected = false;
 
     if (this.settings.autoInit) {
       this.init();
@@ -100,7 +100,9 @@ class BeforeAfter extends Emitter {
     // default detail data
     detail = {
       instance: this,
-      percent: this.currentPercent,
+      horizontal: this._horizontal,
+      ltr: this._ltr,
+      percent: this._percent,
       afterShown: this._afterShown,
       ...detail,
     };
@@ -131,12 +133,12 @@ class BeforeAfter extends Emitter {
    */
   _createGui() {
     const s = this.settings;
-    this.originalElements = [];
-    this.createdElements = [];
+    this._originalEl = []; // original elements
+    this._createdEl = []; // created elements
     const div = 'div';
     let firstImg, secondImg;
 
-    const clippingElement = createEl(div, { class: 'clipSlider' });
+    const clipEl = createEl(div, { class: 'clipSlider' });
 
     if (s.beforeImage || s.afterImage) {
       this.images = [firstImg, secondImg] = [
@@ -148,10 +150,10 @@ class BeforeAfter extends Emitter {
       }, []);
 
       this.element.appendChild(firstImg);
-      clippingElement.appendChild(secondImg);
-      this.element.appendChild(clippingElement);
+      clipEl.appendChild(secondImg);
+      this.element.appendChild(clipEl);
 
-      this.createdElements.push(firstImg);
+      this._createdEl.push(firstImg);
     } else {
       const [first, second] = this.images;
       firstImg = first;
@@ -159,12 +161,12 @@ class BeforeAfter extends Emitter {
       secondImg = second.cloneNode(true);
       secondImg.setAttribute('draggable', false);
 
-      clippingElement.appendChild(secondImg);
-      second.parentNode.replaceChild(clippingElement, second);
-      this.originalElements.push(second);
+      clipEl.appendChild(secondImg);
+      second.parentNode.replaceChild(clipEl, second);
+      this._originalEl.push(second);
     }
 
-    this.createdElements.push(clippingElement);
+    this._createdEl.push(clipEl);
 
     // create labels
     let info1, info2;
@@ -172,14 +174,14 @@ class BeforeAfter extends Emitter {
       info1 = createEl(div, { class: 'label label-one' });
       info1.innerHTML = s.beforeLabel;
       this.element.appendChild(info1);
-      this.createdElements.push(info1);
+      this._createdEl.push(info1);
     }
 
     if ('' !== s.afterLabel) {
       info2 = createEl(div, { class: 'label label-two' });
       info2.innerHTML = s.afterLabel;
       this.element.appendChild(info2);
-      this.createdElements.push(info2);
+      this._createdEl.push(info2);
     }
     this.info1 = s.ltr ? info1 : info2;
     this.info2 = s.ltr ? info2 : info1;
@@ -203,13 +205,13 @@ class BeforeAfter extends Emitter {
     drag.appendChild(dragHandle);
 
     this.element.appendChild(drag);
-    this.createdElements.push(drag);
+    this._createdEl.push(drag);
 
     this.element.style.visibility = 'visible';
 
     // global elements
-    this.dragHandle = drag;
-    this.clippingElement = clippingElement;
+    this._dragHandle = drag;
+    this._clipEl = clipEl;
   }
 
   /**
@@ -227,7 +229,7 @@ class BeforeAfter extends Emitter {
       c[fun]('mouseleave', this._mouseOut, false);
       c[fun]('mousemove', this._mouseMove, false);
     } else {
-      this.dragElementTrigger[fun](MOUSEDOWN, this._dragStart);
+      this._dragEl[fun](MOUSEDOWN, this._dragStart);
       if (s.onlyHandleDraggable && s.clickable) {
         this.element[fun](MOUSEDOWN, this._tapstart, false);
         this.element[fun]('mouseup', this._dragEnd, false);
@@ -243,11 +245,7 @@ class BeforeAfter extends Emitter {
   _touchStartEvent(add = true) {
     const fun = (add ? 'add' : 'remove') + 'EventListener';
     // console.log('_touchStartEvent', fun);
-    this.dragElementTrigger[fun](
-      'touchstart',
-      this._dragStart,
-      passiveIfSupported
-    );
+    this._dragEl[fun]('touchstart', this._dragStart, passiveIfSupported);
     if (this.settings.clickable) {
       this.element[fun]('touchstart', this._tapstart, false);
       this.element[fun]('touchend', this._dragEnd, false);
@@ -268,7 +266,7 @@ class BeforeAfter extends Emitter {
     if (this._renderId) {
       window.cancelAnimationFrame(this._renderId);
       this._renderId = undefined;
-      this.timing.then = this.timing.curTime = 0;
+      this._timing.then = this._timing.curTime = 0;
     }
   }
 
@@ -289,9 +287,9 @@ class BeforeAfter extends Emitter {
   _renderLoop(from, to, delta) {
     const render = () => {
       const now = new Date().getTime();
-      const dt = now - (this.timing.then || now);
-      this.timing.curTime += dt;
-      this.progress = this.timing.curTime / this._animationDuration;
+      const dt = now - (this._timing.then || now);
+      this._timing.curTime += dt;
+      this.progress = this._timing.curTime / this._animationDuration;
 
       if (this.progress >= 1) {
         this.progress = 1;
@@ -304,7 +302,7 @@ class BeforeAfter extends Emitter {
       // render
       this._setPosition(from + delta * this.easing(this.progress));
 
-      this.timing.then = now;
+      this._timing.then = now;
       this._renderId = window.requestAnimationFrame(render);
     };
     render();
@@ -313,15 +311,15 @@ class BeforeAfter extends Emitter {
   /**
    * Method to animate to the given percentage
    *
-   * @param {float} percent The percentage to move to (0 - 100)
+   * @param {float} percent The (new) percentage to move to (0 - 100)
    * @param {int} duration The duration in ms (e.g. 250)
    * @param {Object} easing The the easing function
    * @returns
    */
   _animateTo(percent, duration, easing) {
     percent = restrict(+percent, 0, 100);
-    this._delta = percent - this.currentPercent;
-    // console.log('from:', this.currentPercent, 'to:', percent, duration);
+    const delta = percent - this._percent;
+    // console.log('from:', this._percent, 'to:', percent, duration);
 
     if (!duration) {
       this._setPosition(percent);
@@ -331,15 +329,15 @@ class BeforeAfter extends Emitter {
     this._animationDuration = duration;
     this.easing = easing || this.settings.animateEasing;
     this.progress = 0;
-    this.timing.then = this.timing.curTime = 0;
+    this._timing.then = this._timing.curTime = 0;
 
-    this._renderLoop(this.currentPercent, percent, this._delta);
+    this._renderLoop(this._percent, percent, delta);
   }
 
   _snapToStart(delay = this.settings.snapToStartDelay) {
     this._stopAni();
     // TODO: check snapToStartDelay value
-    this.snapTimeout = setTimeout(() => {
+    this._snapTimeout = setTimeout(() => {
       this._animateTo(
         this.settings.startPos,
         this.settings.animateDuration,
@@ -372,44 +370,36 @@ class BeforeAfter extends Emitter {
     const borderY =
       parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth);
 
-    this.elementWidth = bounding.width - borderX;
-    this.elementHeight = bounding.height - borderY;
-    this.elementX = bounding.x;
-    // const a = this.offsetElements
-    //   .map((offsetEl) => offsetEl.offsetLeft)
-    //   .reduce((prev, cur) => prev + cur);
+    this.width = bounding.width - borderX;
+    this.height = bounding.height - borderY;
 
-    // optimized version for _setPosition method
-    this.elementDim =
-      (this._horizontal ? this.elementWidth : this.elementHeight) * 0.01;
+    let dragHandleDim;
+    if (this._horizontal) {
+      const x = bounding.x;
+      dragHandleDim = this._dragHandle.offsetWidth * 0.5;
 
-    // TODO: is always 2
-    this.dragHandleWidth = this.dragHandle.offsetWidth;
+      this._dim = this.width;
+      this._offset = dragHandleDim - x;
+      this._minPos = x + this.settings.handleMinDistance - dragHandleDim;
+      this._maxPos =
+        x + this.width - dragHandleDim - this.settings.handleMinDistance;
+    } else {
+      const y = this.element.offsetTop;
+      dragHandleDim = this._dragHandle.offsetHeight * 0.5;
 
-    this.minLeftPos =
-      this.elementX +
-      this.settings.handleMinDistance -
-      this.dragHandleWidth / 2;
-
-    this.maxLeftPos =
-      this.elementX +
-      this.elementWidth -
-      this.dragHandleWidth / 2 -
-      this.settings.handleMinDistance;
-
-    // this.elementHeight = this.element.offsetHeight - paddingY - borderY;
-    // Math.max(
-    //   this.element.offsetHeight,
-    //   this.element.offsetWidth / this.imageDimensions.ratio
-    // );
-
-    if (!force && this.oldElementWidth === this.elementWidth) {
-      return;
+      this._dim = this.height;
+      this._offset = dragHandleDim - y;
+      this._minPos = y + this.settings.handleMinDistance - dragHandleDim;
+      this._maxPos =
+        y + this.height - dragHandleDim - this.settings.handleMinDistance;
     }
 
-    this.oldElementWidth = this.elementWidth;
+    if (!force && this._oldDim === this._dim) {
+      return;
+    }
+    this._oldDim = this._dim;
 
-    this._setPosition(this.currentPercent, true);
+    this._setPosition(this._percent, true);
   };
 
   _mouseOver = () => {
@@ -432,7 +422,7 @@ class BeforeAfter extends Emitter {
     // console.log('_mouseMove');
     this._stopAni();
     let currentPos = this._getPos(e);
-    let percent = this._calcLeftPercent(currentPos.x);
+    let percent = this._calcPercent(currentPos);
     this._setPosition(percent);
   };
 
@@ -440,7 +430,7 @@ class BeforeAfter extends Emitter {
   _tapstart = (e) => {
     this._endInteraction = false;
     this._stopAni();
-    clearTimeout(this.snapTimeout);
+    clearTimeout(this._snapTimeout);
 
     if ('touchstart' === e.type) {
       this.isTouch = true;
@@ -450,7 +440,7 @@ class BeforeAfter extends Emitter {
       this._touchStartEvent(false);
     }
 
-    const percent = this._calcLeftPercent(this._getPos(e).x);
+    const percent = this._calcPercent(this._getPos(e));
     this._animateTo(percent, this.settings.animateDuration);
   };
 
@@ -477,17 +467,16 @@ class BeforeAfter extends Emitter {
     // console.log('_drag', e.type);
     this._stopAni();
     let currentPos = this._getPos(e);
-    let percent = this._calcLeftPercent(currentPos.x);
+    let percent = this._calcPercent(currentPos);
 
     if (this.isTouch) {
       e.preventDefault();
       const deltaX = Math.abs(this.startPos.x - currentPos.x);
       const deltaY = Math.abs(this.startPos.y - currentPos.y);
 
-      if (!this.dirDetected) {
+      if (!this._dirDetected) {
         if (deltaY > deltaX) {
           console.log('scroll down or up');
-
           this.element.classList.remove(INTERACTING);
           window.removeEventListener(
             'touchmove',
@@ -498,7 +487,7 @@ class BeforeAfter extends Emitter {
         }
 
         this.element.classList.add(INTERACTING);
-        this.dirDetected = true;
+        this._dirDetected = true;
       }
     }
 
@@ -523,22 +512,22 @@ class BeforeAfter extends Emitter {
     }
 
     this._testInteractionEnd();
-    this.dirDetected = false;
+    this._dirDetected = false;
   };
 
   _getClipRect(pos) {
     if (this._horizontal) {
       if (this._ltr) {
-        return `rect(0 ${pos}px ${this.elementHeight}px 0)`;
+        return `rect(0 ${pos}px ${this.height}px 0)`;
       }
-      return `rect(0 ${this.elementWidth}px ${this.elementHeight}px ${pos}px)`;
+      return `rect(0 ${this.width}px ${this.height}px ${pos}px)`;
     }
 
     // vertical
     if (this._ltr) {
-      return `rect(0 ${this.elementWidth}px ${pos}px 0)`;
+      return `rect(0 ${this.width}px ${pos}px 0)`;
     }
-    return `rect(${pos}px ${this.elementWidth}px ${this.elementHeight}px 0)`;
+    return `rect(${pos}px ${this.width}px ${this.height}px 0)`;
   }
 
   _changeStatus(status) {
@@ -554,14 +543,14 @@ class BeforeAfter extends Emitter {
    * @param {Number} percent Percent of the new handle position from left
    */
   _setPosition(percent, resize = false) {
-    if (percent === this.currentPercent && !resize) {
+    if (percent === this._percent && !resize) {
       return false;
     }
-    this.currentPercent = percent;
+    this._percent = percent;
 
-    const pos = this.elementDim * percent; // this.elementWidth * percent * 0.01;
-    this.clippingElement.style.clipPath = this._getClipRect(pos);
-    this.dragHandle.style.transform = this._horizontal
+    const pos = this._dim * 0.01 * percent; // this.width * percent * 0.01;
+    this._clipEl.style.clipPath = this._getClipRect(pos);
+    this._dragHandle.style.transform = this._horizontal
       ? `translate(${pos}px, 0)`
       : `translate(0, ${pos}px)`;
 
@@ -584,28 +573,26 @@ class BeforeAfter extends Emitter {
 
   /**
    * convert pixel position to percent from left
-   * @param  {Number} leftPos The left ('px') value
+   * @param  {Object} pos The position object { x, y }
    * @return {Number}         The left percent value
    */
-  _calcLeftPercent(leftPos) {
-    leftPos = restrict(leftPos, this.minLeftPos, this.maxLeftPos);
-    return (
-      ((leftPos + this.dragHandleWidth * 0.5 - this.elementX) * 100) /
-      this.elementWidth
-    );
+  _calcPercent(pos) {
+    let val = this._horizontal ? pos.x : pos.y;
+    val = restrict(val, this._minPos, this._maxPos);
+    return ((val + this._offset) * 100) / this._dim;
   }
 
-  /**
-   * convert percent to left pixel value
-   * @param  {Number} leftPercent The left percent value
-   * @return {Number}             The left ('px') value
-   */
-  _calcLeftValue(leftPercent) {
-    const percent = restrict(leftPercent, 0, 100) * 0.01;
-    return (
-      percent * this.elementWidth + this.elementX - this.dragHandleWidth * 0.5
-    );
-  }
+  // /**
+  //  * convert percent to left pixel value
+  //  * @param  {Number} leftPercent The left percent value
+  //  * @return {Number}             The left ('px') value
+  //  */
+  // _calcLeftValue(leftPercent) {
+  //   const percent = restrict(leftPercent, 0, 100) * 0.01;
+  //   return (
+  //     percent * this.width + this.elementX - this._dragHandleDim * 0.5
+  //   );
+  // }
 
   // public user function
   init() {
@@ -623,11 +610,9 @@ class BeforeAfter extends Emitter {
     this._horizontal = s.horizontal;
 
     this._createGui();
-    this.timing = { time: 0, curTime: 0 };
+    this._timing = { time: 0, curTime: 0 };
 
-    this.dragElementTrigger = s.onlyHandleDraggable
-      ? this.dragHandle
-      : this.element;
+    this._dragEl = s.onlyHandleDraggable ? this._dragHandle : this.element;
     this._animationDuration = s.animateInDuration || 0;
 
     if (!s.startPos) {
@@ -637,7 +622,7 @@ class BeforeAfter extends Emitter {
       s.animateStartPos = 0;
     }
 
-    this.currentPercent =
+    this._percent =
       this._animationDuration > 0 ? s.animateStartPos : s.startPos;
     this.element.style.opacity = 0;
 
@@ -647,11 +632,17 @@ class BeforeAfter extends Emitter {
       navigator.maxTouchPoints > 0 ||
       window.navigator.msMaxTouchPoints > 0;
 
+    this.allowedEvents.forEach((eventName) => {
+      if (s[eventName]) {
+        this.addEventListener(eventName, s[eventName]);
+      }
+    });
+
     // read the first image
-    imageDimensions(this.images[0].src).then((dimensions) => {
-      this.imageDimensions = dimensions;
+    imageDimensions(this.images[0].src).then(() => {
+      // this.image = dimensions;
       this._dimensions();
-      this._setPosition(this.currentPercent);
+      this._setPosition(this._percent);
       this.element.style.opacity = 1;
 
       if (
@@ -683,7 +674,7 @@ class BeforeAfter extends Emitter {
     percent = restrict(+percent, 0, 100);
 
     // early exit (same delta)
-    if (percent === this.currentPercent) {
+    if (percent === this._percent) {
       return !1;
     }
     this._stopAni();
@@ -694,9 +685,7 @@ class BeforeAfter extends Emitter {
    * ltr = true  (before, 0%) L -> R (after, 100%)
    * ltr = false (after, 0%)  R -> L (before, 100%)
    */
-  changeDirection() {
-
-  }
+  changeDirection() {}
 
   /**
    * horizontal or vertical slider
@@ -704,8 +693,10 @@ class BeforeAfter extends Emitter {
   changeOrientation() {
     const prev = this._horizontal;
     this._horizontal = !prev;
-    this.dragHandle.classList.remove(prev ? 'horizontal' : 'vertical');
-    this.dragHandle.classList.add(this._horizontal ? 'horizontal' : 'vertical');
+    this._dragHandle.classList.remove(prev ? 'horizontal' : 'vertical');
+    this._dragHandle.classList.add(
+      this._horizontal ? 'horizontal' : 'vertical'
+    );
     this._dimensions(true);
   }
 
@@ -732,13 +723,13 @@ class BeforeAfter extends Emitter {
 
   destroy() {
     this.element.removeAttribute('data-bainitialized');
-    this.createdElements.forEach((el) => this.element.removeChild(el));
-    this.originalElements.forEach((el) => this.element.appendChild(el));
-    this.createdElements = [];
-    this.originalElements = [];
+    this._createdEl.forEach((el) => this.element.removeChild(el));
+    this._originalEl.forEach((el) => this.element.appendChild(el));
+    this._createdEl = [];
+    this._originalEl = [];
 
     // remove all eventlistener
-    this.currentPercent = this.startPos;
+    this._percent = this.startPos;
     this._appEvents(false);
     this._initialized = false;
   }

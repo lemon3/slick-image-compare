@@ -497,45 +497,60 @@
   ltr: true,
 };
 
-const ba = new BeforeAfter('#demo4', options);
+const ba = new BeforeAfter('#adv', options);
 </code></pre>
         <div style="margin: 0 auto 1em">
-          <div id="demo4-events" class="panel">
+          <div id="adv-events" class="panel">
             <div class="line">
-              <div class="label">percent (left):</div>
-              <span id="demo4-percent">&nbsp;</span>
+              <div class="label">percent (<span id="adv-from-percent"></span>):</div>
+              <span id="adv-percent">&nbsp;</span>
             </div>
             <div class="line">
               <div class="label">slider:</div>
               <input
-                id="demo4-range"
+                id="adv-range"
                 type="range"
                 step="0.5"
                 min="0"
                 max="100"
                 value="50"
               />
-              <input id="demo4-smooth" type="checkbox" checked value="smooth" />
-              <label for="demo4-smooth">smooth</label>
+              <input
+                id="adv-smooth"
+                type="checkbox"
+                checked
+                value="smooth"
+              />
+              <label for="adv-smooth">smooth</label>
             </div>
             <div class="line">
-              <button id="demo4-destroy">destroy</button>
+              <button id="adv-toggle">toggle</button>
             </div>
             <div class="line">
-              <button id="demo4-toggle">toggle</button>
+              <button id="adv-direction">change orientation</button>
             </div>
-            <!-- <div class="line">
-            <button id="demo4-direction">change direction</button>
-          </div> -->
+            <div class="line">
+              <button id="adv-destroy">destroy</button>
+            </div>
           </div>
-          <div class="beforeafter" id="demo4">
+          <div class="beforeafter" id="adv">
             <!-- <div class="info-box"><h1>info box</h1></div> -->
           </div>
-          <div id="demo4-caption" style="text-align: center">&nbsp;</div>
+          <div id="adv-caption" style="text-align: center">&nbsp;</div>
           <script type="module">
             import BeforeAfter from './src/index.js';
             const init = () => {
               document.removeEventListener('DOMContentLoaded', init);
+
+              const percent = document.getElementById('adv-percent');
+              const range = document.getElementById('adv-range');
+              const destroy = document.getElementById('adv-destroy');
+              const toggle = document.getElementById('adv-toggle');
+              const caption = document.getElementById('adv-caption');
+              const direction = document.getElementById('adv-direction');
+              const smoothCheckbox = document.getElementById('adv-smooth');
+              const fromPercent = document.getElementById('adv-from-percent');
+
               const options = {
                 beforeImage: '01_before.png',
                 afterImage: '01_after.png',
@@ -543,16 +558,12 @@ const ba = new BeforeAfter('#demo4', options);
                 beforeLabel: 'before',
                 horizontal: true,
                 ltr: true,
-              };
-              const ba = new BeforeAfter('#demo4', options);
 
-              const percent = document.querySelector('#demo4-percent');
-              const range = document.querySelector('#demo4-range');
-              const destroy = document.querySelector('#demo4-destroy');
-              const toggle = document.querySelector('#demo4-toggle');
-              const caption = document.querySelector('#demo4-caption');
-              // const direction = document.querySelector('#demo4-direction');
-              const smoothCheckbox = document.querySelector('#demo4-smooth');
+                init(e) {
+                  fromPercent.innerHTML = (e.detail.horizontal) ? 'left' : 'top';
+                }
+              };
+              const ba = new BeforeAfter('#adv', options);
 
               let destroyed = false;
               let slide = false;
@@ -566,18 +577,24 @@ const ba = new BeforeAfter('#demo4', options);
               });
               smoothValue = smoothCheckbox.checked ? smoothTime : 0;
 
-              range.addEventListener('mousedown', (e) => {
+              const down = () => {
                 clearTimeout(smoothTo);
                 slide = true;
-              });
-              range.addEventListener('input', (e) => {
-                ba.goto(e.target.value, smoothValue);
-              });
-              range.addEventListener('mouseup', (e) => {
+              };
+              const up = () => {
                 smoothTo = setTimeout(() => {
                   clearTimeout(smoothTo);
                   slide = false;
                 }, smoothTime);
+              };
+
+              range.addEventListener('mousedown', down);
+              range.addEventListener('mouseup', up);
+              range.addEventListener('touchstart', down);
+              range.addEventListener('touchend', up);
+
+              range.addEventListener('input', (e) => {
+                ba.goto(e.target.value, smoothValue);
               });
 
               destroy.addEventListener('click', (e) => {
@@ -594,9 +611,10 @@ const ba = new BeforeAfter('#demo4', options);
 
               toggle.addEventListener('click', () => ba.toggle());
 
-              // direction.addEventListener('click', () => {
-              //   ba.changeDirection();
-              // });
+              direction.addEventListener('click', (e) => {
+                ba.changeOrientation();
+                fromPercent.innerHTML = (ba._horizontal) ? 'left' : 'top';
+              });
 
               ba.addEventListener('update', (e) => {
                 let p = Math.round(e.detail.percent * 100) / 100;

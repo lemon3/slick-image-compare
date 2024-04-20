@@ -14,7 +14,7 @@ export const defaults = {
   clickable: false, // only works if onlyHandleDraggable is set to true
 
   snapToStart: false, // after mouse out or drag stop handle jumps to start position
-  snapToStartDelay: 1250,
+  snapToStartDelay: 1000,
   snapToStartDuration: 1250, // ms TODO: implement
   snapToStartEasing: easing.Elastic.easeOut, // TODO: implement
 
