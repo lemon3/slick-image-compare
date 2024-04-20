@@ -1,6 +1,11 @@
 # Changelog
 
-## v0.2.3
+## v0.2.5
+### Added or Changed
+- changeDirection
+- horizontal and vertical support
+
+## v0.2.4
 ### Added or Changed
 - style update
 - dimension calculation update

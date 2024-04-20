@@ -264,7 +264,6 @@
         flex-direction: column;
         flex-wrap: wrap;
         align-items: flex-start;
-        width: 200px;
         font-size: 14px;
       }
 
@@ -485,6 +484,7 @@ const ba = new BeforeAfter('#demo4', options);
               max="100"
               value="50"
             />
+            <input id="demo4-smooth" type="checkbox" value="smooth">
           </div>
           <div class="line">
             <button id="demo4-destroy">destroy</button>
@@ -492,9 +492,9 @@ const ba = new BeforeAfter('#demo4', options);
           <div class="line">
             <button id="demo4-toggle">toggle</button>
           </div>
-          <!-- <div class="line">
+          <div class="line">
             <button id="demo4-direction">change direction</button>
-          </div> -->
+          </div>
         </div>
         <div class="beforeafter" id="demo4">
           <!-- <div class="info-box"><h1>info box</h1></div> -->
@@ -519,13 +519,21 @@ const ba = new BeforeAfter('#demo4', options);
             const destroy = document.querySelector('#demo4-destroy');
             const toggle = document.querySelector('#demo4-toggle');
             const caption = document.querySelector('#demo4-caption');
-            // const direction = document.querySelector('#demo4-direction');
+            const direction = document.querySelector('#demo4-direction');
+            const smoothCheckbox = document.querySelector('#demo4-smooth');
 
             let destroyed = false;
             let slide = false;
+            let smooth = false;
+            let smoothValue = smooth ? 250 : 0;
+
+            smoothCheckbox.addEventListener('change', (e) => {
+              console.log(e.target.value); // TODO:
+              smoothValue = smooth ? 250 : 0;
+            });
 
             range.addEventListener('input', (e) => {
-              ba.goto(e.target.value, 250);
+              ba.goto(e.target.value, smoothValue);
             });
 
             destroy.addEventListener('click', (e) => {
@@ -542,9 +550,9 @@ const ba = new BeforeAfter('#demo4', options);
 
             toggle.addEventListener('click', () => ba.toggle());
 
-            // direction.addEventListener('click', () => {
-            //   ba.changeDirection();
-            // });
+            direction.addEventListener('click', () => {
+              ba.changeDirection();
+            });
 
             ba.addEventListener('update', (e) => {
               let p = Math.round(e.detail.percent * 100) / 100;

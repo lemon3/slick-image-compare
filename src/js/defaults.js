@@ -3,6 +3,8 @@ import easing from '@/js/easing';
 export const defaults = {
   autoInit: true,
 
+  horizontal: true, // true is the default, if false vertical
+
   beforeImage: null,
   afterImage: null,
 
