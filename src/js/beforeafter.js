@@ -476,7 +476,7 @@ class BeforeAfter extends Emitter {
 
       if (!this._dirDetected) {
         if (deltaY > deltaX) {
-          console.log('scroll down or up');
+          // console.log('scroll down or up');
           this.element.classList.remove(INTERACTING);
           window.removeEventListener(
             'touchmove',
@@ -561,11 +561,11 @@ class BeforeAfter extends Emitter {
       this.info2.style.opacity = percent > 50 ? 1 : percent / 50;
     }
 
-    let test = this.settings.ltr ? this._afterShown : !this._afterShown;
+    let test = this._ltr ? this._afterShown : !this._afterShown;
     if (percent > 75 && (this._oneTime || !test)) {
-      this._changeStatus(this.settings.ltr);
+      this._changeStatus(this._ltr);
     } else if (percent < 25 && (this._oneTime || test)) {
-      this._changeStatus(!this.settings.ltr);
+      this._changeStatus(!this._ltr);
     }
 
     this._triggerEvent(UPDATE);
@@ -685,7 +685,15 @@ class BeforeAfter extends Emitter {
    * ltr = true  (before, 0%) L -> R (after, 100%)
    * ltr = false (after, 0%)  R -> L (before, 100%)
    */
-  changeDirection() {}
+  changeDirection() {
+    this._ltr = !this._ltr;
+    let tmp;
+    tmp = this.info1;
+    this.info1 = this.info2;
+    this.info2 = tmp;
+    this._percent = 100 - this._percent;
+    this._dimensions(true);
+  }
 
   /**
    * horizontal or vertical slider
@@ -701,11 +709,11 @@ class BeforeAfter extends Emitter {
   }
 
   showAfter() {
-    this._setPosition(100);
+    this._setPosition(this._ltr ? 100 : 0);
   }
 
   showBefore() {
-    this._setPosition(0);
+    this._setPosition(this._ltr ? 0 : 100);
   }
 
   get elem() {

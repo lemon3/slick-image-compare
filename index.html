@@ -223,7 +223,7 @@
       pre {
         font-size: 13px;
         line-height: 1.3em;
-        margin-bottom: 1em;
+        margin-bottom: 2em;
       }
 
       img {
@@ -263,21 +263,47 @@
 
       .panel {
         padding: 1em;
-        background: rgba(18, 187, 18, 0.6);
+        background: rgb(211 222 234);
         display: inline-flex;
         flex-direction: column;
         flex-wrap: wrap;
         align-items: flex-start;
         font-size: 14px;
-        margin-top: 1em;
         margin-bottom: 1em;
         border-radius: 1em;
         box-shadow: 0px 5px 10px -4px rgba(0, 0, 0, 0.2);
+        width: 100%;
+      }
+      .panel h3 {
+        margin-bottom: 0;
+        font-size: 16px;
+      }
+
+      .dark .panel {
+        background: rgb(32 32 32);
+      }
+
+      .button {
+        appearance: none;
+        border: 0;
+        border-radius: 2px;
+        padding: 0.5em 1em;
+        font-size: 14px;
+        margin-bottom: 1em;
+        cursor: pointer;
+        transition: transform 0.25s ease-out;
+        background-color: #213f92;
+        color: #fff;
+      }
+
+      .button:active {
+        transform: scale(0.96);
       }
 
       .line {
         display: inline-flex;
         flex-flow: row nowrap;
+        margin-bottom: 0.5em;
       }
 
       .line .label {
@@ -292,7 +318,7 @@
 
       .container {
         max-width: 760px;
-        margin: 1em auto;
+        margin: 4em auto;
         padding: 40px;
         overflow: hidden;
         background-color: #eeeeee;
@@ -306,6 +332,7 @@
         display: flex;
         justify-content: space-between;
         flex-flow: row nowrap;
+        margin-bottom: 1em;
       }
 
       .row .col {
@@ -488,7 +515,13 @@
 
       <section class="section">
         <h2>Advanced Demo with custom options</h2>
-        <pre><code class="language-javascript">const options = {
+        <div class="row">
+          <div class="col col50">
+            html:
+            <pre><code class="language-html">&lt;div id=&quot;adv&quot;&gt;&lt;/div&gt;
+</code></pre>
+            javascript:
+            <pre><code class="language-javascript">const options = {
   beforeImage: '01_before.png',
   afterImage: '01_after.png',
   afterLabel: 'after',
@@ -497,156 +530,185 @@
   ltr: true,
 };
 
-const ba = new BeforeAfter('#adv', options);
-</code></pre>
-        <div style="margin: 0 auto 1em">
-          <div id="adv-events" class="panel">
-            <div class="line">
-              <div class="label">percent (<span id="adv-from-percent"></span>):</div>
-              <span id="adv-percent">&nbsp;</span>
-            </div>
-            <div class="line">
-              <div class="label">slider:</div>
-              <input
-                id="adv-range"
-                type="range"
-                step="0.5"
-                min="0"
-                max="100"
-                value="50"
-              />
-              <input
-                id="adv-smooth"
-                type="checkbox"
-                checked
-                value="smooth"
-              />
-              <label for="adv-smooth">smooth</label>
-            </div>
-            <div class="line">
-              <button id="adv-toggle">toggle</button>
-            </div>
-            <div class="line">
-              <button id="adv-direction">change orientation</button>
-            </div>
-            <div class="line">
-              <button id="adv-destroy">destroy</button>
+const ba =
+  new BeforeAfter('#adv', options);
+            </code></pre>
+          </div>
+          <div class="col col50">
+            <div id="adv-events" class="panel">
+              <div class="line">
+                <h3 id="adv-info"></h3>
+              </div>
+              <div class="line">
+                <div class="label">
+                  percent (from <span id="adv-from-percent"></span>):
+                </div>
+                <span id="adv-percent">&nbsp;</span>
+              </div>
+              <div class="line">
+                <div class="label">slider:</div>
+                <input
+                  id="adv-range"
+                  type="range"
+                  step="0.5"
+                  min="0"
+                  max="100"
+                  value="50"
+                />
+                <input id="adv-smooth" type="checkbox" checked value="smooth" />
+                <label for="adv-smooth">smooth</label>
+              </div>
+              <div class="line">
+                <button class="button" id="adv-toggle">toggle</button>
+              </div>
+              <div class="line">
+                <button class="button" id="adv-orientation">
+                  change orientation
+                </button>
+              </div>
+              <div class="line">
+                <button class="button" id="adv-direction">
+                  change direction
+                </button>
+              </div>
+              <div class="line">
+                <button class="button" id="adv-destroy">destroy</button>
+              </div>
             </div>
           </div>
-          <div class="beforeafter" id="adv">
-            <!-- <div class="info-box"><h1>info box</h1></div> -->
-          </div>
-          <div id="adv-caption" style="text-align: center">&nbsp;</div>
-          <script type="module">
-            import BeforeAfter from './src/index.js';
-            const init = () => {
-              document.removeEventListener('DOMContentLoaded', init);
+        </div>
+        <div id="adv">
+          <!-- <div class="info-box"><h1>info box</h1></div> -->
+        </div>
+        <div id="adv-caption" style="text-align: center">&nbsp;</div>
+        <script type="module">
+          import BeforeAfter from './src/index.js';
+          const init = () => {
+            document.removeEventListener('DOMContentLoaded', init);
 
-              const percent = document.getElementById('adv-percent');
-              const range = document.getElementById('adv-range');
-              const destroy = document.getElementById('adv-destroy');
-              const toggle = document.getElementById('adv-toggle');
-              const caption = document.getElementById('adv-caption');
-              const direction = document.getElementById('adv-direction');
-              const smoothCheckbox = document.getElementById('adv-smooth');
-              const fromPercent = document.getElementById('adv-from-percent');
+            const info = document.getElementById('adv-info');
+            const percent = document.getElementById('adv-percent');
+            const range = document.getElementById('adv-range');
+            const destroy = document.getElementById('adv-destroy');
+            const toggle = document.getElementById('adv-toggle');
+            const caption = document.getElementById('adv-caption');
+            const direction = document.getElementById('adv-direction');
+            const orientation = document.getElementById('adv-orientation');
+            const smoothCheckbox = document.getElementById('adv-smooth');
+            const fromPercent = document.getElementById('adv-from-percent');
 
-              const options = {
-                beforeImage: '01_before.png',
-                afterImage: '01_after.png',
-                afterLabel: 'after',
-                beforeLabel: 'before',
-                horizontal: true,
-                ltr: true,
-
-                init(e) {
-                  fromPercent.innerHTML = (e.detail.horizontal) ? 'left' : 'top';
-                }
-              };
-              const ba = new BeforeAfter('#adv', options);
-
-              let destroyed = false;
-              let slide = false;
-              let smooth = false;
-              let smoothTime = 500;
-              let smoothTo;
-              let smoothValue;
-
-              smoothCheckbox.addEventListener('change', (e) => {
-                smoothValue = e.target.checked ? smoothTime : 0;
-              });
-              smoothValue = smoothCheckbox.checked ? smoothTime : 0;
-
-              const down = () => {
-                clearTimeout(smoothTo);
-                slide = true;
-              };
-              const up = () => {
-                smoothTo = setTimeout(() => {
-                  clearTimeout(smoothTo);
-                  slide = false;
-                }, smoothTime);
-              };
-
-              range.addEventListener('mousedown', down);
-              range.addEventListener('mouseup', up);
-              range.addEventListener('touchstart', down);
-              range.addEventListener('touchend', up);
-
-              range.addEventListener('input', (e) => {
-                ba.goto(e.target.value, smoothValue);
-              });
-
-              destroy.addEventListener('click', (e) => {
-                if (!destroyed) {
-                  ba.destroy();
-                  destroy.innerHTML = 'init';
-                  destroyed = true;
-                } else {
-                  ba.init();
-                  destroy.innerHTML = 'destroy';
-                  destroyed = false;
-                }
-              });
-
-              toggle.addEventListener('click', () => ba.toggle());
-
-              direction.addEventListener('click', (e) => {
-                ba.changeOrientation();
-                fromPercent.innerHTML = (ba._horizontal) ? 'left' : 'top';
-              });
-
-              ba.addEventListener('update', (e) => {
-                let p = Math.round(e.detail.percent * 100) / 100;
-                if (!slide) range.value = p;
-                percent.innerHTML = `${p}%`;
-              });
-
-              ba.addEventListener('viewchanged', (e) => {
-                const afterShown = e.detail.afterShown;
-                toggle.innerHTML = 'Show ' + (afterShown ? 'before' : 'after');
-              });
-
-              ba.addEventListener('beforeshown', (e) => {
-                console.log('beforeshown', e);
-                caption.innerHTML = 'pink';
-              });
-
-              ba.addEventListener('aftershown', (e) => {
-                console.log('aftershown', e);
-                caption.innerHTML = 'blue';
-              });
-
-              window.ba = ba;
+            const texts = {
+              info: [
+                'the "before" image is shown',
+                'the "after" image is shown',
+              ],
+              caption: ['pink shoes', 'blue shoes'],
             };
 
-            if ('complete' === document.readyState) {
-              init();
-            } else {
-              document.addEventListener('DOMContentLoaded', init, false);
-            }
-          </script>
-        </div>
+            const options = {
+              beforeImage: '01_before.png',
+              afterImage: '01_after.png',
+              afterLabel: 'after',
+              beforeLabel: 'before',
+              horizontal: true,
+              ltr: true,
+
+              init(e) {
+                fromPercent.innerHTML = e.detail.horizontal ? 'left' : 'top';
+                const which = e.detail.afterShown ? 1 : 0;
+                info.innerHTML = texts.info[which];
+                caption.innerHTML = texts.caption[which];
+              },
+            };
+            const ba = new BeforeAfter('#adv', options);
+
+            let destroyed = false;
+            let slide = false;
+            let smooth = false;
+            let smoothTime = 500;
+            let smoothTo;
+            let smoothValue;
+
+            smoothCheckbox.addEventListener('change', (e) => {
+              smoothValue = e.target.checked ? smoothTime : 0;
+            });
+            smoothValue = smoothCheckbox.checked ? smoothTime : 0;
+
+            const down = () => {
+              clearTimeout(smoothTo);
+              slide = true;
+            };
+            const up = () => {
+              smoothTo = setTimeout(() => {
+                clearTimeout(smoothTo);
+                slide = false;
+              }, smoothTime);
+            };
+
+            range.addEventListener('mousedown', down);
+            range.addEventListener('mouseup', up);
+            range.addEventListener('touchstart', down);
+            range.addEventListener('touchend', up);
+
+            range.addEventListener('input', (e) => {
+              ba.goto(e.target.value, smoothValue);
+            });
+
+            destroy.addEventListener('click', (e) => {
+              if (!destroyed) {
+                ba.destroy();
+                destroy.innerHTML = 'init';
+                destroyed = true;
+              } else {
+                ba.init();
+                destroy.innerHTML = 'destroy';
+                destroyed = false;
+              }
+            });
+
+            toggle.addEventListener('click', () => ba.toggle());
+
+            direction.addEventListener('click', (e) => {
+              ba.changeDirection();
+            });
+
+            orientation.addEventListener('click', (e) => {
+              ba.changeOrientation();
+              fromPercent.innerHTML = ba._horizontal ? 'left' : 'top';
+            });
+
+            ba.addEventListener('update', (e) => {
+              let p = Math.round(e.detail.percent * 100) / 100;
+              if (!slide) range.value = p;
+              percent.innerHTML = `${p}%`;
+            });
+
+            ba.addEventListener('viewchanged', (e) => {
+              const afterShown = e.detail.afterShown;
+              toggle.innerHTML = 'Show ' + (afterShown ? 'before' : 'after');
+            });
+
+            ba.addEventListener('beforeshown', (e) => {
+              // console.log('beforeshown', e);
+              info.innerHTML = texts.info[0];
+              caption.innerHTML = texts.caption[0];
+            });
+
+            ba.addEventListener('aftershown', (e) => {
+              // console.log('aftershown', e);
+              info.innerHTML = texts.info[1];
+              caption.innerHTML = texts.caption[1];
+            });
+
+            window.ba = ba;
+          };
+
+          if ('complete' === document.readyState) {
+            init();
+          } else {
+            document.addEventListener('DOMContentLoaded', init, false);
+          }
+        </script>
       </section>
     </div>
     <div id="modeSwitch"></div>

@@ -1,5 +1,5 @@
 /*!
-* BeforeAfter v0.2.6
+* BeforeAfter v0.2.7
 * undefined
 */
 var k = Object.defineProperty;
@@ -111,7 +111,7 @@ const P = (s, i, t) => {
     for (let n in t)
       Object.prototype.hasOwnProperty.call(t, n) && (s.style[n] = t[n]);
   return e && (s.innerHTML = e), s;
-}, f = (s, i, t, e) => G(document.createElement(s), i, t, e), T = {
+}, _ = (s, i, t, e) => G(document.createElement(s), i, t, e), T = {
   // Linear: {},
   // Pow: {},
   Quad: {
@@ -146,7 +146,7 @@ const P = (s, i, t) => {
   // only works if onlyHandleDraggable is set to true
   snapToStart: !1,
   // after mouse out or drag stop handle jumps to start position
-  snapToStartDelay: 1250,
+  snapToStartDelay: 1e3,
   snapToStartDuration: 1250,
   // ms TODO: implement
   snapToStartEasing: T.Elastic.easeOut,
@@ -284,7 +284,7 @@ class d extends X {
         const a = Math.abs(this.startPos.x - e.x), r = Math.abs(this.startPos.y - e.y);
         if (!this._dirDetected) {
           if (r > a) {
-            console.log("scroll down or up"), this.element.classList.remove(g), window.removeEventListener(
+            this.element.classList.remove(g), window.removeEventListener(
               "touchmove",
               this._drag,
               m
@@ -347,26 +347,26 @@ class d extends X {
     this._originalEl = [], this._createdEl = [];
     const e = "div";
     let n, a;
-    const r = f(e, { class: "clipSlider" });
+    const r = _(e, { class: "clipSlider" });
     if (t.beforeImage || t.afterImage)
       this.images = [n, a] = [
         t.beforeImage,
         t.afterImage
-      ].reduce((E, _) => (E.push(f("img", { draggable: !1, src: _ })), E), []), this.element.appendChild(n), r.appendChild(a), this.element.appendChild(r), this._createdEl.push(n);
+      ].reduce((E, f) => (E.push(_("img", { draggable: !1, src: f })), E), []), this.element.appendChild(n), r.appendChild(a), this.element.appendChild(r), this._createdEl.push(n);
     else {
-      const [E, _] = this.images;
-      n = E, n.setAttribute("draggable", !1), a = _.cloneNode(!0), a.setAttribute("draggable", !1), r.appendChild(a), _.parentNode.replaceChild(r, _), this._originalEl.push(_);
+      const [E, f] = this.images;
+      n = E, n.setAttribute("draggable", !1), a = f.cloneNode(!0), a.setAttribute("draggable", !1), r.appendChild(a), f.parentNode.replaceChild(r, f), this._originalEl.push(f);
     }
     this._createdEl.push(r);
     let h, o;
-    t.beforeLabel !== "" && (h = f(e, { class: "label label-one" }), h.innerHTML = t.beforeLabel, this.element.appendChild(h), this._createdEl.push(h)), t.afterLabel !== "" && (o = f(e, { class: "label label-two" }), o.innerHTML = t.afterLabel, this.element.appendChild(o), this._createdEl.push(o)), this.info1 = t.ltr ? h : o, this.info2 = t.ltr ? o : h;
-    const u = f(
+    t.beforeLabel !== "" && (h = _(e, { class: "label label-one" }), h.innerHTML = t.beforeLabel, this.element.appendChild(h), this._createdEl.push(h)), t.afterLabel !== "" && (o = _(e, { class: "label label-two" }), o.innerHTML = t.afterLabel, this.element.appendChild(o), this._createdEl.push(o)), this.info1 = t.ltr ? h : o, this.info2 = t.ltr ? o : h;
+    const u = _(
       e,
       {
         class: t.dragElementClass + " " + (this._horizontal ? "horizontal" : "vertical")
       },
       { zIndex: 5 }
-    ), c = f(e, { class: "line line-1" }), H = f(e, { class: "line line-2" }), N = f(e, { class: "circle" });
+    ), c = _(e, { class: "line line-1" }), H = _(e, { class: "line line-2" }), N = _(e, { class: "circle" });
     u.appendChild(c), u.appendChild(H), u.appendChild(N), this.element.appendChild(u), this._createdEl.push(u), this.element.style.visibility = "visible", this._dragHandle = u, this._clipEl = r;
   }
   /**
@@ -464,8 +464,8 @@ class d extends X {
     this._percent = t;
     const n = this._dim * 0.01 * t;
     this._clipEl.style.clipPath = this._getClipRect(n), this._dragHandle.style.transform = this._horizontal ? `translate(${n}px, 0)` : `translate(0, ${n}px)`, this.info1 && (this.info1.style.opacity = t < 50 ? 1 : (100 - t) / 50), this.info2 && (this.info2.style.opacity = t > 50 ? 1 : t / 50);
-    let a = this.settings.ltr ? this._afterShown : !this._afterShown;
-    t > 75 && (this._oneTime || !a) ? this._changeStatus(this.settings.ltr) : t < 25 && (this._oneTime || a) && this._changeStatus(!this.settings.ltr), this._triggerEvent(O);
+    let a = this._ltr ? this._afterShown : !this._afterShown;
+    t > 75 && (this._oneTime || !a) ? this._changeStatus(this._ltr) : t < 25 && (this._oneTime || a) && this._changeStatus(!this._ltr), this._triggerEvent(O);
   }
   /**
    * convert pixel position to percent from left
@@ -515,6 +515,9 @@ class d extends X {
    * ltr = false (after, 0%)  R -> L (before, 100%)
    */
   changeDirection() {
+    this._ltr = !this._ltr;
+    let t;
+    t = this.info1, this.info1 = this.info2, this.info2 = t, this._percent = 100 - this._percent, this._dimensions(!0);
   }
   /**
    * horizontal or vertical slider
@@ -526,10 +529,10 @@ class d extends X {
     ), this._dimensions(!0);
   }
   showAfter() {
-    this._setPosition(100);
+    this._setPosition(this._ltr ? 100 : 0);
   }
   showBefore() {
-    this._setPosition(0);
+    this._setPosition(this._ltr ? 0 : 100);
   }
   get elem() {
     return this.element;
