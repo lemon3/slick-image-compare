@@ -153,9 +153,7 @@ const P = (s, i, t) => {
   // TODO: implement
   handleMinDistance: 0,
   // min distance to left and right border in px
-  dragElementClass: "beforeafter-handle",
-  dragCallback: null,
-  // todo
+  dragElementClass: "ba-handle",
   // animateIn: true,
   animateInDuration: 1250,
   // ms
@@ -359,14 +357,14 @@ class d extends X {
     }
     this._createdEl.push(r);
     let h, o;
-    t.beforeLabel !== "" && (h = _(e, { class: "label label-one" }), h.innerHTML = t.beforeLabel, this.element.appendChild(h), this._createdEl.push(h)), t.afterLabel !== "" && (o = _(e, { class: "label label-two" }), o.innerHTML = t.afterLabel, this.element.appendChild(o), this._createdEl.push(o)), this.info1 = t.ltr ? h : o, this.info2 = t.ltr ? o : h;
+    t.beforeLabel !== "" && (h = _(e, { class: "ba-label ba-label-one" }), h.innerHTML = t.beforeLabel, this.element.appendChild(h), this._createdEl.push(h)), t.afterLabel !== "" && (o = _(e, { class: "ba-label ba-label-two" }), o.innerHTML = t.afterLabel, this.element.appendChild(o), this._createdEl.push(o)), this.info1 = t.ltr ? h : o, this.info2 = t.ltr ? o : h;
     const u = _(
       e,
       {
         class: t.dragElementClass + " " + (this._horizontal ? "horizontal" : "vertical")
       },
       { zIndex: 5 }
-    ), c = _(e, { class: "line line-1" }), H = _(e, { class: "line line-2" }), N = _(e, { class: "circle" });
+    ), c = _(e, { class: "ba-line ba-line-1" }), H = _(e, { class: "ba-line ba-line-2" }), N = _(e, { class: "ba-circle" });
     u.appendChild(c), u.appendChild(H), u.appendChild(N), this.element.appendChild(u), this._createdEl.push(u), this.element.style.visibility = "visible", this._dragHandle = u, this._clipEl = r;
   }
   /**

@@ -19,8 +19,7 @@ export const defaults = {
   snapToStartEasing: easing.Elastic.easeOut, // TODO: implement
 
   handleMinDistance: 0, // min distance to left and right border in px
-  dragElementClass: 'beforeafter-handle',
-  dragCallback: null, // todo
+  dragElementClass: 'ba-handle',
 
   // animateIn: true,
   animateInDuration: 1250, // ms

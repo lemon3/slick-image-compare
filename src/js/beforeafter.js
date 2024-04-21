@@ -171,14 +171,14 @@ class BeforeAfter extends Emitter {
     // create labels
     let info1, info2;
     if ('' !== s.beforeLabel) {
-      info1 = createEl(div, { class: 'label label-one' });
+      info1 = createEl(div, { class: 'ba-label ba-label-one' });
       info1.innerHTML = s.beforeLabel;
       this.element.appendChild(info1);
       this._createdEl.push(info1);
     }
 
     if ('' !== s.afterLabel) {
-      info2 = createEl(div, { class: 'label label-two' });
+      info2 = createEl(div, { class: 'ba-label ba-label-two' });
       info2.innerHTML = s.afterLabel;
       this.element.appendChild(info2);
       this._createdEl.push(info2);
@@ -197,9 +197,9 @@ class BeforeAfter extends Emitter {
       },
       { zIndex: 5 }
     );
-    const line1 = createEl(div, { class: 'line line-1' });
-    const line2 = createEl(div, { class: 'line line-2' });
-    const dragHandle = createEl(div, { class: 'circle' });
+    const line1 = createEl(div, { class: 'ba-line ba-line-1' });
+    const line2 = createEl(div, { class: 'ba-line ba-line-2' });
+    const dragHandle = createEl(div, { class: 'ba-circle' });
     drag.appendChild(line1);
     drag.appendChild(line2);
     drag.appendChild(dragHandle);
