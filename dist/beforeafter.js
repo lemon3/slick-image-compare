@@ -97,7 +97,7 @@ try {
 } catch (s) {
   m = !1;
 }
-const P = (s, i, t) => {
+const I = (s, i, t) => {
   if (s = parseFloat(s, 10), i = parseFloat(i, 10), t = parseFloat(t, 10), t < i) {
     let e = t;
     t = i, i = e;
@@ -111,7 +111,7 @@ const P = (s, i, t) => {
     for (let n in t)
       Object.prototype.hasOwnProperty.call(t, n) && (s.style[n] = t[n]);
   return e && (s.innerHTML = e), s;
-}, _ = (s, i, t, e) => G(document.createElement(s), i, t, e), T = {
+}, _ = (s, i, t, e) => G(document.createElement(s), i, t, e), P = {
   // Linear: {},
   // Pow: {},
   Quad: {
@@ -149,25 +149,25 @@ const P = (s, i, t) => {
   snapToStartDelay: 1e3,
   snapToStartDuration: 1250,
   // ms TODO: implement
-  snapToStartEasing: T.Elastic.easeOut,
+  snapToStartEasing: P.Elastic.easeOut,
   // TODO: implement
   handleMinDistance: 0,
-  // min distance to left and right border in px
-  dragElementClass: "ba-handle",
-  // animateIn: true,
+  // min distance to left and right border in px or %
+  // animate in
+  animateIn: !1,
   animateInDuration: 1250,
   // ms
-  animateInEasing: T.Elastic.easeOut,
+  animateInEasing: P.Elastic.easeOut,
   animateInDelay: 100,
   // in ms
-  animateStartPos: 40,
+  animateInStartPos: 40,
   // % from left
   startPos: 50,
   // % from left
   // clickAnimate: true,
   animateDuration: 250,
   // ms
-  animateEasing: T.Cubic.easeOut,
+  animateEasing: P.Cubic.easeOut,
   // showLabels: false,
   beforeLabel: "",
   // before Image
@@ -228,7 +228,7 @@ class X {
     ), this) : this;
   }
 }
-const w = "beforeafter", U = "data-" + w, g = "interacting", C = "init", M = "drag", O = "update", S = "viewchanged", A = "beforeshown", z = "aftershown", I = "interactionend", v = "mousedown", Y = "resize";
+const w = "beforeafter", U = "data-" + w, g = "interacting", C = "init", M = "drag", O = "update", T = "viewchanged", A = "beforeshown", z = "aftershown", S = "interactionend", v = "mousedown", Y = "resize";
 let p = [], D = !1;
 class d extends X {
   constructor(t, e) {
@@ -305,8 +305,8 @@ class d extends X {
       O,
       A,
       z,
-      I,
-      S
+      S,
+      T
     ], p.push(this), x.put(t, "instance", this), this.element = t;
     const n = j(t, w);
     if (this.options = e || {}, this.settings = Object.assign({}, d.defaults, n, e), this.images = this.element.querySelectorAll("img"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || !this.images.length))
@@ -361,7 +361,7 @@ class d extends X {
     const u = _(
       e,
       {
-        class: t.dragElementClass + " " + (this._horizontal ? "horizontal" : "vertical")
+        class: "ba-handle " + (this._horizontal ? "horizontal" : "vertical")
       },
       { zIndex: 5 }
     ), c = _(e, { class: "ba-line ba-line-1" }), H = _(e, { class: "ba-line ba-line-2" }), N = _(e, { class: "ba-circle" });
@@ -391,14 +391,14 @@ class d extends X {
   }
   _appEvents(t = !0) {
     const e = (t ? "add" : "remove") + "EventListener";
-    this._touchStartEvent(t), this._mouseStartEvents(t), window[e](Y, this._dimensions), this[e](I, this._interactionEnd);
+    this._touchStartEvent(t), this._mouseStartEvents(t), window[e](Y, this._dimensions), this[e](S, this._interactionEnd);
   }
   // TODO: jumpToEnd parameter?
   _stopAni() {
     this._renderId && (window.cancelAnimationFrame(this._renderId), this._renderId = void 0, this._timing.then = this._timing.curTime = 0);
   }
   _testInteractionEnd() {
-    this._endInteraction && this._renderId === void 0 && (this._endInteraction = !1, this._triggerEvent(I));
+    this._endInteraction && this._renderId === void 0 && (this._endInteraction = !1, this._triggerEvent(S));
   }
   /**
    *
@@ -427,7 +427,7 @@ class d extends X {
    * @returns
    */
   _animateTo(t, e, n) {
-    t = P(+t, 0, 100);
+    t = I(+t, 0, 100);
     const a = t - this._percent;
     if (!e) {
       this._setPosition(t);
@@ -450,7 +450,7 @@ class d extends X {
   _changeStatus(t) {
     this._afterShown = t;
     let e = this._afterShown ? z : A;
-    this._triggerEvent(e), this._triggerEvent(S), this._oneTime = !1;
+    this._triggerEvent(e), this._triggerEvent(T), this._oneTime = !1;
   }
   /**
    * set the handle to a defined position (in percent from left)
@@ -472,7 +472,7 @@ class d extends X {
    */
   _calcPercent(t) {
     let e = this._horizontal ? t.x : t.y;
-    return e = P(e, this._minPos, this._maxPos), (e + this._offset) * 100 / this._dim;
+    return e = I(e, this._minPos, this._maxPos), (e + this._offset) * 100 / this._dim;
   }
   // /**
   //  * convert percent to left pixel value
@@ -490,21 +490,21 @@ class d extends X {
     if (this._initialized)
       return this;
     const t = this.settings;
-    this._initialized = !0, this._oneTime = !0, this._afterShown = !1, this._ltr = !!t.ltr, this._horizontal = t.horizontal, this._createGui(), this._timing = { time: 0, curTime: 0 }, this._dragEl = t.onlyHandleDraggable ? this._dragHandle : this.element, this._animationDuration = t.animateInDuration || 0, t.startPos || (t.startPos = 0), t.animateStartPos || (t.animateStartPos = 0), this._percent = this._animationDuration > 0 ? t.animateStartPos : t.startPos, this.element.style.opacity = 0, this.isTouch = "ontouchstart" in window || window.DocumentTouch && document instanceof window.DocumentTouch || navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0, this.allowedEvents.forEach((e) => {
+    this._initialized = !0, this._oneTime = !0, this._afterShown = !1, this._ltr = !!t.ltr, this._horizontal = t.horizontal, this._createGui(), this._timing = { time: 0, curTime: 0 }, this._dragEl = t.onlyHandleDraggable ? this._dragHandle : this.element, this._animationDuration = t.animateInDuration || 0, t.startPos || (t.startPos = 0), t.animateInStartPos || (t.animateInStartPos = 0), t.animateIn ? this._percent = this._animationDuration > 0 ? t.animateInStartPos : t.startPos : this._percent = t.startPos, this.element.style.opacity = 0, this.isTouch = "ontouchstart" in window || window.DocumentTouch && document instanceof window.DocumentTouch || navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0, this.allowedEvents.forEach((e) => {
       t[e] && this.addEventListener(e, t[e]);
     }), W(this.images[0].src).then(() => {
-      this._dimensions(), this._setPosition(this._percent), this.element.style.opacity = 1, this._animationDuration > 0 && this.settings.animateStartPos !== this.settings.startPos && setTimeout(
+      this._dimensions(), this._setPosition(this._percent), this.element.style.opacity = 1, t.animateIn && this._animationDuration > 0 && this.settings.animateInStartPos !== this.settings.startPos && setTimeout(
         () => this._animateTo(
           this.settings.startPos,
           this._animationDuration,
           this.settings.animateInEasing
         ),
         this.settings.animateInDelay
-      ), this._appEvents(), this._triggerEvent(C), this._triggerEvent(S);
+      ), this._appEvents(), this._triggerEvent(C), this._triggerEvent(T);
     });
   }
   goto(t, e, n) {
-    if (isNaN(t) || (t = P(+t, 0, 100), t === this._percent))
+    if (isNaN(t) || (t = I(+t, 0, 100), t === this._percent))
       return !1;
     this._stopAni(), this._animateTo(t, e, n);
   }

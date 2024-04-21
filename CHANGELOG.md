@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.7
+### Added or Changed
+- changeOrientation and changeDirection update
+
 ## v0.2.6
 ### Added or Changed
 - changeOrientation support

@@ -18,14 +18,14 @@ export const defaults = {
   snapToStartDuration: 1250, // ms TODO: implement
   snapToStartEasing: easing.Elastic.easeOut, // TODO: implement
 
-  handleMinDistance: 0, // min distance to left and right border in px
-  dragElementClass: 'ba-handle',
+  handleMinDistance: 0, // min distance to left and right border in px or %
 
-  // animateIn: true,
+  // animate in
+  animateIn: false,
   animateInDuration: 1250, // ms
   animateInEasing: easing.Elastic.easeOut,
   animateInDelay: 100, // in ms
-  animateStartPos: 40, // % from left
+  animateInStartPos: 40, // % from left
   startPos: 50, // % from left
 
   // clickAnimate: true,

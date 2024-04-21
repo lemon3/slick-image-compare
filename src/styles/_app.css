@@ -19,11 +19,14 @@
     cursor: col-resize;
   }
 
-  /* &:hover {
-    .ba-handle div {
-      transform: scale(1.25);
+  &:hover {
+    & .ba-circle:before {
+      transform: rotate(180deg) translate(3px);
     }
-  } */
+    & .ba-circle:after {
+      transform: translate(3px);
+    }
+  }
 
   img {
     user-select: none;
@@ -153,6 +156,7 @@
 
   & .ba-circle:before,
   & .ba-circle:after {
+    transition: transform 0.25s ease-out;
     content: '';
     position: absolute;
     width: 50%;

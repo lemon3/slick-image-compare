@@ -190,10 +190,7 @@ class BeforeAfter extends Emitter {
     const drag = createEl(
       div,
       {
-        class:
-          s.dragElementClass +
-          ' ' +
-          (this._horizontal ? 'horizontal' : 'vertical'),
+        class: 'ba-handle ' + (this._horizontal ? 'horizontal' : 'vertical'),
       },
       { zIndex: 5 }
     );
@@ -618,12 +615,17 @@ class BeforeAfter extends Emitter {
     if (!s.startPos) {
       s.startPos = 0;
     }
-    if (!s.animateStartPos) {
-      s.animateStartPos = 0;
+    if (!s.animateInStartPos) {
+      s.animateInStartPos = 0;
     }
 
-    this._percent =
-      this._animationDuration > 0 ? s.animateStartPos : s.startPos;
+    if (!s.animateIn) {
+      this._percent = s.startPos;
+    } else {
+      this._percent =
+        this._animationDuration > 0 ? s.animateInStartPos : s.startPos;
+    }
+
     this.element.style.opacity = 0;
 
     this.isTouch =
@@ -646,8 +648,9 @@ class BeforeAfter extends Emitter {
       this.element.style.opacity = 1;
 
       if (
+        s.animateIn &&
         this._animationDuration > 0 &&
-        this.settings.animateStartPos !== this.settings.startPos
+        this.settings.animateInStartPos !== this.settings.startPos
       ) {
         setTimeout(
           () =>
