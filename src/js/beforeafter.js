@@ -1,6 +1,7 @@
 import {
   passiveIfSupported,
   restrict,
+  restrictFast,
   docReady,
   imageDimensions,
   getJSONData,
@@ -31,6 +32,19 @@ const RESIZE = 'resize';
 
 let instances = [];
 let initialized = false;
+
+const getArrow = (color = '#ffffff', right = true) =>
+  `<svg xmlns="http://www.w3.org/2000/svg"
+    width="32"
+    height="32"
+    viewBox="0 0 32 32"
+    fill="none"
+    stroke="${color}"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="arcs">
+    <path d="${right ? 'm12 24 8-8-8-8' : 'm20 8-8 8 8 8'}"/>
+  </svg>`;
 
 class BeforeAfter extends Emitter {
   constructor(element, options) {
@@ -138,7 +152,7 @@ class BeforeAfter extends Emitter {
     const div = 'div';
     let firstImg, secondImg;
 
-    const clipEl = createEl(div, { class: 'clipSlider' });
+    const clipEl = createEl(div, { class: 'ba-clip' });
 
     if (s.beforeImage || s.afterImage) {
       this.images = [firstImg, secondImg] = [
@@ -196,7 +210,15 @@ class BeforeAfter extends Emitter {
     );
     const line1 = createEl(div, { class: 'ba-line ba-line-1' });
     const line2 = createEl(div, { class: 'ba-line ba-line-2' });
+    const arrow1 = createEl(div, { class: 'ba-arrow ba-arrow-1' });
+    const arrow2 = createEl(div, { class: 'ba-arrow ba-arrow-2' });
     const dragHandle = createEl(div, { class: 'ba-circle' });
+
+    arrow1.innerHTML = getArrow('#ffffff', false);
+    arrow2.innerHTML = getArrow('#ffffff', true);
+
+    dragHandle.appendChild(arrow1);
+    dragHandle.appendChild(arrow2);
     drag.appendChild(line1);
     drag.appendChild(line2);
     drag.appendChild(dragHandle);
@@ -217,7 +239,7 @@ class BeforeAfter extends Emitter {
    * @param {Boolean} add true or false
    */
   _mouseStartEvents(add = true) {
-    const fun = (add ? 'add' : 'remove') + 'EventListener';
+    const fun = this._addRemove(add);
     // console.log('_mouseStartEvents', fun);
     const s = this.settings;
     if (s.followMouse) {
@@ -235,12 +257,23 @@ class BeforeAfter extends Emitter {
   }
 
   /**
+   * Helper method.
+   *
+   * @param {Boolean} add true for addEventListener
+   *                      false for removeEventListener
+   * @returns
+   */
+  _addRemove(add = true) {
+    return (add ? 'add' : 'remove') + 'EventListener';
+  }
+
+  /**
    * Method to remove or add touch events
    *
    * @param {Boolean} add true or false
    */
   _touchStartEvent(add = true) {
-    const fun = (add ? 'add' : 'remove') + 'EventListener';
+    const fun = this._addRemove(add);
     // console.log('_touchStartEvent', fun);
     this._dragEl[fun]('touchstart', this._dragStart, passiveIfSupported);
     if (this.settings.clickable) {
@@ -250,26 +283,27 @@ class BeforeAfter extends Emitter {
   }
 
   _appEvents(add = true) {
-    const fun = (add ? 'add' : 'remove') + 'EventListener';
     this._touchStartEvent(add);
     this._mouseStartEvents(add);
+    const fun = this._addRemove(add);
     window[fun](RESIZE, this._dimensions);
-    this[fun](INTERACTIONEND, this._interactionEnd);
+    // this[fun](INTERACTIONEND, this._interactionEnd);
   }
 
   // TODO: jumpToEnd parameter?
   _stopAni() {
     // console.log('_stopAni', this._renderId);
     if (this._renderId) {
-      window.cancelAnimationFrame(this._renderId);
+      cancelAnimationFrame(this._renderId);
       this._renderId = undefined;
-      this._timing.then = this._timing.curTime = 0;
+      // this._timingThen = this._timingCurTime = 0;
     }
   }
 
   _testInteractionEnd() {
     if (this._endInteraction && undefined === this._renderId) {
       this._endInteraction = false;
+      this._interactionEnd();
       this._triggerEvent(INTERACTIONEND);
     }
   }
@@ -283,24 +317,29 @@ class BeforeAfter extends Emitter {
    */
   _renderLoop(from, to, delta) {
     const render = () => {
-      const now = new Date().getTime();
-      const dt = now - (this._timing.then || now);
-      this._timing.curTime += dt;
-      this.progress = this._timing.curTime / this._animationDuration;
+      const now = Date.now();
 
-      if (this.progress >= 1) {
-        this.progress = 1;
-        this._setPosition(to);
-        this._stopAni();
-        this._testInteractionEnd();
-        return;
+      if (0 !== this._timingThen) {
+        this._timingCurTime += now - this._timingThen;
+        this.progress = this._timingCurTime / this._animationDuration;
+
+        if (this.progress >= 1) {
+          this.progress = 1;
+          this._setPosition(to);
+          this._stopAni();
+          this._testInteractionEnd();
+          return;
+        }
+
+        // render
+        this._setPosition(from + delta * this.easing(this.progress));
+      } else {
+        this.progress = 0;
+        this._setPosition(from);
       }
 
-      // render
-      this._setPosition(from + delta * this.easing(this.progress));
-
-      this._timing.then = now;
-      this._renderId = window.requestAnimationFrame(render);
+      this._timingThen = now;
+      this._renderId = requestAnimationFrame(render);
     };
     render();
   }
@@ -314,8 +353,7 @@ class BeforeAfter extends Emitter {
    * @returns
    */
   _animateTo(percent, duration, easing) {
-    percent = restrict(+percent, 0, 100);
-    const delta = percent - this._percent;
+    percent = restrictFast(+percent, 0, 100);
     // console.log('from:', this._percent, 'to:', percent, duration);
 
     if (!duration) {
@@ -323,10 +361,16 @@ class BeforeAfter extends Emitter {
       return;
     }
 
+    const delta = percent - this._percent;
+
+    // if (0 === delta) {
+    //   return;
+    // }
+
     this._animationDuration = duration;
     this.easing = easing || this.settings.animateEasing;
     this.progress = 0;
-    this._timing.then = this._timing.curTime = 0;
+    this._timingThen = this._timingCurTime = 0;
 
     this._renderLoop(this._percent, percent, delta);
   }
@@ -343,7 +387,7 @@ class BeforeAfter extends Emitter {
     }, delay);
   }
 
-  _interactionEnd = () => {
+  _interactionEnd() {
     // console.log('isTouch:', this.isTouch);
     this.element.classList.remove(INTERACTING);
 
@@ -357,7 +401,7 @@ class BeforeAfter extends Emitter {
     if (this.settings.snapToStart) {
       this._snapToStart();
     }
-  };
+  }
 
   _dimensions = (force) => {
     const bounding = this.element.getBoundingClientRect();
@@ -400,15 +444,11 @@ class BeforeAfter extends Emitter {
   };
 
   _mouseOver = () => {
-    // console.log('_mouseOver');
-    // this.element.addEventListener('mousemove', this._mouseMove);
     this._stopAni();
     this.element.classList.add(INTERACTING);
   };
 
   _mouseOut = () => {
-    // console.log('_mouseOut');
-    // this.element.removeEventListener('mousemove', this._mouseMove);
     this.element.classList.remove(INTERACTING);
     if (this.settings.snapToStart) {
       this._snapToStart();
@@ -416,11 +456,8 @@ class BeforeAfter extends Emitter {
   };
 
   _mouseMove = (e) => {
-    // console.log('_mouseMove');
     this._stopAni();
-    let currentPos = this._getPos(e);
-    let percent = this._calcPercent(currentPos);
-    this._setPosition(percent);
+    this._setPosition(this._calcPercent(this._getPos(e)));
   };
 
   // if tapped on canvas
@@ -438,7 +475,11 @@ class BeforeAfter extends Emitter {
     }
 
     const percent = this._calcPercent(this._getPos(e));
-    this._animateTo(percent, this.settings.animateDuration);
+    if (this.settings.animateOnClick) {
+      this._animateTo(percent, this.settings.animateDuration);
+    } else {
+      this._setPosition(percent);
+    }
   };
 
   _dragStart = (e) => {
@@ -463,6 +504,7 @@ class BeforeAfter extends Emitter {
   _drag = (e) => {
     // console.log('_drag', e.type);
     this._stopAni();
+
     let currentPos = this._getPos(e);
     let percent = this._calcPercent(currentPos);
 
@@ -488,6 +530,7 @@ class BeforeAfter extends Emitter {
       }
     }
 
+    // this._smooth(percent);
     this._setPosition(percent);
     this._triggerEvent(DRAG);
   };
@@ -575,7 +618,7 @@ class BeforeAfter extends Emitter {
    */
   _calcPercent(pos) {
     let val = this._horizontal ? pos.x : pos.y;
-    val = restrict(val, this._minPos, this._maxPos);
+    val = restrictFast(val, this._minPos, this._maxPos);
     return ((val + this._offset) * 100) / this._dim;
   }
 
@@ -667,6 +710,10 @@ class BeforeAfter extends Emitter {
       this._triggerEvent(INIT);
       this._triggerEvent(VIEWCHANGED);
     });
+  }
+
+  _smooth(percent) {
+    this._animateTo(percent, this.settings.smoothAmount);
   }
 
   goto(percent, duration, easing) {

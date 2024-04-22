@@ -6,17 +6,17 @@
  * @param {String} name the event name
  * @param {Object} data event data
  */
-export const trigger = (elem, name, data) => {
-  let funData = elem.getAttribute('on' + name);
-  let func = new Function(
-    'e',
-    // 'with(document) {' +
-    // 'with(this)' +
-    '{' + funData + '}'
-    // + '}'
-  );
-  func.call(elem, data);
-};
+// export const trigger = (elem, name, data) => {
+//   let funData = elem.getAttribute('on' + name);
+//   let func = new Function(
+//     'e',
+//     // 'with(document) {' +
+//     // 'with(this)' +
+//     '{' + funData + '}'
+//     // + '}'
+//   );
+//   func.call(elem, data);
+// };
 
 /**
  * The Emitter class
@@ -45,13 +45,13 @@ export class Emitter {
       eventCallbacks.forEach((cb) => cb.call(this, ce));
     }
 
-    if (this.element) {
-      // trigger DOM event
-      this.element.dispatchEvent(ce);
+    // trigger DOM event
+    this.element.dispatchEvent(ce);
 
-      // for inline events
-      trigger(this.element, eventName, ce);
-    }
+    // if (this.element) {
+    //   // for inline events
+    //   // trigger(this.element, eventName, ce);
+    // }
   }
 
   /**

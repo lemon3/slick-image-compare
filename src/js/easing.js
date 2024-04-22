@@ -4,7 +4,7 @@
  *
  * @type {Object}
  */
-const easing = {
+export const easing = {
   // Linear: {},
   // Pow: {},
   Quad: {
@@ -29,5 +29,3 @@ const easing = {
     },
   },
 };
-
-export default easing;

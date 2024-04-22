@@ -203,6 +203,9 @@ try {
   passiveIfSupported = false;
 }
 
+export const restrictFast = (value, min, max) =>
+  Math.max(min, Math.min(value, max));
+
 export const restrict = (value, min, max) => {
   value = parseFloat(value, 10);
   min = parseFloat(min, 10);

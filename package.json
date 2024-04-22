@@ -22,6 +22,7 @@
     "lint": "eslint 'src/**/*.js'",
     "format": "prettier --write 'src/**/*.js'",
     "test": "vitest",
+    "bench": "vitest bench",
     "coverage": "vitest --coverage",
     "browserslistupdate": "npx update-browserslist-db@latest"
   },
@@ -70,7 +71,7 @@
     "jsdom": "^24.0.0",
     "postcss": "^8.4.38",
     "postcss-nested": "^6.0.1",
-    "postcss-preset-env": "^9.5.6",
+    "postcss-preset-env": "^9.5.9",
     "prettier": "^3.2.5",
     "vite": "^5.2.10",
     "vite-plugin-babel": "^1.2.0",

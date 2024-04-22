@@ -310,12 +310,6 @@
         padding-right: 0.5em;
       }
 
-      .canvas {
-        background-color: #fff;
-        box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
-        overflow: hidden;
-      }
-
       .container {
         max-width: 760px;
         margin: 4em auto;
@@ -366,10 +360,19 @@
         color: #dadada;
       }
 
+      .caption {
+        text-align: center;
+        text-transform: uppercase;
+        font-weight: 100;
+        font-size: 0.75em;
+      }
+
       div[data-beforeafter],
       .beforeafter {
         background-color: #fff;
         margin-bottom: 1em;
+        box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
       }
 
       .dark div[data-beforeafter],
@@ -392,6 +395,28 @@
           flex-flow: column wrap;
         }
       }
+
+      .ba-arrow svg {
+        stroke: #3d3d3d;
+      }
+      .ba-circle {
+        border-color: #3d3d3d !important;
+        background-color: rgba(255, 255, 255, 0.25);
+      }
+      .ba-line {
+        background-color: #3d3d3d !important;
+      }
+
+      .dark .ba-arrow svg {
+        stroke: #fff;
+      }
+      .dark .ba-circle {
+        border-color: #fff !important;
+        background-color: rgba(0, 0, 0, 0.25);
+      }
+      .dark .ba-line {
+        background-color: #fff !important;
+      }
     </style>
   </head>
 
@@ -399,26 +424,27 @@
     <div class="container page">
       <h1>beforeafter</h1>
       <p>
-        Is a modern Image comparison slider written in Vanilla Javascript with no dependencies to other libraries.
-        Best for comparing image retouches, color adjustments or renderings.
+        Is a modern Image comparison slider written in Vanilla Javascript with
+        no dependencies to other libraries. Best for comparing image retouches,
+        color adjustments or renderings.
+      </p>
+      <p style="font-size: 14px">
+        Started as a jQuery-Plugin back in the days (2013) and was used for a
+        custom wordpress-plugin :-)
       </p>
 
       <section class="section">
         <h2>Default Settings</h2>
-        <div class="row">
-          <div class="col col50">
-            <pre><code class="language-xml">&lt;div data-beforeafter&gt;
-  &lt;img src=&quot;03_before.png&quot; /&gt;
-  &lt;img src=&quot;03_after.png&quot; /&gt;
+        <pre><code class="language-xml">&lt;div data-beforeafter&gt;
+  &lt;img src=&quot;04_before.jpg&quot; /&gt;
+  &lt;img src=&quot;04_after.jpg&quot; /&gt;
 &lt;/div&gt;</code></pre>
-          </div>
-          <div class="col col50">
-            <div data-beforeafter>
-              <img src="03_before.png" alt="" />
-              <img src="03_after.png" alt="" />
-            </div>
-          </div>
+
+        <div data-beforeafter>
+          <img src="04_before.jpg" alt="" />
+          <img src="04_after.jpg" alt="" />
         </div>
+        <div class="caption">color grading an image</div>
       </section>
 
       <section class="section">
@@ -434,7 +460,7 @@
     beforeLabel: 'before',
     afterLabel: 'after',
   }&quot;&gt;
-  &lt;img src=&quot;01_before.png&quot; alt=&quot;&quot; style=&quot;filter: grayscale()&quot; /&gt;
+  &lt;img src=&quot;01_before.png&quot; alt=&quot;&quot; /&gt;
   &lt;img src=&quot;01_after.png&quot; alt=&quot;&quot; /&gt;
 &lt;/div&gt;
 </code></pre>
@@ -446,8 +472,11 @@
           afterLabel: 'after',
         }"
         >
-          <img src="01_before.png" alt="" style="filter: grayscale()" />
+          <img src="01_before.png" alt="" />
           <img src="01_after.png" alt="" />
+        </div>
+        <div class="caption">
+          Replacing colors in an image (Transparent PNG)
         </div>
       </section>
       <!--
@@ -486,7 +515,7 @@
         <h2>Snap to Start</h2>
         <p>
           if set to true, the slider will animate back to the defined start
-          position when user interaction ends
+          position when user-interaction ends.
         </p>
         <pre><code class="language-xml">&lt;div class=&quot;beforeafter&quot;
   data-beforeafter=&quot;{
@@ -498,30 +527,30 @@
   &lt;img src=&quot;02_before.png&quot; alt=&quot;&quot; /&gt;
 &lt;/div&gt;
 </code></pre>
-        <div style="margin: 0 auto 1em">
-          <div
-            class="beforeafter"
-            data-beforeafter="{
+
+        <div
+          class="beforeafter"
+          data-beforeafter="{
             snapToStart: true,
             beforeLabel: 'before',
             afterLabel: 'after',
           }"
-          >
-            <img src="02_after.png" alt="" />
-            <img src="02_before.png" alt="" />
-          </div>
+        >
+          <img src="02_after.png" alt="" />
+          <img src="02_before.png" alt="" />
+        </div>
+        <div class="caption">
+          Replacing colors in an image (Transparent PNG)
         </div>
       </section>
 
       <section class="section">
         <h2>Advanced Demo with custom options</h2>
-        <div class="row">
-          <div class="col col50">
-            html:
-            <pre><code class="language-html">&lt;div id=&quot;adv&quot;&gt;&lt;/div&gt;
+        html:
+        <pre><code class="language-html">&lt;div id=&quot;adv&quot;&gt;&lt;/div&gt;
 </code></pre>
-            javascript:
-            <pre><code class="language-javascript">const options = {
+        javascript:
+        <pre><code class="language-javascript">const options = {
   beforeImage: '01_before.png',
   afterImage: '01_after.png',
   afterLabel: 'after',
@@ -531,10 +560,8 @@
   animateIn: true,
 };
 
-const ba =
-  new BeforeAfter('#adv', options);
-            </code></pre>
-          </div>
+const ba = new BeforeAfter('#adv', options);</code></pre>
+        <div class="row">
           <div class="col col50">
             <div id="adv-events" class="panel">
               <div class="line">
@@ -560,6 +587,11 @@ const ba =
                 <label for="adv-smooth">smooth</label>
               </div>
               <div class="line">
+                interaction status:&nbsp;<span id="adv-interaction-status"
+                  >none</span
+                >
+              </div>
+              <div class="line">
                 <button class="button" id="adv-toggle">toggle</button>
               </div>
               <div class="line">
@@ -572,16 +604,20 @@ const ba =
                   change direction
                 </button>
               </div>
-              <div class="line">
+              <!-- <div class="line">
                 <button class="button" id="adv-destroy">destroy</button>
-              </div>
+              </div> -->
+            </div>
+          </div>
+          <div class="col col50">
+            <div id="adv">
+              <!-- <div class="info-box"><h1>info box</h1></div> -->
+            </div>
+            <div class="caption" id="adv-caption" style="text-align: center">
+              &nbsp;
             </div>
           </div>
         </div>
-        <div id="adv">
-          <!-- <div class="info-box"><h1>info box</h1></div> -->
-        </div>
-        <div id="adv-caption" style="text-align: center">&nbsp;</div>
         <script type="module">
           import BeforeAfter from './src/index.js';
           const init = () => {
@@ -590,13 +626,16 @@ const ba =
             const info = document.getElementById('adv-info');
             const percent = document.getElementById('adv-percent');
             const range = document.getElementById('adv-range');
-            const destroy = document.getElementById('adv-destroy');
             const toggle = document.getElementById('adv-toggle');
             const caption = document.getElementById('adv-caption');
             const direction = document.getElementById('adv-direction');
             const orientation = document.getElementById('adv-orientation');
             const smoothCheckbox = document.getElementById('adv-smooth');
             const fromPercent = document.getElementById('adv-from-percent');
+            const interactionStatus = document.getElementById(
+              'adv-interaction-status'
+            );
+            // const destroy = document.getElementById('adv-destroy');
 
             const texts = {
               info: [
@@ -607,13 +646,14 @@ const ba =
             };
 
             const options = {
-              beforeImage: '01_before.png',
-              afterImage: '01_after.png',
+              beforeImage: '03_before.png',
+              afterImage: '03_after.png',
               afterLabel: 'after',
               beforeLabel: 'before',
               horizontal: true,
               ltr: true,
               animateIn: true,
+              snapToStart: true,
 
               init(e) {
                 fromPercent.innerHTML = e.detail.horizontal ? 'left' : 'top';
@@ -656,17 +696,18 @@ const ba =
               ba.goto(e.target.value, smoothValue);
             });
 
-            destroy.addEventListener('click', (e) => {
-              if (!destroyed) {
-                ba.destroy();
-                destroy.innerHTML = 'init';
-                destroyed = true;
-              } else {
-                ba.init();
-                destroy.innerHTML = 'destroy';
-                destroyed = false;
-              }
-            });
+            // destroy.addEventListener('click', (e) => {
+            //   if (!destroyed) {
+            //     ba.destroy();
+            //     destroy.innerHTML = 'init';
+            //     caption.innerHTML = '';
+            //     destroyed = true;
+            //   } else {
+            //     ba.init();
+            //     destroy.innerHTML = 'destroy';
+            //     destroyed = false;
+            //   }
+            // });
 
             toggle.addEventListener('click', () => ba.toggle());
 
@@ -679,6 +720,7 @@ const ba =
               fromPercent.innerHTML = ba._horizontal ? 'left' : 'top';
             });
 
+            // events
             ba.addEventListener('update', (e) => {
               let p = Math.round(e.detail.percent * 100) / 100;
               if (!slide) range.value = p;
@@ -700,6 +742,11 @@ const ba =
               // console.log('aftershown', e);
               info.innerHTML = texts.info[1];
               caption.innerHTML = texts.caption[1];
+            });
+
+            ba.addEventListener('interactionend', (e) => {
+              interactionStatus.innerHTML = 'ended';
+              // start the timer
             });
 
             window.ba = ba;

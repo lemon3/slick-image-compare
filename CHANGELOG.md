@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.8
+### Added or Changed
+- performance optimization
+- preview update
+
 ## v0.2.7
 ### Added or Changed
 - changeOrientation and changeDirection update

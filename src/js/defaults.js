@@ -1,15 +1,22 @@
-import easing from '@/js/easing';
+import { easing } from '@/js/easing';
 
 export const defaults = {
   autoInit: true,
 
-  horizontal: true, // true is the default, if false vertical
-  ltr: true,
+  startPos: 50, // % from left
 
   beforeImage: null,
   afterImage: null,
 
+  horizontal: true, // true is the default, if false vertical
+  ltr: true,
+
+  smooth: true,
+  smoothAmount: 250,
+  animateOnClick: true,
+
   followMouse: false, // mouse move interaction (desktop only)
+
   onlyHandleDraggable: false,
   clickable: false, // only works if onlyHandleDraggable is set to true
 
@@ -18,7 +25,7 @@ export const defaults = {
   snapToStartDuration: 1250, // ms TODO: implement
   snapToStartEasing: easing.Elastic.easeOut, // TODO: implement
 
-  handleMinDistance: 0, // min distance to left and right border in px or %
+  handleMinDistance: 0, // min distance to left and right border in px TODO: also %
 
   // animate in
   animateIn: false,
@@ -26,9 +33,7 @@ export const defaults = {
   animateInEasing: easing.Elastic.easeOut,
   animateInDelay: 100, // in ms
   animateInStartPos: 40, // % from left
-  startPos: 50, // % from left
 
-  // clickAnimate: true,
   animateDuration: 250, // ms
   animateEasing: easing.Cubic.easeOut,
 
