@@ -290,6 +290,7 @@
         padding: 0.5em 1em;
         font-size: 14px;
         margin-bottom: 1em;
+        margin-right: 1em;
         cursor: pointer;
         transition: transform 0.25s ease-out;
         background-color: #213f92;
@@ -595,15 +596,17 @@ const ba = new BeforeAfter('#adv', options);</code></pre>
                 <button class="button" id="adv-toggle">toggle</button>
               </div>
               <div class="line">
+                orientation:&nbsp;<span id="adv-orientation-info"></span>
+              </div>
+              <div class="line">
                 <button class="button" id="adv-orientation">
                   change orientation
                 </button>
-              </div>
-              <div class="line">
                 <button class="button" id="adv-direction">
                   change direction
                 </button>
               </div>
+
               <!-- <div class="line">
                 <button class="button" id="adv-destroy">destroy</button>
               </div> -->
@@ -620,6 +623,8 @@ const ba = new BeforeAfter('#adv', options);</code></pre>
         </div>
         <script type="module">
           import BeforeAfter from './src/index.js';
+          window.BeforeAfter = BeforeAfter;
+
           const init = () => {
             document.removeEventListener('DOMContentLoaded', init);
 
@@ -630,6 +635,9 @@ const ba = new BeforeAfter('#adv', options);</code></pre>
             const caption = document.getElementById('adv-caption');
             const direction = document.getElementById('adv-direction');
             const orientation = document.getElementById('adv-orientation');
+            const orientationInfo = document.getElementById(
+              'adv-orientation-info'
+            );
             const smoothCheckbox = document.getElementById('adv-smooth');
             const fromPercent = document.getElementById('adv-from-percent');
             const interactionStatus = document.getElementById(
@@ -638,10 +646,7 @@ const ba = new BeforeAfter('#adv', options);</code></pre>
             // const destroy = document.getElementById('adv-destroy');
 
             const texts = {
-              info: [
-                'the "before" image is shown',
-                'the "after" image is shown',
-              ],
+              info: ['"before" image is shown', '"after" image is shown'],
               caption: ['pink shoes', 'blue shoes'],
             };
 
@@ -660,6 +665,9 @@ const ba = new BeforeAfter('#adv', options);</code></pre>
                 const which = e.detail.afterShown ? 1 : 0;
                 info.innerHTML = texts.info[which];
                 caption.innerHTML = texts.caption[which];
+
+                changeOrientationInfo();
+                // this.play(1250, 0, 50);
               },
             };
             const ba = new BeforeAfter('#adv', options);
@@ -675,6 +683,16 @@ const ba = new BeforeAfter('#adv', options);</code></pre>
               smoothValue = e.target.checked ? smoothTime : 0;
             });
             smoothValue = smoothCheckbox.checked ? smoothTime : 0;
+
+            const changeOrientationInfo = () => {
+              orientationInfo.innerHTML = ba._horizontal
+                ? ba._ltr
+                  ? 'LEFT - RIGHT'
+                  : 'RIGHT - LEFT'
+                : ba._ltr
+                  ? 'TOP - BOTTOM'
+                  : 'BOTTOM - TOP';
+            };
 
             const down = () => {
               clearTimeout(smoothTo);
@@ -713,11 +731,13 @@ const ba = new BeforeAfter('#adv', options);</code></pre>
 
             direction.addEventListener('click', (e) => {
               ba.changeDirection();
+              changeOrientationInfo();
             });
 
             orientation.addEventListener('click', (e) => {
               ba.changeOrientation();
               fromPercent.innerHTML = ba._horizontal ? 'left' : 'top';
+              changeOrientationInfo();
             });
 
             // events

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.9
+### Added or Changed
+- play method added
+- preview update
+
 ## v0.2.8
 ### Added or Changed
 - performance optimization

@@ -9,6 +9,7 @@ import {
   dataStorage,
 } from '@/js/utils';
 
+import { easing } from './easing';
 import { defaults } from '@/js/defaults';
 import { Emitter } from '@/js/emitter';
 
@@ -33,7 +34,7 @@ const RESIZE = 'resize';
 let instances = [];
 let initialized = false;
 
-const getArrow = (color = '#ffffff', right = true) =>
+const getArrow = (right = true, color = '#ffffff') =>
   `<svg xmlns="http://www.w3.org/2000/svg"
     width="32"
     height="32"
@@ -214,8 +215,8 @@ class BeforeAfter extends Emitter {
     const arrow2 = createEl(div, { class: 'ba-arrow ba-arrow-2' });
     const dragHandle = createEl(div, { class: 'ba-circle' });
 
-    arrow1.innerHTML = getArrow('#ffffff', false);
-    arrow2.innerHTML = getArrow('#ffffff', true);
+    arrow1.innerHTML = getArrow(false);
+    arrow2.innerHTML = getArrow();
 
     dragHandle.appendChild(arrow1);
     dragHandle.appendChild(arrow2);
@@ -634,6 +635,10 @@ class BeforeAfter extends Emitter {
   //   );
   // }
 
+  _smooth(percent) {
+    this._animateTo(percent, this.settings.smoothAmount);
+  }
+
   // public user function
   init() {
     if (this._initialized) {
@@ -712,8 +717,65 @@ class BeforeAfter extends Emitter {
     });
   }
 
-  _smooth(percent) {
-    this._animateTo(percent, this.settings.smoothAmount);
+  /**
+   *
+   * @param {Integer} stopAt The Position (0-100) where it should stop
+   * @param {Integer} repetitions How often should it bounce (0 means endless)
+   * @param {Integer} duration The animation Duration form 0 - 100 in ms
+   * @param {Function} easingFun An easing-function eg.: (p) => p (for linear);
+   */
+  play(stopAt = this._percent, repetitions = 2, duration = 2000, easingFun) {
+    this._stopAni();
+    clearTimeout(this._snapTimeout);
+    duration = restrict(duration, 250, 10000);
+    stopAt = restrict(stopAt, 0, 100);
+
+    let from = this._percent;
+    let delta = 100 - from;
+    let newDuration = (duration / 100) * Math.abs(delta);
+    let first = true;
+    let toRight = true;
+    let count = 0;
+    if (repetitions <= 0) {
+      repetitions = -1;
+    }
+
+    this.progress = this._timingCurTime = this._timingThen = 0;
+    this.easing = easingFun || easing.Quad.easeOut;
+
+    const render = () => {
+      let now = Date.now();
+      this._timingCurTime += now - (this._timingThen || now);
+      this.progress = this._timingCurTime / newDuration;
+
+      if (this.progress >= 1) {
+        if (count === repetitions) return;
+        if (first) newDuration = duration;
+        if (toRight) {
+          from = 100;
+          delta = -100;
+        } else {
+          from = 0;
+          delta = 100;
+        }
+        toRight = !toRight;
+        count++;
+        if (count === repetitions) {
+          delta = toRight ? stopAt : stopAt - 100;
+          newDuration = (duration / 100) * Math.abs(delta);
+        }
+
+        this._setPosition(from);
+        now = Date.now();
+        this._timingCurTime = 0;
+      } else {
+        this._setPosition(from + delta * this.easing(this.progress));
+      }
+
+      this._timingThen = now;
+      this._renderId = requestAnimationFrame(render);
+    };
+    render();
   }
 
   goto(percent, duration, easing) {
@@ -729,6 +791,8 @@ class BeforeAfter extends Emitter {
     }
     this._stopAni();
     this._animateTo(percent, duration, easing);
+
+    return this;
   }
 
   /**

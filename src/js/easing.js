@@ -5,7 +5,7 @@
  * @type {Object}
  */
 export const easing = {
-  // Linear: {},
+  Linear: (p) => p,
   // Pow: {},
   Quad: {
     easeIn: (p) => Math.pow(p, 2),

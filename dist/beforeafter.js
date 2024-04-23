@@ -1,20 +1,20 @@
 /*!
-* BeforeAfter v0.2.7
+* BeforeAfter v0.2.9
 * undefined
 */
-var F = Object.defineProperty;
-var y = Object.getOwnPropertySymbols;
-var W = Object.prototype.hasOwnProperty, j = Object.prototype.propertyIsEnumerable;
-var T = (s, i, t) => i in s ? F(s, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[i] = t, L = (s, i) => {
+var W = Object.defineProperty;
+var M = Object.getOwnPropertySymbols;
+var j = Object.prototype.hasOwnProperty, G = Object.prototype.propertyIsEnumerable;
+var S = (s, i, t) => i in s ? W(s, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[i] = t, O = (s, i) => {
   for (var t in i || (i = {}))
-    W.call(i, t) && T(s, t, i[t]);
-  if (y)
-    for (var t of y(i))
-      j.call(i, t) && T(s, t, i[t]);
+    j.call(i, t) && S(s, t, i[t]);
+  if (M)
+    for (var t of M(i))
+      G.call(i, t) && S(s, t, i[t]);
   return s;
 };
-var c = (s, i, t) => (T(s, typeof i != "symbol" ? i + "" : i, t), t);
-const R = {
+var _ = (s, i, t) => (S(s, typeof i != "symbol" ? i + "" : i, t), t);
+const F = {
   // storage
   _s: /* @__PURE__ */ new WeakMap(),
   put(s, ...i) {
@@ -42,18 +42,18 @@ const R = {
     let t = this._s.get(s).delete(i);
     return this._s.get(s).size === 0 && this._s.delete(s), t;
   }
-}, G = (s) => {
+}, q = (s) => {
   const i = "DOMContentLoaded";
   document.readyState === "complete" || document.readyState === "interactive" ? (s(), document.removeEventListener(i, s)) : document.addEventListener(i, s, !1);
 }, B = (s) => new Promise((i, t) => {
   const e = new Image();
   e.onload = () => {
-    const { naturalWidth: n, naturalHeight: a } = e, r = n / a;
-    i({ width: n, height: a, ratio: r });
+    const { naturalWidth: n, naturalHeight: r } = e, a = n / r;
+    i({ width: n, height: r, ratio: a });
   }, e.onerror = () => {
     t("error");
   }, e.src = s;
-}), q = (s, i, t = null) => {
+}), X = (s, i, t = null) => {
   if (!s)
     return !1;
   if (i === void 0 || s.dataset[i] === void 0)
@@ -61,43 +61,43 @@ const R = {
   let e;
   try {
     e = JSON.parse(s.dataset[i].replace(/'/g, '"'));
-  } catch (r) {
+  } catch (a) {
   }
   if (typeof e != "object") {
     e = s.dataset[i];
-    const r = {};
+    const a = {};
     e = e.replace(/[\\ \t\n\r]/g, ""), e = e.replace(/{?([^{])}?/g, "$1");
     const h = e.split(",");
     h.length > 1 ? h.forEach((o) => {
       if (o) {
-        let [_, d] = o.split(":");
-        d = d.replace(/'/g, ""), d === "true" ? d = !0 : d === "false" && (d = !1), r[_.replace(/'/g, "")] = d;
+        let [l, c] = o.split(":");
+        c = c.replace(/'/g, ""), c === "true" ? c = !0 : c === "false" && (c = !1), a[l.replace(/'/g, "")] = c;
       }
-    }) : r[i] = e, e = r;
+    }) : a[i] = e, e = a;
   }
-  let n = {}, a = i.length;
-  return Object.entries(s.dataset).forEach((r) => {
-    if (r[0].toLowerCase().indexOf(i) >= 0 && r[0].length > a) {
-      let h = r[0][a].toLowerCase() + r[0].substring(a + 1);
-      (t === null || t && t[h] !== void 0) && (n[h] = r[1]);
+  let n = {}, r = i.length;
+  return Object.entries(s.dataset).forEach((a) => {
+    if (a[0].toLowerCase().indexOf(i) >= 0 && a[0].length > r) {
+      let h = a[0][r].toLowerCase() + a[0].substring(r + 1);
+      (t === null || t && t[h] !== void 0) && (n[h] = a[1]);
     }
   }), Object.assign(e, n);
 };
-let m = !1;
+let p = !1;
 try {
   window.addEventListener(
     "test",
     null,
     Object.defineProperty({}, "passive", {
       get: function() {
-        return m = { passive: !1 }, !1;
+        return p = { passive: !1 }, !1;
       }
     })
   );
 } catch (s) {
-  m = !1;
+  p = !1;
 }
-const M = (s, i, t) => Math.max(i, Math.min(s, t)), X = (s, i, t) => {
+const A = (s, i, t) => Math.max(i, Math.min(s, t)), C = (s, i, t) => {
   if (s = parseFloat(s, 10), i = parseFloat(i, 10), t = parseFloat(t, 10), t < i) {
     let e = t;
     t = i, i = e;
@@ -111,8 +111,8 @@ const M = (s, i, t) => Math.max(i, Math.min(s, t)), X = (s, i, t) => {
     for (let n in t)
       Object.prototype.hasOwnProperty.call(t, n) && (s.style[n] = t[n]);
   return e && (s.innerHTML = e), s;
-}, l = (s, i, t, e) => U(document.createElement(s), i, t, e), P = {
-  // Linear: {},
+}, d = (s, i, t, e) => U(document.createElement(s), i, t, e), T = {
+  Linear: (s) => s,
   // Pow: {},
   Quad: {
     easeIn: (s) => Math.pow(s, 2),
@@ -154,7 +154,7 @@ const M = (s, i, t) => Math.max(i, Math.min(s, t)), X = (s, i, t) => {
   snapToStartDelay: 1e3,
   snapToStartDuration: 1250,
   // ms TODO: implement
-  snapToStartEasing: P.Elastic.easeOut,
+  snapToStartEasing: T.Elastic.easeOut,
   // TODO: implement
   handleMinDistance: 0,
   // min distance to left and right border in px TODO: also %
@@ -162,14 +162,14 @@ const M = (s, i, t) => Math.max(i, Math.min(s, t)), X = (s, i, t) => {
   animateIn: !1,
   animateInDuration: 1250,
   // ms
-  animateInEasing: P.Elastic.easeOut,
+  animateInEasing: T.Elastic.easeOut,
   animateInDelay: 100,
   // in ms
   animateInStartPos: 40,
   // % from left
   animateDuration: 250,
   // ms
-  animateEasing: P.Cubic.easeOut,
+  animateEasing: T.Cubic.easeOut,
   // showLabels: false,
   beforeLabel: "",
   // before Image
@@ -191,8 +191,8 @@ class J {
    */
   emit(i, t) {
     let e = this._eventCallbacks[i];
-    const n = { bubbles: !1, cancelable: !1, detail: t }, a = new CustomEvent(i, n);
-    e && e.forEach((r) => r.call(this, a)), this.element.dispatchEvent(a);
+    const n = { bubbles: !1, cancelable: !1, detail: t }, r = new CustomEvent(i, n);
+    e && e.forEach((a) => a.call(this, r)), this.element.dispatchEvent(r);
   }
   /**
    * Register an event handler
@@ -221,29 +221,29 @@ class J {
     ), this) : this;
   }
 }
-const v = "beforeafter", Q = "data-" + v, g = "interacting", O = "init", A = "drag", z = "update", I = "viewchanged", x = "beforeshown", H = "aftershown", k = "interactionend", w = "mousedown", Z = "resize";
-let p = [], S = !1;
-const N = (s = "#ffffff", i = !0) => `<svg xmlns="http://www.w3.org/2000/svg"
+const P = "beforeafter", Q = "data-" + P, m = "interacting", z = "init", x = "drag", H = "update", D = "viewchanged", k = "beforeshown", N = "aftershown", R = "interactionend", b = "mousedown", Z = "resize";
+let E = [], y = !1;
+const $ = (s = !0, i = "#ffffff") => `<svg xmlns="http://www.w3.org/2000/svg"
     width="32"
     height="32"
     viewBox="0 0 32 32"
     fill="none"
-    stroke="${s}"
+    stroke="${i}"
     stroke-width="2"
     stroke-linecap="round"
     stroke-linejoin="arcs">
-    <path d="${i ? "m12 24 8-8-8-8" : "m20 8-8 8 8 8"}"/>
+    <path d="${s ? "m12 24 8-8-8-8" : "m20 8-8 8 8 8"}"/>
   </svg>`;
-class f extends J {
+class u extends J {
   constructor(t, e) {
     if (!t)
       return { error: !0 };
     if (t = typeof t == "string" ? document.querySelector(t) : t, t === null || t.length === 0)
       return { error: !0 };
     super();
-    c(this, "_dimensions", (t) => {
-      const e = this.element.getBoundingClientRect(), n = getComputedStyle(this.element), a = parseFloat(n.borderLeftWidth) + parseFloat(n.borderRightWidth), r = parseFloat(n.borderTopWidth) + parseFloat(n.borderBottomWidth);
-      this.width = e.width - a, this.height = e.height - r;
+    _(this, "_dimensions", (t) => {
+      const e = this.element.getBoundingClientRect(), n = getComputedStyle(this.element), r = parseFloat(n.borderLeftWidth) + parseFloat(n.borderRightWidth), a = parseFloat(n.borderTopWidth) + parseFloat(n.borderBottomWidth);
+      this.width = e.width - r, this.height = e.height - a;
       let h;
       if (this._horizontal) {
         const o = e.x;
@@ -254,68 +254,68 @@ class f extends J {
       }
       !t && this._oldDim === this._dim || (this._oldDim = this._dim, this._setPosition(this._percent, !0));
     });
-    c(this, "_mouseOver", () => {
-      this._stopAni(), this.element.classList.add(g);
+    _(this, "_mouseOver", () => {
+      this._stopAni(), this.element.classList.add(m);
     });
-    c(this, "_mouseOut", () => {
-      this.element.classList.remove(g), this.settings.snapToStart && this._snapToStart();
+    _(this, "_mouseOut", () => {
+      this.element.classList.remove(m), this.settings.snapToStart && this._snapToStart();
     });
-    c(this, "_mouseMove", (t) => {
+    _(this, "_mouseMove", (t) => {
       this._stopAni(), this._setPosition(this._calcPercent(this._getPos(t)));
     });
     // if tapped on canvas
-    c(this, "_tapstart", (t) => {
-      this._endInteraction = !1, this._stopAni(), clearTimeout(this._snapTimeout), t.type === "touchstart" ? (this.isTouch = !0, this._mouseStartEvents(!1)) : w === t.type && (this.isTouch = !1, this._touchStartEvent(!1));
+    _(this, "_tapstart", (t) => {
+      this._endInteraction = !1, this._stopAni(), clearTimeout(this._snapTimeout), t.type === "touchstart" ? (this.isTouch = !0, this._mouseStartEvents(!1)) : b === t.type && (this.isTouch = !1, this._touchStartEvent(!1));
       const e = this._calcPercent(this._getPos(t));
       this.settings.animateOnClick ? this._animateTo(e, this.settings.animateDuration) : this._setPosition(e);
     });
-    c(this, "_dragStart", (t) => {
-      t.stopPropagation(), this.startPos = this._getPos(t), this.element.classList.add(g), this._tapstart(t), t.type === "touchstart" ? (window.addEventListener("touchmove", this._drag, m), window.addEventListener("touchend", this._dragEnd, !1)) : w === t.type && (this.settings.followMouse || (window.addEventListener("mousemove", this._drag, !1), window.addEventListener("mouseup", this._dragEnd, !1)));
+    _(this, "_dragStart", (t) => {
+      t.stopPropagation(), this.startPos = this._getPos(t), this.element.classList.add(m), this._tapstart(t), t.type === "touchstart" ? (window.addEventListener("touchmove", this._drag, p), window.addEventListener("touchend", this._dragEnd, !1)) : b === t.type && (this.settings.followMouse || (window.addEventListener("mousemove", this._drag, !1), window.addEventListener("mouseup", this._dragEnd, !1)));
     });
     // moving
-    c(this, "_drag", (t) => {
+    _(this, "_drag", (t) => {
       this._stopAni();
       let e = this._getPos(t), n = this._calcPercent(e);
       if (this.isTouch) {
         t.preventDefault();
-        const a = Math.abs(this.startPos.x - e.x), r = Math.abs(this.startPos.y - e.y);
+        const r = Math.abs(this.startPos.x - e.x), a = Math.abs(this.startPos.y - e.y);
         if (!this._dirDetected) {
-          if (r > a) {
-            this.element.classList.remove(g), window.removeEventListener(
+          if (a > r) {
+            this.element.classList.remove(m), window.removeEventListener(
               "touchmove",
               this._drag,
-              m
+              p
             );
             return;
           }
-          this.element.classList.add(g), this._dirDetected = !0;
+          this.element.classList.add(m), this._dirDetected = !0;
         }
       }
-      this._setPosition(n), this._triggerEvent(A);
+      this._setPosition(n), this._triggerEvent(x);
     });
-    c(this, "_dragEnd", (t) => {
-      this._endInteraction = !0, t.type === "touchend" ? (this.isTouch = !0, window.removeEventListener("touchmove", this._drag, m), window.removeEventListener("touchend", this._dragEnd)) : t.type === "mouseup" && (this.isTouch = !1, this.settings.followMouse || (window.removeEventListener("mousemove", this._drag, !1), window.removeEventListener("mouseup", this._dragEnd, !1))), this._testInteractionEnd(), this._dirDetected = !1;
+    _(this, "_dragEnd", (t) => {
+      this._endInteraction = !0, t.type === "touchend" ? (this.isTouch = !0, window.removeEventListener("touchmove", this._drag, p), window.removeEventListener("touchend", this._dragEnd)) : t.type === "mouseup" && (this.isTouch = !1, this.settings.followMouse || (window.removeEventListener("mousemove", this._drag, !1), window.removeEventListener("mouseup", this._dragEnd, !1))), this._testInteractionEnd(), this._dirDetected = !1;
     });
     if (t.dataset.bainitialized)
-      return f.getInstance(t);
+      return u.getInstance(t);
     t.dataset.bainitialized = !0, this.allowedEvents = [
-      O,
-      A,
       z,
       x,
       H,
       k,
-      I
-    ], p.push(this), R.put(t, "instance", this), this.element = t;
-    const n = q(t, v);
-    if (this.options = e || {}, this.settings = Object.assign({}, f.defaults, n, e), this.images = this.element.querySelectorAll("img"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || !this.images.length))
+      N,
+      R,
+      D
+    ], E.push(this), F.put(t, "instance", this), this.element = t;
+    const n = X(t, P);
+    if (this.options = e || {}, this.settings = Object.assign({}, u.defaults, n, e), this.images = this.element.querySelectorAll("img"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || !this.images.length))
       return {
         error: !0
       };
-    this.element.classList.contains(v) || this.element.classList.add(v), this._snapTimeout = null, this._dirDetected = !1, this.settings.autoInit && this.init();
+    this.element.classList.contains(P) || this.element.classList.add(P), this._snapTimeout = null, this._dirDetected = !1, this.settings.autoInit && this.init();
   }
   _triggerEvent(t, e) {
-    e = L({
+    e = O({
       instance: this,
       horizontal: this._horizontal,
       ltr: this._ltr,
@@ -343,28 +343,28 @@ class f extends J {
     const t = this.settings;
     this._originalEl = [], this._createdEl = [];
     const e = "div";
-    let n, a;
-    const r = l(e, { class: "ba-clip" });
+    let n, r;
+    const a = d(e, { class: "ba-clip" });
     if (t.beforeImage || t.afterImage)
-      this.images = [n, a] = [
+      this.images = [n, r] = [
         t.beforeImage,
         t.afterImage
-      ].reduce((E, u) => (E.push(l("img", { draggable: !1, src: u })), E), []), this.element.appendChild(n), r.appendChild(a), this.element.appendChild(r), this._createdEl.push(n);
+      ].reduce((v, g) => (v.push(d("img", { draggable: !1, src: g })), v), []), this.element.appendChild(n), a.appendChild(r), this.element.appendChild(a), this._createdEl.push(n);
     else {
-      const [E, u] = this.images;
-      n = E, n.setAttribute("draggable", !1), a = u.cloneNode(!0), a.setAttribute("draggable", !1), r.appendChild(a), u.parentNode.replaceChild(r, u), this._originalEl.push(u);
+      const [v, g] = this.images;
+      n = v, n.setAttribute("draggable", !1), r = g.cloneNode(!0), r.setAttribute("draggable", !1), a.appendChild(r), g.parentNode.replaceChild(a, g), this._originalEl.push(g);
     }
-    this._createdEl.push(r);
+    this._createdEl.push(a);
     let h, o;
-    t.beforeLabel !== "" && (h = l(e, { class: "ba-label ba-label-one" }), h.innerHTML = t.beforeLabel, this.element.appendChild(h), this._createdEl.push(h)), t.afterLabel !== "" && (o = l(e, { class: "ba-label ba-label-two" }), o.innerHTML = t.afterLabel, this.element.appendChild(o), this._createdEl.push(o)), this.info1 = t.ltr ? h : o, this.info2 = t.ltr ? o : h;
-    const _ = l(
+    t.beforeLabel !== "" && (h = d(e, { class: "ba-label ba-label-one" }), h.innerHTML = t.beforeLabel, this.element.appendChild(h), this._createdEl.push(h)), t.afterLabel !== "" && (o = d(e, { class: "ba-label ba-label-two" }), o.innerHTML = t.afterLabel, this.element.appendChild(o), this._createdEl.push(o)), this.info1 = t.ltr ? h : o, this.info2 = t.ltr ? o : h;
+    const l = d(
       e,
       {
         class: "ba-handle " + (this._horizontal ? "horizontal" : "vertical")
       },
       { zIndex: 5 }
-    ), d = l(e, { class: "ba-line ba-line-1" }), $ = l(e, { class: "ba-line ba-line-2" }), D = l(e, { class: "ba-arrow ba-arrow-1" }), C = l(e, { class: "ba-arrow ba-arrow-2" }), b = l(e, { class: "ba-circle" });
-    D.innerHTML = N("#ffffff", !1), C.innerHTML = N("#ffffff", !0), b.appendChild(D), b.appendChild(C), _.appendChild(d), _.appendChild($), _.appendChild(b), this.element.appendChild(_), this._createdEl.push(_), this.element.style.visibility = "visible", this._dragHandle = _, this._clipEl = r;
+    ), c = d(e, { class: "ba-line ba-line-1" }), w = d(e, { class: "ba-line ba-line-2" }), f = d(e, { class: "ba-arrow ba-arrow-1" }), L = d(e, { class: "ba-arrow ba-arrow-2" }), I = d(e, { class: "ba-circle" });
+    f.innerHTML = $(!1), L.innerHTML = $(), I.appendChild(f), I.appendChild(L), l.appendChild(c), l.appendChild(w), l.appendChild(I), this.element.appendChild(l), this._createdEl.push(l), this.element.style.visibility = "visible", this._dragHandle = l, this._clipEl = a;
   }
   /**
    * Method to remove or add mouse events
@@ -374,10 +374,10 @@ class f extends J {
   _mouseStartEvents(t = !0) {
     const e = this._addRemove(t), n = this.settings;
     if (n.followMouse) {
-      const a = this.element;
-      a[e]("mouseenter", this._mouseOver, !1), a[e]("mouseleave", this._mouseOut, !1), a[e]("mousemove", this._mouseMove, !1);
+      const r = this.element;
+      r[e]("mouseenter", this._mouseOver, !1), r[e]("mouseleave", this._mouseOut, !1), r[e]("mousemove", this._mouseMove, !1);
     } else
-      this._dragEl[e](w, this._dragStart), n.onlyHandleDraggable && n.clickable && (this.element[e](w, this._tapstart, !1), this.element[e]("mouseup", this._dragEnd, !1));
+      this._dragEl[e](b, this._dragStart), n.onlyHandleDraggable && n.clickable && (this.element[e](b, this._tapstart, !1), this.element[e]("mouseup", this._dragEnd, !1));
   }
   /**
    * Helper method.
@@ -396,7 +396,7 @@ class f extends J {
    */
   _touchStartEvent(t = !0) {
     const e = this._addRemove(t);
-    this._dragEl[e]("touchstart", this._dragStart, m), this.settings.clickable && (this.element[e]("touchstart", this._tapstart, !1), this.element[e]("touchend", this._dragEnd, !1));
+    this._dragEl[e]("touchstart", this._dragStart, p), this.settings.clickable && (this.element[e]("touchstart", this._tapstart, !1), this.element[e]("touchend", this._dragEnd, !1));
   }
   _appEvents(t = !0) {
     this._touchStartEvent(t), this._mouseStartEvents(t);
@@ -408,7 +408,7 @@ class f extends J {
     this._renderId && (cancelAnimationFrame(this._renderId), this._renderId = void 0);
   }
   _testInteractionEnd() {
-    this._endInteraction && this._renderId === void 0 && (this._endInteraction = !1, this._interactionEnd(), this._triggerEvent(k));
+    this._endInteraction && this._renderId === void 0 && (this._endInteraction = !1, this._interactionEnd(), this._triggerEvent(R));
   }
   /**
    *
@@ -418,19 +418,19 @@ class f extends J {
    * @returns {boolean} true if stopped
    */
   _renderLoop(t, e, n) {
-    const a = () => {
-      const r = Date.now();
+    const r = () => {
+      const a = Date.now();
       if (this._timingThen !== 0) {
-        if (this._timingCurTime += r - this._timingThen, this.progress = this._timingCurTime / this._animationDuration, this.progress >= 1) {
+        if (this._timingCurTime += a - this._timingThen, this.progress = this._timingCurTime / this._animationDuration, this.progress >= 1) {
           this.progress = 1, this._setPosition(e), this._stopAni(), this._testInteractionEnd();
           return;
         }
         this._setPosition(t + n * this.easing(this.progress));
       } else
         this.progress = 0, this._setPosition(t);
-      this._timingThen = r, this._renderId = requestAnimationFrame(a);
+      this._timingThen = a, this._renderId = requestAnimationFrame(r);
     };
-    a();
+    r();
   }
   /**
    * Method to animate to the given percentage
@@ -441,12 +441,12 @@ class f extends J {
    * @returns
    */
   _animateTo(t, e, n) {
-    if (t = M(+t, 0, 100), !e) {
+    if (t = A(+t, 0, 100), !e) {
       this._setPosition(t);
       return;
     }
-    const a = t - this._percent;
-    this._animationDuration = e, this.easing = n || this.settings.animateEasing, this.progress = 0, this._timingThen = this._timingCurTime = 0, this._renderLoop(this._percent, t, a);
+    const r = t - this._percent;
+    this._animationDuration = e, this.easing = n || this.settings.animateEasing, this.progress = 0, this._timingThen = this._timingCurTime = 0, this._renderLoop(this._percent, t, r);
   }
   _snapToStart(t = this.settings.snapToStartDelay) {
     this._stopAni(), this._snapTimeout = setTimeout(() => {
@@ -458,15 +458,15 @@ class f extends J {
     }, t);
   }
   _interactionEnd() {
-    this.element.classList.remove(g), this.isTouch ? this._mouseStartEvents() : this._touchStartEvent(), this.settings.snapToStart && this._snapToStart();
+    this.element.classList.remove(m), this.isTouch ? this._mouseStartEvents() : this._touchStartEvent(), this.settings.snapToStart && this._snapToStart();
   }
   _getClipRect(t) {
     return this._horizontal ? this._ltr ? `rect(0 ${t}px ${this.height}px 0)` : `rect(0 ${this.width}px ${this.height}px ${t}px)` : this._ltr ? `rect(0 ${this.width}px ${t}px 0)` : `rect(${t}px ${this.width}px ${this.height}px 0)`;
   }
   _changeStatus(t) {
     this._afterShown = t;
-    let e = this._afterShown ? H : x;
-    this._triggerEvent(e), this._triggerEvent(I), this._oneTime = !1;
+    let e = this._afterShown ? N : k;
+    this._triggerEvent(e), this._triggerEvent(D), this._oneTime = !1;
   }
   /**
    * set the handle to a defined position (in percent from left)
@@ -478,8 +478,8 @@ class f extends J {
     this._percent = t;
     const n = this._dim * 0.01 * t;
     this._clipEl.style.clipPath = this._getClipRect(n), this._dragHandle.style.transform = this._horizontal ? `translate(${n}px, 0)` : `translate(0, ${n}px)`, this.info1 && (this.info1.style.opacity = t < 50 ? 1 : (100 - t) / 50), this.info2 && (this.info2.style.opacity = t > 50 ? 1 : t / 50);
-    let a = this._ltr ? this._afterShown : !this._afterShown;
-    t > 75 && (this._oneTime || !a) ? this._changeStatus(this._ltr) : t < 25 && (this._oneTime || a) && this._changeStatus(!this._ltr), this._triggerEvent(z);
+    let r = this._ltr ? this._afterShown : !this._afterShown;
+    t > 75 && (this._oneTime || !r) ? this._changeStatus(this._ltr) : t < 25 && (this._oneTime || r) && this._changeStatus(!this._ltr), this._triggerEvent(H);
   }
   /**
    * convert pixel position to percent from left
@@ -488,7 +488,7 @@ class f extends J {
    */
   _calcPercent(t) {
     let e = this._horizontal ? t.x : t.y;
-    return e = M(e, this._minPos, this._maxPos), (e + this._offset) * 100 / this._dim;
+    return e = A(e, this._minPos, this._maxPos), (e + this._offset) * 100 / this._dim;
   }
   // /**
   //  * convert percent to left pixel value
@@ -501,6 +501,9 @@ class f extends J {
   //     percent * this.width + this.elementX - this._dragHandleDim * 0.5
   //   );
   // }
+  _smooth(t) {
+    this._animateTo(t, this.settings.smoothAmount);
+  }
   // public user function
   init() {
     if (this._initialized)
@@ -516,16 +519,34 @@ class f extends J {
           this.settings.animateInEasing
         ),
         this.settings.animateInDelay
-      ), this._appEvents(), this._triggerEvent(O), this._triggerEvent(I);
+      ), this._appEvents(), this._triggerEvent(z), this._triggerEvent(D);
     });
   }
-  _smooth(t) {
-    this._animateTo(t, this.settings.smoothAmount);
+  /**
+   *
+   * @param {Integer} stopAt The Position (0-100) where it should stop
+   * @param {Integer} repetitions How often should it bounce (0 means endless)
+   * @param {Integer} duration The animation Duration form 0 - 100 in ms
+   * @param {Function} easingFun An easing-function eg.: (p) => p (for linear);
+   */
+  play(t = this._percent, e = 2, n = 2e3, r) {
+    this._stopAni(), clearTimeout(this._snapTimeout), n = C(n, 250, 1e4), t = C(t, 0, 100);
+    let a = this._percent, h = 100 - a, o = n / 100 * Math.abs(h), l = !0, c = 0;
+    e <= 0 && (e = -1), this.progress = this._timingCurTime = this._timingThen = 0, this.easing = r || T.Quad.easeOut;
+    const w = () => {
+      let f = Date.now();
+      if (this._timingCurTime += f - (this._timingThen || f), this.progress = this._timingCurTime / o, this.progress >= 1) {
+        if (c === e)
+          return;
+        o = n, l ? (a = 100, h = -100) : (a = 0, h = 100), l = !l, c++, c === e && (h = l ? t : t - 100, o = n / 100 * Math.abs(h)), this._setPosition(a), f = Date.now(), this._timingCurTime = 0;
+      } else
+        this._setPosition(a + h * this.easing(this.progress));
+      this._timingThen = f, this._renderId = requestAnimationFrame(w);
+    };
+    w();
   }
   goto(t, e, n) {
-    if (isNaN(t) || (t = X(+t, 0, 100), t === this._percent))
-      return !1;
-    this._stopAni(), this._animateTo(t, e, n);
+    return isNaN(t) || (t = C(+t, 0, 100), t === this._percent) ? !1 : (this._stopAni(), this._animateTo(t, e, n), this);
   }
   /**
    * ltr = true  (before, 0%) L -> R (after, 100%)
@@ -561,21 +582,21 @@ class f extends J {
     this.element.removeAttribute("data-bainitialized"), this._createdEl.forEach((t) => this.element.removeChild(t)), this._originalEl.forEach((t) => this.element.appendChild(t)), this._createdEl = [], this._originalEl = [], this._percent = this.startPos, this._appEvents(!1), this._initialized = !1;
   }
 }
-f.init = () => {
-  if (S)
+u.init = () => {
+  if (y)
     return !0;
-  S = !0;
+  y = !0;
   let s = document.querySelectorAll("[" + Q + "]");
   return s.length === 0 ? !1 : (s.forEach((i) => {
-    new f(i);
-  }), p);
+    new u(i);
+  }), E);
 };
-f.destroyAll = () => p.length ? (p.forEach((s) => {
+u.destroyAll = () => E.length ? (E.forEach((s) => {
   s.destroy();
-}), S = !1, p = [], !0) : !1;
-f.getInstance = (s) => R.get(s, "instance");
-f.defaults = Y;
-G(f.init);
+}), y = !1, E = [], !0) : !1;
+u.getInstance = (s) => F.get(s, "instance");
+u.defaults = Y;
+q(u.init);
 export {
-  f as default
+  u as default
 };
