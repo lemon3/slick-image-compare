@@ -71,11 +71,6 @@
     right: 1em;
   }
 
-  .sic-ttb .sic-arrow {
-    transform: rotate(90deg);
-    transform-origin: 75% 50%;
-  }
-
   .sic-handle {
     position: absolute;
     transform: translate3d(0, 0, 0);
@@ -84,7 +79,7 @@
   .sic-line {
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
     position: absolute;
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.8);
     transition: transform 0.2s ease-out;
   }
 
@@ -109,8 +104,8 @@
   }
 
   .sic-arrow {
-    top: 2px;
     position: absolute;
+    top: 2px;
     width: 32px;
     height: 32px;
     transition: transform 0.2s ease-out;
@@ -119,6 +114,7 @@
   .sic-arrow-1 {
     left: -6px;
   }
+
   .sic-arrow-2 {
     right: -6px;
   }
@@ -166,7 +162,6 @@
       &.sic-line-1 {
         left: 0;
         transform: translate3d(-20px, 0, 0);
-        border-color: blue;
       }
 
       &.sic-line-2 {

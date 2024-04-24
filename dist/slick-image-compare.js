@@ -1,20 +1,20 @@
 /*!
-* SlickImageCompare v0.2.12
+* SlickImageCompare v0.2.13
 * https://lemon3.github.io/slick-image-compare
 */
-var j = Object.defineProperty;
-var O = Object.getOwnPropertySymbols;
-var G = Object.prototype.hasOwnProperty, q = Object.prototype.propertyIsEnumerable;
-var C = (s, i, t) => i in s ? j(s, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[i] = t, A = (s, i) => {
+var G = Object.defineProperty;
+var A = Object.getOwnPropertySymbols;
+var q = Object.prototype.hasOwnProperty, B = Object.prototype.propertyIsEnumerable;
+var C = (s, i, t) => i in s ? G(s, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[i] = t, z = (s, i) => {
   for (var t in i || (i = {}))
-    G.call(i, t) && C(s, t, i[t]);
-  if (O)
-    for (var t of O(i))
-      q.call(i, t) && C(s, t, i[t]);
+    q.call(i, t) && C(s, t, i[t]);
+  if (A)
+    for (var t of A(i))
+      B.call(i, t) && C(s, t, i[t]);
   return s;
 };
 var d = (s, i, t) => (C(s, typeof i != "symbol" ? i + "" : i, t), t);
-const W = {
+const j = {
   // storage
   _s: /* @__PURE__ */ new WeakMap(),
   put(s, ...i) {
@@ -42,18 +42,18 @@ const W = {
     let t = this._s.get(s).delete(i);
     return this._s.get(s).size === 0 && this._s.delete(s), t;
   }
-}, B = (s) => {
+}, X = (s) => {
   const i = "DOMContentLoaded";
   document.readyState === "complete" || document.readyState === "interactive" ? (s(), document.removeEventListener(i, s)) : document.addEventListener(i, s, !1);
-}, X = (s) => new Promise((i, t) => {
+}, U = (s) => new Promise((i, t) => {
   const e = new Image();
   e.onload = () => {
-    const { naturalWidth: n, naturalHeight: r } = e, a = n / r;
-    i({ width: n, height: r, ratio: a });
+    const { naturalWidth: n, naturalHeight: h } = e, a = n / h;
+    i({ width: n, height: h, ratio: a });
   }, e.onerror = () => {
     t("error");
   }, e.src = s;
-}), U = (s, i, t = null) => {
+}), Y = (s, i, t = null) => {
   if (!s)
     return !1;
   if (i === void 0 || s.dataset[i] === void 0)
@@ -67,19 +67,19 @@ const W = {
     e = s.dataset[i];
     const a = {};
     e = e.replace(/[\\ \t\n\r]/g, ""), e = e.replace(/{?([^{])}?/g, "$1");
-    const h = e.split(",");
-    h.length > 1 ? h.forEach((o) => {
+    const r = e.split(",");
+    r.length > 1 ? r.forEach((o) => {
       if (o) {
         let [u, l] = o.split(":");
         l = l.replace(/'/g, ""), l === "true" ? l = !0 : l === "false" && (l = !1), a[u.replace(/'/g, "")] = l;
       }
     }) : a[i] = e, e = a;
   }
-  let n = {}, r = i.length;
+  let n = {}, h = i.length;
   return Object.entries(s.dataset).forEach((a) => {
-    if (a[0].toLowerCase().indexOf(i) >= 0 && a[0].length > r) {
-      let h = a[0][r].toLowerCase() + a[0].substring(r + 1);
-      (t === null || t && t[h] !== void 0) && (n[h] = a[1]);
+    if (a[0].toLowerCase().indexOf(i) >= 0 && a[0].length > h) {
+      let r = a[0][h].toLowerCase() + a[0].substring(h + 1);
+      (t === null || t && t[r] !== void 0) && (n[r] = a[1]);
     }
   }), Object.assign(e, n);
 };
@@ -97,13 +97,13 @@ try {
 } catch (s) {
   w = !1;
 }
-const z = (s, i, t) => Math.max(i, Math.min(s, t)), D = (s, i, t) => {
+const x = (s, i, t) => Math.max(i, Math.min(s, t)), D = (s, i, t) => {
   if (s = parseFloat(s, 10), i = parseFloat(i, 10), t = parseFloat(t, 10), t < i) {
     let e = t;
     t = i, i = e;
   }
   return !isNaN(i) && s < i ? i : !isNaN(t) && s > t ? t : s;
-}, Y = (s, i, t, e) => {
+}, J = (s, i, t, e) => {
   if (i)
     for (let n in i)
       Object.prototype.hasOwnProperty.call(i, n) && s.setAttribute(n, i[n]);
@@ -111,7 +111,7 @@ const z = (s, i, t) => Math.max(i, Math.min(s, t)), D = (s, i, t) => {
     for (let n in t)
       Object.prototype.hasOwnProperty.call(t, n) && (s.style[n] = t[n]);
   return e && (s.innerHTML = e), s;
-}, c = (s, i, t, e) => Y(document.createElement(s), i, t, e), I = {
+}, c = (s, i, t, e) => J(document.createElement(s), i, t, e), I = {
   Linear: (s) => s,
   // Pow: {},
   Quad: {
@@ -132,7 +132,7 @@ const z = (s, i, t) => Math.max(i, Math.min(s, t)), D = (s, i, t) => {
       return s === 0 || s === 1 ? s : Math.pow(2, -10 * s) * Math.sin((s * 10 - 0.75) * i) + 1;
     }
   }
-}, J = {
+}, Q = {
   autoInit: !0,
   startPos: 50,
   // % from left
@@ -176,7 +176,7 @@ const z = (s, i, t) => Math.max(i, Math.min(s, t)), D = (s, i, t) => {
   afterLabel: ""
   // after Image
 };
-class Q {
+class Z {
   /**
    * class constructor
    */
@@ -191,8 +191,8 @@ class Q {
    */
   emit(i, t) {
     let e = this._eventCallbacks[i];
-    const n = { bubbles: !1, cancelable: !1, detail: t }, r = new CustomEvent(i, n);
-    e && e.forEach((a) => a.call(this, r)), this.element.dispatchEvent(r);
+    const n = { bubbles: !1, cancelable: !1, detail: t }, h = new CustomEvent(i, n);
+    e && e.forEach((a) => a.call(this, h)), this.element.dispatchEvent(h);
   }
   /**
    * Register an event handler
@@ -221,9 +221,9 @@ class Q {
     ), this) : this;
   }
 }
-const S = "sic", Z = "data-" + S, E = "interacting", x = "init", k = "drag", H = "update", y = "viewchanged", N = "beforeshown", R = "aftershown", $ = "interactionend", P = "mousedown", K = "resize";
-let b = [], L = !1;
-const F = (s = !0, i = "#ffffff") => `<svg xmlns="http://www.w3.org/2000/svg"
+const y = "sic", K = "data-" + y, E = "interacting", k = "init", H = "drag", N = "update", L = "viewchanged", R = "beforeshown", $ = "aftershown", F = "interactionend", P = "mousedown", V = "resize";
+let b = [], M = !1;
+const W = (s = !0, i = "#ffffff") => `<svg xmlns="http://www.w3.org/2000/svg"
     width="32"
     height="32"
     viewBox="0 0 32 32"
@@ -234,7 +234,7 @@ const F = (s = !0, i = "#ffffff") => `<svg xmlns="http://www.w3.org/2000/svg"
     stroke-linejoin="arcs">
     <path d="${s ? "m12 24 8-8-8-8" : "m20 8-8 8 8 8"}"/>
   </svg>`;
-class _ extends Q {
+class _ extends Z {
   constructor(t, e) {
     if (!t)
       return { error: !0 };
@@ -242,15 +242,15 @@ class _ extends Q {
       return { error: !0 };
     super();
     d(this, "_dimensions", (t) => {
-      const e = this.element.getBoundingClientRect(), n = getComputedStyle(this.element), r = parseFloat(n.borderLeftWidth) + parseFloat(n.borderRightWidth), a = parseFloat(n.borderTopWidth) + parseFloat(n.borderBottomWidth);
-      this.width = e.width - r, this.height = e.height - a;
-      let h;
+      const e = this.element.getBoundingClientRect(), n = getComputedStyle(this.element), h = parseFloat(n.borderLeftWidth) + parseFloat(n.borderRightWidth), a = parseFloat(n.borderTopWidth) + parseFloat(n.borderBottomWidth);
+      this.width = e.width - h, this.height = e.height - a;
+      let r;
       if (this._horizontal) {
         const o = e.x;
-        h = this._dragHandle.offsetWidth * 0.5, this._dim = this.width, this._offset = h - o, this._minPos = o + this.settings.handleMinDistance - h, this._maxPos = o + this.width - h - this.settings.handleMinDistance;
+        r = this._dragHandle.offsetWidth * 0.5, this._dim = this.width, this._offset = r - o, this._minPos = o + this.settings.handleMinDistance - r, this._maxPos = o + this.width - r - this.settings.handleMinDistance;
       } else {
         const o = this.element.offsetTop;
-        h = this._dragHandle.offsetHeight * 0.5, this._dim = this.height, this._offset = h - o, this._minPos = o + this.settings.handleMinDistance - h, this._maxPos = o + this.height - h - this.settings.handleMinDistance;
+        r = this._dragHandle.offsetHeight * 0.5, this._dim = this.height, this._offset = r - o, this._minPos = o + this.settings.handleMinDistance - r, this._maxPos = o + this.height - r - this.settings.handleMinDistance;
       }
       !t && this._oldDim === this._dim || (this._oldDim = this._dim, this._setPosition(this._percent, !0));
     });
@@ -278,9 +278,9 @@ class _ extends Q {
       let e = this._getPos(t), n = this._calcPercent(e);
       if (this.isTouch) {
         t.preventDefault();
-        const r = Math.abs(this.startPos.x - e.x), a = Math.abs(this.startPos.y - e.y);
+        const h = Math.abs(this.startPos.x - e.x), a = Math.abs(this.startPos.y - e.y);
         if (!this._dirDetected) {
-          if (a > r) {
+          if (a > h) {
             this.element.classList.remove(E), window.removeEventListener(
               "touchmove",
               this._drag,
@@ -291,31 +291,31 @@ class _ extends Q {
           this.element.classList.add(E), this._dirDetected = !0;
         }
       }
-      this._setPosition(n), this._triggerEvent(k);
+      this._setPosition(n), this._triggerEvent(H);
     });
     d(this, "_dragEnd", (t) => {
       this._endInteraction = !0, t.type === "touchend" ? (this.isTouch = !0, window.removeEventListener("touchmove", this._drag, w), window.removeEventListener("touchend", this._dragEnd)) : t.type === "mouseup" && (this.isTouch = !1, this.settings.followMouse || (window.removeEventListener("mousemove", this._drag, !1), window.removeEventListener("mouseup", this._dragEnd, !1))), this._testInteractionEnd(), this._dirDetected = !1;
     });
-    if (t.dataset.bainitialized)
+    if (t.dataset.sicinitialized)
       return _.getInstance(t);
-    t.dataset.bainitialized = !0, this.allowedEvents = [
-      x,
+    t.dataset.sicinitialized = !0, this.allowedEvents = [
       k,
       H,
       N,
       R,
       $,
-      y
-    ], b.push(this), W.put(t, "instance", this), this.element = t;
-    const n = U(t, S);
+      F,
+      L
+    ], b.push(this), j.put(t, "instance", this), this.element = t;
+    const n = Y(t, y);
     if (this.options = e || {}, this.settings = Object.assign({}, _.defaults, n, e), this.images = this.element.querySelectorAll("img"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || !this.images.length))
       return {
         error: !0
       };
-    this.element.classList.contains(S + "-main") || this.element.classList.add(S + "-main"), this._snapTimeout = null, this._dirDetected = !1, this.settings.autoInit && this.init();
+    this.element.classList.contains(y + "-main") || this.element.classList.add(y + "-main"), this._snapTimeout = null, this._dirDetected = !1, this.settings.autoInit && this.init();
   }
   _triggerEvent(t, e) {
-    e = A({
+    e = z({
       instance: this,
       horizontal: this._horizontal,
       ltr: this._ltr,
@@ -343,26 +343,48 @@ class _ extends Q {
     const t = this.settings;
     this._originalEl = [], this._createdEl = [];
     const e = "div";
-    let n, r;
-    const a = c(e, { class: "sic-clip" });
+    let n, h;
+    const a = c(
+      e,
+      { class: "sic-clip" },
+      {
+        position: "absolute",
+        left: 0,
+        top: 0
+      }
+    );
     if (t.beforeImage || t.afterImage)
-      this.images = [n, r] = [
+      this.images = [n, h] = [
         t.beforeImage,
         t.afterImage
-      ].reduce((T, p) => (T.push(c("img", { draggable: !1, src: p })), T), []), this.element.appendChild(n), a.appendChild(r), this.element.appendChild(a), this._createdEl.push(n);
+      ].reduce((T, p) => (T.push(
+        c(
+          "img",
+          { draggable: !1, src: p },
+          { width: "100%", display: "block" }
+        )
+      ), T), []), this.element.appendChild(n), a.appendChild(h), this.element.appendChild(a), this._createdEl.push(n);
     else {
       const [T, p] = this.images;
-      n = T, n.setAttribute("draggable", !1), r = p.cloneNode(!0), r.setAttribute("draggable", !1), a.appendChild(r), p.parentNode.replaceChild(a, p), this._originalEl.push(p);
+      n = T, h = p.cloneNode(!0), [n, h].forEach((S) => {
+        S.setAttribute("draggable", !1), S.style.width = "100%", S.style.display = "block";
+      }), a.appendChild(h), p.parentNode.replaceChild(a, p), this._originalEl.push(p);
     }
     this._createdEl.push(a);
-    const h = c(e, {
-      class: "sic-handle"
-    }), o = c(e, { class: "sic-line sic-line-1" }), u = c(e, { class: "sic-line sic-line-2" }), l = c(e, { class: "sic-arrows" }), v = c(e, { class: "sic-arrow sic-arrow-1" }), f = c(e, { class: "sic-arrow sic-arrow-2" }), M = c(e, { class: "sic-circle" });
-    v.innerHTML = F(!1), f.innerHTML = F(), l.appendChild(v), l.appendChild(f), M.appendChild(l), h.appendChild(o), h.appendChild(u), h.appendChild(M), this.element.appendChild(h), this._createdEl.push(h);
+    const r = c(
+      e,
+      {
+        class: "sic-handle"
+      },
+      {
+        position: "absolute"
+      }
+    ), o = c(e, { class: "sic-line sic-line-1" }), u = c(e, { class: "sic-line sic-line-2" }), l = c(e, { class: "sic-arrows" }), v = c(e, { class: "sic-arrow sic-arrow-1" }), f = c(e, { class: "sic-arrow sic-arrow-2" }), O = c(e, { class: "sic-circle" });
+    v.innerHTML = W(!1), f.innerHTML = W(), l.appendChild(v), l.appendChild(f), O.appendChild(l), r.appendChild(o), r.appendChild(u), r.appendChild(O), this.element.appendChild(r), this._createdEl.push(r);
     let g, m;
     t.beforeLabel !== "" && (g = c(e, { class: "sic-label sic-label-one" }), g.innerHTML = t.beforeLabel, this.element.appendChild(g), this._createdEl.push(g)), t.afterLabel !== "" && (m = c(e, { class: "sic-label sic-label-two" }), m.innerHTML = t.afterLabel, this.element.appendChild(m), this._createdEl.push(m)), this.info1 = t.ltr ? g : m, this.info2 = t.ltr ? m : g, this.element.classList.add(
       this._horizontal ? "sic-horizontal" : "sic-vertical"
-    ), this.element.style.visibility = "visible", this._dragHandle = h, this._clipEl = a;
+    ), this.element.style.position = "relative", this.element.style.overflow = "hidden", this.element.style.visibility = "visible", this._dragHandle = r, this._clipEl = a;
   }
   /**
    * Method to remove or add mouse events
@@ -372,8 +394,8 @@ class _ extends Q {
   _mouseStartEvents(t = !0) {
     const e = this._addRemove(t), n = this.settings;
     if (n.followMouse) {
-      const r = this.element;
-      r[e]("mouseenter", this._mouseOver, !1), r[e]("mouseleave", this._mouseOut, !1), r[e]("mousemove", this._mouseMove, !1);
+      const h = this.element;
+      h[e]("mouseenter", this._mouseOver, !1), h[e]("mouseleave", this._mouseOut, !1), h[e]("mousemove", this._mouseMove, !1);
     } else
       this._dragEl[e](P, this._dragStart), n.onlyHandleDraggable && n.clickable && (this.element[e](P, this._tapstart, !1), this.element[e]("mouseup", this._dragEnd, !1));
   }
@@ -399,14 +421,14 @@ class _ extends Q {
   _appEvents(t = !0) {
     this._touchStartEvent(t), this._mouseStartEvents(t);
     const e = this._addRemove(t);
-    window[e](K, this._dimensions);
+    window[e](V, this._dimensions);
   }
   // TODO: jumpToEnd parameter?
   _stopAni() {
-    this._renderId && (cancelAnimationFrame(this._renderId), this._renderId = void 0);
+    this._renderId && (cancelAnimationFrame(this._renderId), this.element.classList.contains("playing") && this.element.classList.remove("playing"), this._renderId = void 0);
   }
   _testInteractionEnd() {
-    this._endInteraction && this._renderId === void 0 && (this._endInteraction = !1, this._interactionEnd(), this._triggerEvent($));
+    this._endInteraction && this._renderId === void 0 && (this._endInteraction = !1, this._interactionEnd(), this._triggerEvent(F));
   }
   /**
    *
@@ -416,7 +438,7 @@ class _ extends Q {
    * @returns {boolean} true if stopped
    */
   _renderLoop(t, e, n) {
-    const r = () => {
+    const h = () => {
       const a = Date.now();
       if (this._timingThen !== 0) {
         if (this._timingCurTime += a - this._timingThen, this.progress = this._timingCurTime / this._animationDuration, this.progress >= 1) {
@@ -426,9 +448,9 @@ class _ extends Q {
         this._setPosition(t + n * this.easing(this.progress));
       } else
         this.progress = 0, this._setPosition(t);
-      this._timingThen = a, this._renderId = requestAnimationFrame(r);
+      this._timingThen = a, this._renderId = requestAnimationFrame(h);
     };
-    r();
+    h();
   }
   /**
    * Method to animate to the given percentage
@@ -439,12 +461,12 @@ class _ extends Q {
    * @returns
    */
   _animateTo(t, e, n) {
-    if (t = z(+t, 0, 100), !e) {
+    if (t = x(+t, 0, 100), !e) {
       this._setPosition(t);
       return;
     }
-    const r = t - this._percent;
-    this._animationDuration = e, this.easing = n || this.settings.animateEasing, this.progress = 0, this._timingThen = this._timingCurTime = 0, this._renderLoop(this._percent, t, r);
+    const h = t - this._percent;
+    this._animationDuration = e, this.easing = n || this.settings.animateEasing, this.progress = 0, this._timingThen = this._timingCurTime = 0, this._renderLoop(this._percent, t, h);
   }
   _snapToStart(t = this.settings.snapToStartDelay) {
     this._stopAni(), this._snapTimeout = setTimeout(() => {
@@ -463,8 +485,8 @@ class _ extends Q {
   }
   _changeStatus(t) {
     this._afterShown = t;
-    let e = this._afterShown ? R : N;
-    this._triggerEvent(e), this._triggerEvent(y), this._oneTime = !1;
+    let e = this._afterShown ? $ : R;
+    this._triggerEvent(e), this._triggerEvent(L), this._oneTime = !1;
   }
   /**
    * set the handle to a defined position (in percent from left)
@@ -476,8 +498,8 @@ class _ extends Q {
     this._percent = t;
     const n = this._dim * 0.01 * t;
     this._clipEl.style.clipPath = this._getClipRect(n), this._dragHandle.style.transform = this._horizontal ? `translate(${n}px, 0)` : `translate(0, ${n}px)`, this.info1 && (this.info1.style.opacity = t < 50 ? 1 : (100 - t) / 50), this.info2 && (this.info2.style.opacity = t > 50 ? 1 : t / 50);
-    let r = this._ltr ? this._afterShown : !this._afterShown;
-    t > 70 && (this._oneTime || !r) ? this._changeStatus(this._ltr) : t < 30 && (this._oneTime || r) && this._changeStatus(!this._ltr), this._triggerEvent(H);
+    let h = this._ltr ? this._afterShown : !this._afterShown;
+    t > 70 && (this._oneTime || !h) ? this._changeStatus(this._ltr) : t < 30 && (this._oneTime || h) && this._changeStatus(!this._ltr), this._triggerEvent(N);
   }
   /**
    * convert pixel position to percent from left
@@ -486,7 +508,7 @@ class _ extends Q {
    */
   _calcPercent(t) {
     let e = this._horizontal ? t.x : t.y;
-    return e = z(e, this._minPos, this._maxPos), (e + this._offset) * 100 / this._dim;
+    return e = x(e, this._minPos, this._maxPos), (e + this._offset) * 100 / this._dim;
   }
   // /**
   //  * convert percent to left pixel value
@@ -509,7 +531,7 @@ class _ extends Q {
     const t = this.settings;
     this._initialized = !0, this._oneTime = !0, this._afterShown = !1, this._ltr = !!t.ltr, this._horizontal = t.horizontal, this._createGui(), this._timing = { time: 0, curTime: 0 }, this._dragEl = t.onlyHandleDraggable ? this._dragHandle : this.element, this._animationDuration = t.animateInDuration || 0, t.startPos || (t.startPos = 0), t.animateInStartPos || (t.animateInStartPos = 0), t.animateIn ? this._percent = this._animationDuration > 0 ? t.animateInStartPos : t.startPos : this._percent = t.startPos, this.element.style.opacity = 0, this.isTouch = "ontouchstart" in window || window.DocumentTouch && document instanceof window.DocumentTouch || navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0, this.allowedEvents.forEach((e) => {
       t[e] && this.addEventListener(e, t[e]);
-    }), X(this.images[0].src).then(() => {
+    }), U(this.images[0].src).then(() => {
       this._dimensions(), this._setPosition(this._percent), this.element.style.opacity = 1, t.animateIn && this._animationDuration > 0 && this.settings.animateInStartPos !== this.settings.startPos && setTimeout(
         () => this._animateTo(
           this.settings.startPos,
@@ -517,7 +539,7 @@ class _ extends Q {
           this.settings.animateInEasing
         ),
         this.settings.animateInDelay
-      ), this._appEvents(), this._triggerEvent(x), this._triggerEvent(y);
+      ), this._appEvents(), this._triggerEvent(k), this._triggerEvent(L);
     });
   }
   /**
@@ -527,21 +549,23 @@ class _ extends Q {
    * @param {Integer} duration The animation Duration form 0 - 100 in ms
    * @param {Function} easingFun An easing-function eg.: (p) => p (for linear);
    */
-  play(t = this._percent, e = 2, n = 2e3, r) {
+  play(t = this._percent, e = 2, n = 2e3, h) {
     this._stopAni(), clearTimeout(this._snapTimeout), n = D(n, 250, 1e4), t = D(t, 0, 100);
-    let a = this._percent, h = 100 - a, o = n / 100 * Math.abs(h), u = !0, l = 0;
-    e <= 0 && (e = -1), this.progress = this._timingCurTime = this._timingThen = 0, this.easing = r || I.Quad.easeOut;
+    let a = this._percent, r = 100 - a, o = n / 100 * Math.abs(r), u = !0, l = 0;
+    e <= 0 && (e = -1), this.progress = this._timingCurTime = this._timingThen = 0, this.easing = h || I.Quad.easeOut;
     const v = () => {
       let f = Date.now();
       if (this._timingCurTime += f - (this._timingThen || f), this.progress = this._timingCurTime / o, this.progress >= 1) {
-        if (l === e)
+        if (l === e) {
+          this.element.classList.remove("playing");
           return;
-        o = n, u ? (a = 100, h = -100) : (a = 0, h = 100), u = !u, l++, l === e && (h = u ? t : t - 100, o = n / 100 * Math.abs(h)), this._setPosition(a), f = Date.now(), this._timingCurTime = 0;
+        }
+        o = n, u ? (a = 100, r = -100) : (a = 0, r = 100), u = !u, l++, l === e && (r = u ? t : t - 100, o = n / 100 * Math.abs(r)), this._setPosition(a), f = Date.now(), this._timingCurTime = 0;
       } else
-        this._setPosition(a + h * this.easing(this.progress));
+        this._setPosition(a + r * this.easing(this.progress));
       this._timingThen = f, this._renderId = requestAnimationFrame(v);
     };
-    v();
+    this.element.classList.add("playing"), v();
   }
   goto(t, e, n) {
     return isNaN(t) || (t = D(+t, 0, 100), t === this._percent) ? !1 : (this._stopAni(), this._animateTo(t, e, n), this);
@@ -577,24 +601,24 @@ class _ extends Q {
     this._stopAni(), this._afterShown ? this.showBefore() : this.showAfter();
   }
   destroy() {
-    this.element.removeAttribute("data-bainitialized"), this._createdEl.forEach((t) => this.element.removeChild(t)), this._originalEl.forEach((t) => this.element.appendChild(t)), this._createdEl = [], this._originalEl = [], this._percent = this.startPos, this._appEvents(!1), this._initialized = !1;
+    this.element.removeAttribute("data-sicinitialized"), this._createdEl.forEach((t) => this.element.removeChild(t)), this._originalEl.forEach((t) => this.element.appendChild(t)), this._createdEl = [], this._originalEl = [], this._percent = this.startPos, this._appEvents(!1), this._initialized = !1;
   }
 }
 _.init = () => {
-  if (L)
+  if (M)
     return !0;
-  L = !0;
-  let s = document.querySelectorAll("[" + Z + "]");
+  M = !0;
+  let s = document.querySelectorAll("[" + K + "]");
   return s.length === 0 ? !1 : (s.forEach((i) => {
     new _(i);
   }), b);
 };
 _.destroyAll = () => b.length ? (b.forEach((s) => {
   s.destroy();
-}), L = !1, b = [], !0) : !1;
-_.getInstance = (s) => W.get(s, "instance");
-_.defaults = J;
-B(_.init);
+}), M = !1, b = [], !0) : !1;
+_.getInstance = (s) => j.get(s, "instance");
+_.defaults = Q;
+X(_.init);
 export {
   _ as default
 };

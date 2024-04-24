@@ -365,7 +365,7 @@
       }
 
       div[data-sic],
-      .sic-slider {
+      .sic-main {
         background-color: #fff;
         box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
         overflow: hidden;
@@ -374,7 +374,7 @@
       }
 
       .dark div[data-sic],
-      .dark .sic {
+      .dark .sic-main {
         background-color: #202020;
       }
 
@@ -445,6 +445,7 @@
       .ba-circle {
         border-color: #3d3d3d !important;
         background-color: rgba(255, 255, 255, 0.25);
+        border: none !important;
       }
       .ba-line {
         background-color: #3d3d3d !important;
@@ -465,7 +466,7 @@
 
   <body class="darkmode">
     <div class="container page">
-      <h1>sic</h1>
+      <h1>Slick Image Comparison (sic)</h1>
       <p>
         Is a modern Image comparison slider written in Vanilla Javascript with
         no dependencies to other libraries. Best for comparing image retouches,
@@ -481,22 +482,11 @@
         <pre><code class="language-xml">&lt;div data-sic&gt;
   &lt;img src=&quot;04_before.jpg&quot; /&gt;
   &lt;img src=&quot;04_after.jpg&quot; /&gt;
-  &lt;div class=&quot;info-box-wrapper&quot;&gt;
-    &lt;div class=&quot;info-box&quot;&gt;
-      &lt;h1&gt;sunrise&lt;/h1&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
 &lt;/div&gt;</code></pre>
 
         <div data-sic>
           <img src="04_before.jpg" alt="" />
           <img src="04_after.jpg" alt="" />
-          <div class="info-box-wrapper">
-            <div class="info-box">
-              <h1>sunrise</h1>
-              <p>in Italy</p>
-            </div>
-          </div>
         </div>
         <div class="caption">color grading an image</div>
       </section>
@@ -504,7 +494,7 @@
       <section class="section">
         <h2>Follow Mouse movement</h2>
         <p>
-          the slider follows the mouse movement (only on desktop-devices, where
+          The slider follows the mouse movement (only on desktop-devices, where
           a trackpad or mouse is available). On touch devices the default slider
           will be used!
         </p>
@@ -673,8 +663,8 @@ const ba = new sic('#adv', options);</code></pre>
           </div>
         </div>
         <script type="module">
-          import sic from './src/index.js';
-          window.sic = sic;
+          import SlickImageCompare from './src/index.js';
+          window.SlickImageCompare = SlickImageCompare;
 
           const init = () => {
             document.removeEventListener('DOMContentLoaded', init);
@@ -730,7 +720,7 @@ const ba = new sic('#adv', options);</code></pre>
                 changeOrientationInfo();
               },
             };
-            const ba = new sic('#adv', options);
+            const ba = new SlickImageCompare('#adv', options);
 
             let destroyed = false;
             let slide = false;

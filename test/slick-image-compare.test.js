@@ -45,18 +45,18 @@ describe('test static methods', () => {
 
 describe('test initialization', () => {
   test('no element given, should return error', () => {
-    const ba = new SlickImageCompare(null, null);
-    expect(typeof ba).toBe('object');
-    expect(ba instanceof SlickImageCompare).toBe(false);
-    expect(ba.error).toBe(true);
+    const sic = new SlickImageCompare(null, null);
+    expect(typeof sic).toBe('object');
+    expect(sic instanceof SlickImageCompare).toBe(false);
+    expect(sic.error).toBe(true);
   });
 
   test('element given, but no images set, should return error', () => {
     const div = document.createElement('div');
-    const ba = new SlickImageCompare(div, null);
-    expect(typeof ba).toBe('object');
-    expect(ba instanceof SlickImageCompare).toBe(false);
-    expect(ba.error).toBe(true);
+    const sic = new SlickImageCompare(div, null);
+    expect(typeof sic).toBe('object');
+    expect(sic instanceof SlickImageCompare).toBe(false);
+    expect(sic.error).toBe(true);
   });
 
   test('element is already initialized should return true', () => {
@@ -68,12 +68,12 @@ describe('test initialization', () => {
       div.append(el);
     });
 
-    const ba = new SlickImageCompare(div);
-    expect(typeof ba).toBe('object');
-    expect(ba instanceof SlickImageCompare).toBe(true);
+    const sic = new SlickImageCompare(div);
+    expect(typeof sic).toBe('object');
+    expect(sic instanceof SlickImageCompare).toBe(true);
 
-    const ba2 = new SlickImageCompare(div);
-    expect(ba2 instanceof SlickImageCompare).toBe(true);
+    const sic2 = new SlickImageCompare(div);
+    expect(sic2 instanceof SlickImageCompare).toBe(true);
   });
 });
 
@@ -86,8 +86,8 @@ describe('test app', () => {
     </div>
     `;
     const el = document.querySelectorAll('#test')[0];
-    const ba = new SlickImageCompare(el);
+    const sic = new SlickImageCompare(el);
     expect(el.dataset).toBeTruthy();
-    expect(el.dataset.bainitialized).toBeTruthy();
+    expect(el.dataset.sicinitialized).toBeTruthy();
   });
 });

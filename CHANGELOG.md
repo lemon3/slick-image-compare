@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.13
+### Added or Changed
+- Added basic CSS to JS so the layout doesn't look destroyed.
+(If the default style is not loaded)
+- Add class “playing” when play() method is active (remove when stopped or interrupted).
+
 ## v0.2.12
 ### Added or Changed
 - rename to slick-image-compare

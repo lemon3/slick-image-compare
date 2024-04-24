@@ -62,10 +62,10 @@ class BeforeAfter extends Emitter {
 
     super();
 
-    if (element.dataset.bainitialized) {
+    if (element.dataset.sicinitialized) {
       return BeforeAfter.getInstance(element);
     }
-    element.dataset.bainitialized = true;
+    element.dataset.sicinitialized = true;
 
     this.allowedEvents = [
       INIT,
@@ -153,14 +153,28 @@ class BeforeAfter extends Emitter {
     const div = 'div';
     let firstImg, secondImg;
 
-    const clipEl = createEl(div, { class: 'sic-clip' });
+    const clipEl = createEl(
+      div,
+      { class: 'sic-clip' },
+      {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+      }
+    );
 
     if (s.beforeImage || s.afterImage) {
       this.images = [firstImg, secondImg] = [
         s.beforeImage,
         s.afterImage,
       ].reduce((arr, src) => {
-        arr.push(createEl('img', { draggable: false, src }));
+        arr.push(
+          createEl(
+            'img',
+            { draggable: false, src },
+            { width: '100%', display: 'block' }
+          )
+        );
         return arr;
       }, []);
 
@@ -172,9 +186,13 @@ class BeforeAfter extends Emitter {
     } else {
       const [first, second] = this.images;
       firstImg = first;
-      firstImg.setAttribute('draggable', false);
       secondImg = second.cloneNode(true);
-      secondImg.setAttribute('draggable', false);
+
+      [firstImg, secondImg].forEach((img) => {
+        img.setAttribute('draggable', false);
+        img.style.width = '100%';
+        img.style.display = 'block';
+      });
 
       clipEl.appendChild(secondImg);
       second.parentNode.replaceChild(clipEl, second);
@@ -184,9 +202,15 @@ class BeforeAfter extends Emitter {
     this._createdEl.push(clipEl);
 
     // Create drag element
-    const drag = createEl(div, {
-      class: 'sic-handle',
-    });
+    const drag = createEl(
+      div,
+      {
+        class: 'sic-handle',
+      },
+      {
+        position: 'absolute',
+      }
+    );
     const line1 = createEl(div, { class: 'sic-line sic-line-1' });
     const line2 = createEl(div, { class: 'sic-line sic-line-2' });
     const arrows = createEl(div, { class: 'sic-arrows' });
@@ -228,6 +252,10 @@ class BeforeAfter extends Emitter {
     this.element.classList.add(
       this._horizontal ? 'sic-horizontal' : 'sic-vertical'
     );
+
+    // add important style via js
+    this.element.style.position = 'relative';
+    this.element.style.overflow = 'hidden';
     this.element.style.visibility = 'visible';
 
     // global elements
@@ -297,6 +325,9 @@ class BeforeAfter extends Emitter {
     // console.log('_stopAni', this._renderId);
     if (this._renderId) {
       cancelAnimationFrame(this._renderId);
+      if (this.element.classList.contains('playing')) {
+        this.element.classList.remove('playing');
+      }
       this._renderId = undefined;
       // this._timingThen = this._timingCurTime = 0;
     }
@@ -751,7 +782,10 @@ class BeforeAfter extends Emitter {
       this.progress = this._timingCurTime / newDuration;
 
       if (this.progress >= 1) {
-        if (count === repetitions) return;
+        if (count === repetitions) {
+          this.element.classList.remove('playing');
+          return;
+        }
         if (first) newDuration = duration;
         if (toRight) {
           from = 100;
@@ -777,6 +811,7 @@ class BeforeAfter extends Emitter {
       this._timingThen = now;
       this._renderId = requestAnimationFrame(render);
     };
+    this.element.classList.add('playing');
     render();
   }
 
@@ -846,7 +881,7 @@ class BeforeAfter extends Emitter {
   }
 
   destroy() {
-    this.element.removeAttribute('data-bainitialized');
+    this.element.removeAttribute('data-sicinitialized');
     this._createdEl.forEach((el) => this.element.removeChild(el));
     this._originalEl.forEach((el) => this.element.appendChild(el));
     this._createdEl = [];
