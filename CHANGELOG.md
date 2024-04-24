@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.2.11
+### Added or Changed
+- drag-handle css update
+- preview update
+
+## v0.2.10
+### Added or Changed
+- object-fit cover support added
+- preview update
+
 ## v0.2.9
 ### Added or Changed
 - play method added

@@ -183,6 +183,30 @@ class BeforeAfter extends Emitter {
 
     this._createdEl.push(clipEl);
 
+    // Create drag element
+    const drag = createEl(div, {
+      class: 'ba-handle',
+    });
+    const line1 = createEl(div, { class: 'ba-line ba-line-1' });
+    const line2 = createEl(div, { class: 'ba-line ba-line-2' });
+    const arrows = createEl(div, { class: 'ba-arrows' });
+    const arrow1 = createEl(div, { class: 'ba-arrow ba-arrow-1' });
+    const arrow2 = createEl(div, { class: 'ba-arrow ba-arrow-2' });
+    const dragHandle = createEl(div, { class: 'ba-circle' });
+
+    arrow1.innerHTML = getArrow(false);
+    arrow2.innerHTML = getArrow();
+    arrows.appendChild(arrow1);
+    arrows.appendChild(arrow2);
+
+    dragHandle.appendChild(arrows);
+    drag.appendChild(line1);
+    drag.appendChild(line2);
+    drag.appendChild(dragHandle);
+
+    this.element.appendChild(drag);
+    this._createdEl.push(drag);
+
     // create labels
     let info1, info2;
     if ('' !== s.beforeLabel) {
@@ -201,32 +225,9 @@ class BeforeAfter extends Emitter {
     this.info1 = s.ltr ? info1 : info2;
     this.info2 = s.ltr ? info2 : info1;
 
-    // Create drag element
-    const drag = createEl(
-      div,
-      {
-        class: 'ba-handle ' + (this._horizontal ? 'horizontal' : 'vertical'),
-      },
-      { zIndex: 5 }
+    this.element.classList.add(
+      this._horizontal ? 'ba-horizontal' : 'ba-vertical'
     );
-    const line1 = createEl(div, { class: 'ba-line ba-line-1' });
-    const line2 = createEl(div, { class: 'ba-line ba-line-2' });
-    const arrow1 = createEl(div, { class: 'ba-arrow ba-arrow-1' });
-    const arrow2 = createEl(div, { class: 'ba-arrow ba-arrow-2' });
-    const dragHandle = createEl(div, { class: 'ba-circle' });
-
-    arrow1.innerHTML = getArrow(false);
-    arrow2.innerHTML = getArrow();
-
-    dragHandle.appendChild(arrow1);
-    dragHandle.appendChild(arrow2);
-    drag.appendChild(line1);
-    drag.appendChild(line2);
-    drag.appendChild(dragHandle);
-
-    this.element.appendChild(drag);
-    this._createdEl.push(drag);
-
     this.element.style.visibility = 'visible';
 
     // global elements
@@ -463,6 +464,7 @@ class BeforeAfter extends Emitter {
 
   // if tapped on canvas
   _tapstart = (e) => {
+    e.stopPropagation();
     this._endInteraction = false;
     this._stopAni();
     clearTimeout(this._snapTimeout);
@@ -603,9 +605,9 @@ class BeforeAfter extends Emitter {
     }
 
     let test = this._ltr ? this._afterShown : !this._afterShown;
-    if (percent > 75 && (this._oneTime || !test)) {
+    if (percent > 70 && (this._oneTime || !test)) {
       this._changeStatus(this._ltr);
-    } else if (percent < 25 && (this._oneTime || test)) {
+    } else if (percent < 30 && (this._oneTime || test)) {
       this._changeStatus(!this._ltr);
     }
 
@@ -815,9 +817,9 @@ class BeforeAfter extends Emitter {
   changeOrientation() {
     const prev = this._horizontal;
     this._horizontal = !prev;
-    this._dragHandle.classList.remove(prev ? 'horizontal' : 'vertical');
-    this._dragHandle.classList.add(
-      this._horizontal ? 'horizontal' : 'vertical'
+    this.element.classList.remove(prev ? 'ba-horizontal' : 'ba-vertical');
+    this.element.classList.add(
+      this._horizontal ? 'ba-horizontal' : 'ba-vertical'
     );
     this._dimensions(true);
   }

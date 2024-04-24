@@ -1,20 +1,20 @@
 /*!
-* BeforeAfter v0.2.9
+* BeforeAfter v0.2.11
 * undefined
 */
-var W = Object.defineProperty;
-var M = Object.getOwnPropertySymbols;
-var j = Object.prototype.hasOwnProperty, G = Object.prototype.propertyIsEnumerable;
-var S = (s, i, t) => i in s ? W(s, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[i] = t, O = (s, i) => {
+var j = Object.defineProperty;
+var O = Object.getOwnPropertySymbols;
+var G = Object.prototype.hasOwnProperty, q = Object.prototype.propertyIsEnumerable;
+var C = (s, i, t) => i in s ? j(s, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[i] = t, A = (s, i) => {
   for (var t in i || (i = {}))
-    j.call(i, t) && S(s, t, i[t]);
-  if (M)
-    for (var t of M(i))
-      G.call(i, t) && S(s, t, i[t]);
+    G.call(i, t) && C(s, t, i[t]);
+  if (O)
+    for (var t of O(i))
+      q.call(i, t) && C(s, t, i[t]);
   return s;
 };
-var _ = (s, i, t) => (S(s, typeof i != "symbol" ? i + "" : i, t), t);
-const F = {
+var d = (s, i, t) => (C(s, typeof i != "symbol" ? i + "" : i, t), t);
+const W = {
   // storage
   _s: /* @__PURE__ */ new WeakMap(),
   put(s, ...i) {
@@ -42,10 +42,10 @@ const F = {
     let t = this._s.get(s).delete(i);
     return this._s.get(s).size === 0 && this._s.delete(s), t;
   }
-}, q = (s) => {
+}, B = (s) => {
   const i = "DOMContentLoaded";
   document.readyState === "complete" || document.readyState === "interactive" ? (s(), document.removeEventListener(i, s)) : document.addEventListener(i, s, !1);
-}, B = (s) => new Promise((i, t) => {
+}, X = (s) => new Promise((i, t) => {
   const e = new Image();
   e.onload = () => {
     const { naturalWidth: n, naturalHeight: r } = e, a = n / r;
@@ -53,7 +53,7 @@ const F = {
   }, e.onerror = () => {
     t("error");
   }, e.src = s;
-}), X = (s, i, t = null) => {
+}), U = (s, i, t = null) => {
   if (!s)
     return !1;
   if (i === void 0 || s.dataset[i] === void 0)
@@ -70,8 +70,8 @@ const F = {
     const h = e.split(",");
     h.length > 1 ? h.forEach((o) => {
       if (o) {
-        let [l, c] = o.split(":");
-        c = c.replace(/'/g, ""), c === "true" ? c = !0 : c === "false" && (c = !1), a[l.replace(/'/g, "")] = c;
+        let [u, l] = o.split(":");
+        l = l.replace(/'/g, ""), l === "true" ? l = !0 : l === "false" && (l = !1), a[u.replace(/'/g, "")] = l;
       }
     }) : a[i] = e, e = a;
   }
@@ -83,27 +83,27 @@ const F = {
     }
   }), Object.assign(e, n);
 };
-let p = !1;
+let w = !1;
 try {
   window.addEventListener(
     "test",
     null,
     Object.defineProperty({}, "passive", {
       get: function() {
-        return p = { passive: !1 }, !1;
+        return w = { passive: !1 }, !1;
       }
     })
   );
 } catch (s) {
-  p = !1;
+  w = !1;
 }
-const A = (s, i, t) => Math.max(i, Math.min(s, t)), C = (s, i, t) => {
+const z = (s, i, t) => Math.max(i, Math.min(s, t)), D = (s, i, t) => {
   if (s = parseFloat(s, 10), i = parseFloat(i, 10), t = parseFloat(t, 10), t < i) {
     let e = t;
     t = i, i = e;
   }
   return !isNaN(i) && s < i ? i : !isNaN(t) && s > t ? t : s;
-}, U = (s, i, t, e) => {
+}, Y = (s, i, t, e) => {
   if (i)
     for (let n in i)
       Object.prototype.hasOwnProperty.call(i, n) && s.setAttribute(n, i[n]);
@@ -111,7 +111,7 @@ const A = (s, i, t) => Math.max(i, Math.min(s, t)), C = (s, i, t) => {
     for (let n in t)
       Object.prototype.hasOwnProperty.call(t, n) && (s.style[n] = t[n]);
   return e && (s.innerHTML = e), s;
-}, d = (s, i, t, e) => U(document.createElement(s), i, t, e), T = {
+}, c = (s, i, t, e) => Y(document.createElement(s), i, t, e), I = {
   Linear: (s) => s,
   // Pow: {},
   Quad: {
@@ -132,7 +132,7 @@ const A = (s, i, t) => Math.max(i, Math.min(s, t)), C = (s, i, t) => {
       return s === 0 || s === 1 ? s : Math.pow(2, -10 * s) * Math.sin((s * 10 - 0.75) * i) + 1;
     }
   }
-}, Y = {
+}, J = {
   autoInit: !0,
   startPos: 50,
   // % from left
@@ -154,7 +154,7 @@ const A = (s, i, t) => Math.max(i, Math.min(s, t)), C = (s, i, t) => {
   snapToStartDelay: 1e3,
   snapToStartDuration: 1250,
   // ms TODO: implement
-  snapToStartEasing: T.Elastic.easeOut,
+  snapToStartEasing: I.Elastic.easeOut,
   // TODO: implement
   handleMinDistance: 0,
   // min distance to left and right border in px TODO: also %
@@ -162,21 +162,21 @@ const A = (s, i, t) => Math.max(i, Math.min(s, t)), C = (s, i, t) => {
   animateIn: !1,
   animateInDuration: 1250,
   // ms
-  animateInEasing: T.Elastic.easeOut,
+  animateInEasing: I.Elastic.easeOut,
   animateInDelay: 100,
   // in ms
   animateInStartPos: 40,
   // % from left
   animateDuration: 250,
   // ms
-  animateEasing: T.Cubic.easeOut,
+  animateEasing: I.Cubic.easeOut,
   // showLabels: false,
   beforeLabel: "",
   // before Image
   afterLabel: ""
   // after Image
 };
-class J {
+class Q {
   /**
    * class constructor
    */
@@ -221,9 +221,9 @@ class J {
     ), this) : this;
   }
 }
-const P = "beforeafter", Q = "data-" + P, m = "interacting", z = "init", x = "drag", H = "update", D = "viewchanged", k = "beforeshown", N = "aftershown", R = "interactionend", b = "mousedown", Z = "resize";
-let E = [], y = !1;
-const $ = (s = !0, i = "#ffffff") => `<svg xmlns="http://www.w3.org/2000/svg"
+const S = "beforeafter", Z = "data-" + S, E = "interacting", x = "init", k = "drag", H = "update", y = "viewchanged", N = "beforeshown", R = "aftershown", $ = "interactionend", P = "mousedown", K = "resize";
+let v = [], L = !1;
+const F = (s = !0, i = "#ffffff") => `<svg xmlns="http://www.w3.org/2000/svg"
     width="32"
     height="32"
     viewBox="0 0 32 32"
@@ -234,14 +234,14 @@ const $ = (s = !0, i = "#ffffff") => `<svg xmlns="http://www.w3.org/2000/svg"
     stroke-linejoin="arcs">
     <path d="${s ? "m12 24 8-8-8-8" : "m20 8-8 8 8 8"}"/>
   </svg>`;
-class u extends J {
+class _ extends Q {
   constructor(t, e) {
     if (!t)
       return { error: !0 };
     if (t = typeof t == "string" ? document.querySelector(t) : t, t === null || t.length === 0)
       return { error: !0 };
     super();
-    _(this, "_dimensions", (t) => {
+    d(this, "_dimensions", (t) => {
       const e = this.element.getBoundingClientRect(), n = getComputedStyle(this.element), r = parseFloat(n.borderLeftWidth) + parseFloat(n.borderRightWidth), a = parseFloat(n.borderTopWidth) + parseFloat(n.borderBottomWidth);
       this.width = e.width - r, this.height = e.height - a;
       let h;
@@ -254,26 +254,26 @@ class u extends J {
       }
       !t && this._oldDim === this._dim || (this._oldDim = this._dim, this._setPosition(this._percent, !0));
     });
-    _(this, "_mouseOver", () => {
-      this._stopAni(), this.element.classList.add(m);
+    d(this, "_mouseOver", () => {
+      this._stopAni(), this.element.classList.add(E);
     });
-    _(this, "_mouseOut", () => {
-      this.element.classList.remove(m), this.settings.snapToStart && this._snapToStart();
+    d(this, "_mouseOut", () => {
+      this.element.classList.remove(E), this.settings.snapToStart && this._snapToStart();
     });
-    _(this, "_mouseMove", (t) => {
+    d(this, "_mouseMove", (t) => {
       this._stopAni(), this._setPosition(this._calcPercent(this._getPos(t)));
     });
     // if tapped on canvas
-    _(this, "_tapstart", (t) => {
-      this._endInteraction = !1, this._stopAni(), clearTimeout(this._snapTimeout), t.type === "touchstart" ? (this.isTouch = !0, this._mouseStartEvents(!1)) : b === t.type && (this.isTouch = !1, this._touchStartEvent(!1));
+    d(this, "_tapstart", (t) => {
+      t.stopPropagation(), this._endInteraction = !1, this._stopAni(), clearTimeout(this._snapTimeout), t.type === "touchstart" ? (this.isTouch = !0, this._mouseStartEvents(!1)) : P === t.type && (this.isTouch = !1, this._touchStartEvent(!1));
       const e = this._calcPercent(this._getPos(t));
       this.settings.animateOnClick ? this._animateTo(e, this.settings.animateDuration) : this._setPosition(e);
     });
-    _(this, "_dragStart", (t) => {
-      t.stopPropagation(), this.startPos = this._getPos(t), this.element.classList.add(m), this._tapstart(t), t.type === "touchstart" ? (window.addEventListener("touchmove", this._drag, p), window.addEventListener("touchend", this._dragEnd, !1)) : b === t.type && (this.settings.followMouse || (window.addEventListener("mousemove", this._drag, !1), window.addEventListener("mouseup", this._dragEnd, !1)));
+    d(this, "_dragStart", (t) => {
+      t.stopPropagation(), this.startPos = this._getPos(t), this.element.classList.add(E), this._tapstart(t), t.type === "touchstart" ? (window.addEventListener("touchmove", this._drag, w), window.addEventListener("touchend", this._dragEnd, !1)) : P === t.type && (this.settings.followMouse || (window.addEventListener("mousemove", this._drag, !1), window.addEventListener("mouseup", this._dragEnd, !1)));
     });
     // moving
-    _(this, "_drag", (t) => {
+    d(this, "_drag", (t) => {
       this._stopAni();
       let e = this._getPos(t), n = this._calcPercent(e);
       if (this.isTouch) {
@@ -281,41 +281,41 @@ class u extends J {
         const r = Math.abs(this.startPos.x - e.x), a = Math.abs(this.startPos.y - e.y);
         if (!this._dirDetected) {
           if (a > r) {
-            this.element.classList.remove(m), window.removeEventListener(
+            this.element.classList.remove(E), window.removeEventListener(
               "touchmove",
               this._drag,
-              p
+              w
             );
             return;
           }
-          this.element.classList.add(m), this._dirDetected = !0;
+          this.element.classList.add(E), this._dirDetected = !0;
         }
       }
-      this._setPosition(n), this._triggerEvent(x);
+      this._setPosition(n), this._triggerEvent(k);
     });
-    _(this, "_dragEnd", (t) => {
-      this._endInteraction = !0, t.type === "touchend" ? (this.isTouch = !0, window.removeEventListener("touchmove", this._drag, p), window.removeEventListener("touchend", this._dragEnd)) : t.type === "mouseup" && (this.isTouch = !1, this.settings.followMouse || (window.removeEventListener("mousemove", this._drag, !1), window.removeEventListener("mouseup", this._dragEnd, !1))), this._testInteractionEnd(), this._dirDetected = !1;
+    d(this, "_dragEnd", (t) => {
+      this._endInteraction = !0, t.type === "touchend" ? (this.isTouch = !0, window.removeEventListener("touchmove", this._drag, w), window.removeEventListener("touchend", this._dragEnd)) : t.type === "mouseup" && (this.isTouch = !1, this.settings.followMouse || (window.removeEventListener("mousemove", this._drag, !1), window.removeEventListener("mouseup", this._dragEnd, !1))), this._testInteractionEnd(), this._dirDetected = !1;
     });
     if (t.dataset.bainitialized)
-      return u.getInstance(t);
+      return _.getInstance(t);
     t.dataset.bainitialized = !0, this.allowedEvents = [
-      z,
       x,
-      H,
       k,
+      H,
       N,
       R,
-      D
-    ], E.push(this), F.put(t, "instance", this), this.element = t;
-    const n = X(t, P);
-    if (this.options = e || {}, this.settings = Object.assign({}, u.defaults, n, e), this.images = this.element.querySelectorAll("img"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || !this.images.length))
+      $,
+      y
+    ], v.push(this), W.put(t, "instance", this), this.element = t;
+    const n = U(t, S);
+    if (this.options = e || {}, this.settings = Object.assign({}, _.defaults, n, e), this.images = this.element.querySelectorAll("img"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || !this.images.length))
       return {
         error: !0
       };
-    this.element.classList.contains(P) || this.element.classList.add(P), this._snapTimeout = null, this._dirDetected = !1, this.settings.autoInit && this.init();
+    this.element.classList.contains(S) || this.element.classList.add(S), this._snapTimeout = null, this._dirDetected = !1, this.settings.autoInit && this.init();
   }
   _triggerEvent(t, e) {
-    e = O({
+    e = A({
       instance: this,
       horizontal: this._horizontal,
       ltr: this._ltr,
@@ -344,27 +344,25 @@ class u extends J {
     this._originalEl = [], this._createdEl = [];
     const e = "div";
     let n, r;
-    const a = d(e, { class: "ba-clip" });
+    const a = c(e, { class: "ba-clip" });
     if (t.beforeImage || t.afterImage)
       this.images = [n, r] = [
         t.beforeImage,
         t.afterImage
-      ].reduce((v, g) => (v.push(d("img", { draggable: !1, src: g })), v), []), this.element.appendChild(n), a.appendChild(r), this.element.appendChild(a), this._createdEl.push(n);
+      ].reduce((T, p) => (T.push(c("img", { draggable: !1, src: p })), T), []), this.element.appendChild(n), a.appendChild(r), this.element.appendChild(a), this._createdEl.push(n);
     else {
-      const [v, g] = this.images;
-      n = v, n.setAttribute("draggable", !1), r = g.cloneNode(!0), r.setAttribute("draggable", !1), a.appendChild(r), g.parentNode.replaceChild(a, g), this._originalEl.push(g);
+      const [T, p] = this.images;
+      n = T, n.setAttribute("draggable", !1), r = p.cloneNode(!0), r.setAttribute("draggable", !1), a.appendChild(r), p.parentNode.replaceChild(a, p), this._originalEl.push(p);
     }
     this._createdEl.push(a);
-    let h, o;
-    t.beforeLabel !== "" && (h = d(e, { class: "ba-label ba-label-one" }), h.innerHTML = t.beforeLabel, this.element.appendChild(h), this._createdEl.push(h)), t.afterLabel !== "" && (o = d(e, { class: "ba-label ba-label-two" }), o.innerHTML = t.afterLabel, this.element.appendChild(o), this._createdEl.push(o)), this.info1 = t.ltr ? h : o, this.info2 = t.ltr ? o : h;
-    const l = d(
-      e,
-      {
-        class: "ba-handle " + (this._horizontal ? "horizontal" : "vertical")
-      },
-      { zIndex: 5 }
-    ), c = d(e, { class: "ba-line ba-line-1" }), w = d(e, { class: "ba-line ba-line-2" }), f = d(e, { class: "ba-arrow ba-arrow-1" }), L = d(e, { class: "ba-arrow ba-arrow-2" }), I = d(e, { class: "ba-circle" });
-    f.innerHTML = $(!1), L.innerHTML = $(), I.appendChild(f), I.appendChild(L), l.appendChild(c), l.appendChild(w), l.appendChild(I), this.element.appendChild(l), this._createdEl.push(l), this.element.style.visibility = "visible", this._dragHandle = l, this._clipEl = a;
+    const h = c(e, {
+      class: "ba-handle"
+    }), o = c(e, { class: "ba-line ba-line-1" }), u = c(e, { class: "ba-line ba-line-2" }), l = c(e, { class: "ba-arrows" }), b = c(e, { class: "ba-arrow ba-arrow-1" }), f = c(e, { class: "ba-arrow ba-arrow-2" }), M = c(e, { class: "ba-circle" });
+    b.innerHTML = F(!1), f.innerHTML = F(), l.appendChild(b), l.appendChild(f), M.appendChild(l), h.appendChild(o), h.appendChild(u), h.appendChild(M), this.element.appendChild(h), this._createdEl.push(h);
+    let g, m;
+    t.beforeLabel !== "" && (g = c(e, { class: "ba-label ba-label-one" }), g.innerHTML = t.beforeLabel, this.element.appendChild(g), this._createdEl.push(g)), t.afterLabel !== "" && (m = c(e, { class: "ba-label ba-label-two" }), m.innerHTML = t.afterLabel, this.element.appendChild(m), this._createdEl.push(m)), this.info1 = t.ltr ? g : m, this.info2 = t.ltr ? m : g, this.element.classList.add(
+      this._horizontal ? "ba-horizontal" : "ba-vertical"
+    ), this.element.style.visibility = "visible", this._dragHandle = h, this._clipEl = a;
   }
   /**
    * Method to remove or add mouse events
@@ -377,7 +375,7 @@ class u extends J {
       const r = this.element;
       r[e]("mouseenter", this._mouseOver, !1), r[e]("mouseleave", this._mouseOut, !1), r[e]("mousemove", this._mouseMove, !1);
     } else
-      this._dragEl[e](b, this._dragStart), n.onlyHandleDraggable && n.clickable && (this.element[e](b, this._tapstart, !1), this.element[e]("mouseup", this._dragEnd, !1));
+      this._dragEl[e](P, this._dragStart), n.onlyHandleDraggable && n.clickable && (this.element[e](P, this._tapstart, !1), this.element[e]("mouseup", this._dragEnd, !1));
   }
   /**
    * Helper method.
@@ -396,19 +394,19 @@ class u extends J {
    */
   _touchStartEvent(t = !0) {
     const e = this._addRemove(t);
-    this._dragEl[e]("touchstart", this._dragStart, p), this.settings.clickable && (this.element[e]("touchstart", this._tapstart, !1), this.element[e]("touchend", this._dragEnd, !1));
+    this._dragEl[e]("touchstart", this._dragStart, w), this.settings.clickable && (this.element[e]("touchstart", this._tapstart, !1), this.element[e]("touchend", this._dragEnd, !1));
   }
   _appEvents(t = !0) {
     this._touchStartEvent(t), this._mouseStartEvents(t);
     const e = this._addRemove(t);
-    window[e](Z, this._dimensions);
+    window[e](K, this._dimensions);
   }
   // TODO: jumpToEnd parameter?
   _stopAni() {
     this._renderId && (cancelAnimationFrame(this._renderId), this._renderId = void 0);
   }
   _testInteractionEnd() {
-    this._endInteraction && this._renderId === void 0 && (this._endInteraction = !1, this._interactionEnd(), this._triggerEvent(R));
+    this._endInteraction && this._renderId === void 0 && (this._endInteraction = !1, this._interactionEnd(), this._triggerEvent($));
   }
   /**
    *
@@ -441,7 +439,7 @@ class u extends J {
    * @returns
    */
   _animateTo(t, e, n) {
-    if (t = A(+t, 0, 100), !e) {
+    if (t = z(+t, 0, 100), !e) {
       this._setPosition(t);
       return;
     }
@@ -458,15 +456,15 @@ class u extends J {
     }, t);
   }
   _interactionEnd() {
-    this.element.classList.remove(m), this.isTouch ? this._mouseStartEvents() : this._touchStartEvent(), this.settings.snapToStart && this._snapToStart();
+    this.element.classList.remove(E), this.isTouch ? this._mouseStartEvents() : this._touchStartEvent(), this.settings.snapToStart && this._snapToStart();
   }
   _getClipRect(t) {
     return this._horizontal ? this._ltr ? `rect(0 ${t}px ${this.height}px 0)` : `rect(0 ${this.width}px ${this.height}px ${t}px)` : this._ltr ? `rect(0 ${this.width}px ${t}px 0)` : `rect(${t}px ${this.width}px ${this.height}px 0)`;
   }
   _changeStatus(t) {
     this._afterShown = t;
-    let e = this._afterShown ? N : k;
-    this._triggerEvent(e), this._triggerEvent(D), this._oneTime = !1;
+    let e = this._afterShown ? R : N;
+    this._triggerEvent(e), this._triggerEvent(y), this._oneTime = !1;
   }
   /**
    * set the handle to a defined position (in percent from left)
@@ -479,7 +477,7 @@ class u extends J {
     const n = this._dim * 0.01 * t;
     this._clipEl.style.clipPath = this._getClipRect(n), this._dragHandle.style.transform = this._horizontal ? `translate(${n}px, 0)` : `translate(0, ${n}px)`, this.info1 && (this.info1.style.opacity = t < 50 ? 1 : (100 - t) / 50), this.info2 && (this.info2.style.opacity = t > 50 ? 1 : t / 50);
     let r = this._ltr ? this._afterShown : !this._afterShown;
-    t > 75 && (this._oneTime || !r) ? this._changeStatus(this._ltr) : t < 25 && (this._oneTime || r) && this._changeStatus(!this._ltr), this._triggerEvent(H);
+    t > 70 && (this._oneTime || !r) ? this._changeStatus(this._ltr) : t < 30 && (this._oneTime || r) && this._changeStatus(!this._ltr), this._triggerEvent(H);
   }
   /**
    * convert pixel position to percent from left
@@ -488,7 +486,7 @@ class u extends J {
    */
   _calcPercent(t) {
     let e = this._horizontal ? t.x : t.y;
-    return e = A(e, this._minPos, this._maxPos), (e + this._offset) * 100 / this._dim;
+    return e = z(e, this._minPos, this._maxPos), (e + this._offset) * 100 / this._dim;
   }
   // /**
   //  * convert percent to left pixel value
@@ -511,7 +509,7 @@ class u extends J {
     const t = this.settings;
     this._initialized = !0, this._oneTime = !0, this._afterShown = !1, this._ltr = !!t.ltr, this._horizontal = t.horizontal, this._createGui(), this._timing = { time: 0, curTime: 0 }, this._dragEl = t.onlyHandleDraggable ? this._dragHandle : this.element, this._animationDuration = t.animateInDuration || 0, t.startPos || (t.startPos = 0), t.animateInStartPos || (t.animateInStartPos = 0), t.animateIn ? this._percent = this._animationDuration > 0 ? t.animateInStartPos : t.startPos : this._percent = t.startPos, this.element.style.opacity = 0, this.isTouch = "ontouchstart" in window || window.DocumentTouch && document instanceof window.DocumentTouch || navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0, this.allowedEvents.forEach((e) => {
       t[e] && this.addEventListener(e, t[e]);
-    }), B(this.images[0].src).then(() => {
+    }), X(this.images[0].src).then(() => {
       this._dimensions(), this._setPosition(this._percent), this.element.style.opacity = 1, t.animateIn && this._animationDuration > 0 && this.settings.animateInStartPos !== this.settings.startPos && setTimeout(
         () => this._animateTo(
           this.settings.startPos,
@@ -519,7 +517,7 @@ class u extends J {
           this.settings.animateInEasing
         ),
         this.settings.animateInDelay
-      ), this._appEvents(), this._triggerEvent(z), this._triggerEvent(D);
+      ), this._appEvents(), this._triggerEvent(x), this._triggerEvent(y);
     });
   }
   /**
@@ -530,23 +528,23 @@ class u extends J {
    * @param {Function} easingFun An easing-function eg.: (p) => p (for linear);
    */
   play(t = this._percent, e = 2, n = 2e3, r) {
-    this._stopAni(), clearTimeout(this._snapTimeout), n = C(n, 250, 1e4), t = C(t, 0, 100);
-    let a = this._percent, h = 100 - a, o = n / 100 * Math.abs(h), l = !0, c = 0;
-    e <= 0 && (e = -1), this.progress = this._timingCurTime = this._timingThen = 0, this.easing = r || T.Quad.easeOut;
-    const w = () => {
+    this._stopAni(), clearTimeout(this._snapTimeout), n = D(n, 250, 1e4), t = D(t, 0, 100);
+    let a = this._percent, h = 100 - a, o = n / 100 * Math.abs(h), u = !0, l = 0;
+    e <= 0 && (e = -1), this.progress = this._timingCurTime = this._timingThen = 0, this.easing = r || I.Quad.easeOut;
+    const b = () => {
       let f = Date.now();
       if (this._timingCurTime += f - (this._timingThen || f), this.progress = this._timingCurTime / o, this.progress >= 1) {
-        if (c === e)
+        if (l === e)
           return;
-        o = n, l ? (a = 100, h = -100) : (a = 0, h = 100), l = !l, c++, c === e && (h = l ? t : t - 100, o = n / 100 * Math.abs(h)), this._setPosition(a), f = Date.now(), this._timingCurTime = 0;
+        o = n, u ? (a = 100, h = -100) : (a = 0, h = 100), u = !u, l++, l === e && (h = u ? t : t - 100, o = n / 100 * Math.abs(h)), this._setPosition(a), f = Date.now(), this._timingCurTime = 0;
       } else
         this._setPosition(a + h * this.easing(this.progress));
-      this._timingThen = f, this._renderId = requestAnimationFrame(w);
+      this._timingThen = f, this._renderId = requestAnimationFrame(b);
     };
-    w();
+    b();
   }
   goto(t, e, n) {
-    return isNaN(t) || (t = C(+t, 0, 100), t === this._percent) ? !1 : (this._stopAni(), this._animateTo(t, e, n), this);
+    return isNaN(t) || (t = D(+t, 0, 100), t === this._percent) ? !1 : (this._stopAni(), this._animateTo(t, e, n), this);
   }
   /**
    * ltr = true  (before, 0%) L -> R (after, 100%)
@@ -562,8 +560,8 @@ class u extends J {
    */
   changeOrientation() {
     const t = this._horizontal;
-    this._horizontal = !t, this._dragHandle.classList.remove(t ? "horizontal" : "vertical"), this._dragHandle.classList.add(
-      this._horizontal ? "horizontal" : "vertical"
+    this._horizontal = !t, this.element.classList.remove(t ? "ba-horizontal" : "ba-vertical"), this.element.classList.add(
+      this._horizontal ? "ba-horizontal" : "ba-vertical"
     ), this._dimensions(!0);
   }
   showAfter() {
@@ -582,21 +580,21 @@ class u extends J {
     this.element.removeAttribute("data-bainitialized"), this._createdEl.forEach((t) => this.element.removeChild(t)), this._originalEl.forEach((t) => this.element.appendChild(t)), this._createdEl = [], this._originalEl = [], this._percent = this.startPos, this._appEvents(!1), this._initialized = !1;
   }
 }
-u.init = () => {
-  if (y)
+_.init = () => {
+  if (L)
     return !0;
-  y = !0;
-  let s = document.querySelectorAll("[" + Q + "]");
+  L = !0;
+  let s = document.querySelectorAll("[" + Z + "]");
   return s.length === 0 ? !1 : (s.forEach((i) => {
-    new u(i);
-  }), E);
+    new _(i);
+  }), v);
 };
-u.destroyAll = () => E.length ? (E.forEach((s) => {
+_.destroyAll = () => v.length ? (v.forEach((s) => {
   s.destroy();
-}), y = !1, E = [], !0) : !1;
-u.getInstance = (s) => F.get(s, "instance");
-u.defaults = Y;
-q(u.init);
+}), L = !1, v = [], !0) : !1;
+_.getInstance = (s) => W.get(s, "instance");
+_.defaults = J;
+B(_.init);
 export {
-  u as default
+  _ as default
 };
