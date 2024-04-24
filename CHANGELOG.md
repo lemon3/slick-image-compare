@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.12
+### Added or Changed
+- rename to slick-image-compare
+
 ## v0.2.11
 ### Added or Changed
 - drag-handle css update

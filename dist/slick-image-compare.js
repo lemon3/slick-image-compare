@@ -1,6 +1,6 @@
 /*!
-* BeforeAfter v0.2.11
-* undefined
+* SlickImageCompare v0.2.12
+* https://lemon3.github.io/slick-image-compare
 */
 var j = Object.defineProperty;
 var O = Object.getOwnPropertySymbols;
@@ -221,8 +221,8 @@ class Q {
     ), this) : this;
   }
 }
-const S = "beforeafter", Z = "data-" + S, E = "interacting", x = "init", k = "drag", H = "update", y = "viewchanged", N = "beforeshown", R = "aftershown", $ = "interactionend", P = "mousedown", K = "resize";
-let v = [], L = !1;
+const S = "sic", Z = "data-" + S, E = "interacting", x = "init", k = "drag", H = "update", y = "viewchanged", N = "beforeshown", R = "aftershown", $ = "interactionend", P = "mousedown", K = "resize";
+let b = [], L = !1;
 const F = (s = !0, i = "#ffffff") => `<svg xmlns="http://www.w3.org/2000/svg"
     width="32"
     height="32"
@@ -306,13 +306,13 @@ class _ extends Q {
       R,
       $,
       y
-    ], v.push(this), W.put(t, "instance", this), this.element = t;
+    ], b.push(this), W.put(t, "instance", this), this.element = t;
     const n = U(t, S);
     if (this.options = e || {}, this.settings = Object.assign({}, _.defaults, n, e), this.images = this.element.querySelectorAll("img"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || !this.images.length))
       return {
         error: !0
       };
-    this.element.classList.contains(S) || this.element.classList.add(S), this._snapTimeout = null, this._dirDetected = !1, this.settings.autoInit && this.init();
+    this.element.classList.contains(S + "-main") || this.element.classList.add(S + "-main"), this._snapTimeout = null, this._dirDetected = !1, this.settings.autoInit && this.init();
   }
   _triggerEvent(t, e) {
     e = A({
@@ -344,7 +344,7 @@ class _ extends Q {
     this._originalEl = [], this._createdEl = [];
     const e = "div";
     let n, r;
-    const a = c(e, { class: "ba-clip" });
+    const a = c(e, { class: "sic-clip" });
     if (t.beforeImage || t.afterImage)
       this.images = [n, r] = [
         t.beforeImage,
@@ -356,12 +356,12 @@ class _ extends Q {
     }
     this._createdEl.push(a);
     const h = c(e, {
-      class: "ba-handle"
-    }), o = c(e, { class: "ba-line ba-line-1" }), u = c(e, { class: "ba-line ba-line-2" }), l = c(e, { class: "ba-arrows" }), b = c(e, { class: "ba-arrow ba-arrow-1" }), f = c(e, { class: "ba-arrow ba-arrow-2" }), M = c(e, { class: "ba-circle" });
-    b.innerHTML = F(!1), f.innerHTML = F(), l.appendChild(b), l.appendChild(f), M.appendChild(l), h.appendChild(o), h.appendChild(u), h.appendChild(M), this.element.appendChild(h), this._createdEl.push(h);
+      class: "sic-handle"
+    }), o = c(e, { class: "sic-line sic-line-1" }), u = c(e, { class: "sic-line sic-line-2" }), l = c(e, { class: "sic-arrows" }), v = c(e, { class: "sic-arrow sic-arrow-1" }), f = c(e, { class: "sic-arrow sic-arrow-2" }), M = c(e, { class: "sic-circle" });
+    v.innerHTML = F(!1), f.innerHTML = F(), l.appendChild(v), l.appendChild(f), M.appendChild(l), h.appendChild(o), h.appendChild(u), h.appendChild(M), this.element.appendChild(h), this._createdEl.push(h);
     let g, m;
-    t.beforeLabel !== "" && (g = c(e, { class: "ba-label ba-label-one" }), g.innerHTML = t.beforeLabel, this.element.appendChild(g), this._createdEl.push(g)), t.afterLabel !== "" && (m = c(e, { class: "ba-label ba-label-two" }), m.innerHTML = t.afterLabel, this.element.appendChild(m), this._createdEl.push(m)), this.info1 = t.ltr ? g : m, this.info2 = t.ltr ? m : g, this.element.classList.add(
-      this._horizontal ? "ba-horizontal" : "ba-vertical"
+    t.beforeLabel !== "" && (g = c(e, { class: "sic-label sic-label-one" }), g.innerHTML = t.beforeLabel, this.element.appendChild(g), this._createdEl.push(g)), t.afterLabel !== "" && (m = c(e, { class: "sic-label sic-label-two" }), m.innerHTML = t.afterLabel, this.element.appendChild(m), this._createdEl.push(m)), this.info1 = t.ltr ? g : m, this.info2 = t.ltr ? m : g, this.element.classList.add(
+      this._horizontal ? "sic-horizontal" : "sic-vertical"
     ), this.element.style.visibility = "visible", this._dragHandle = h, this._clipEl = a;
   }
   /**
@@ -531,7 +531,7 @@ class _ extends Q {
     this._stopAni(), clearTimeout(this._snapTimeout), n = D(n, 250, 1e4), t = D(t, 0, 100);
     let a = this._percent, h = 100 - a, o = n / 100 * Math.abs(h), u = !0, l = 0;
     e <= 0 && (e = -1), this.progress = this._timingCurTime = this._timingThen = 0, this.easing = r || I.Quad.easeOut;
-    const b = () => {
+    const v = () => {
       let f = Date.now();
       if (this._timingCurTime += f - (this._timingThen || f), this.progress = this._timingCurTime / o, this.progress >= 1) {
         if (l === e)
@@ -539,9 +539,9 @@ class _ extends Q {
         o = n, u ? (a = 100, h = -100) : (a = 0, h = 100), u = !u, l++, l === e && (h = u ? t : t - 100, o = n / 100 * Math.abs(h)), this._setPosition(a), f = Date.now(), this._timingCurTime = 0;
       } else
         this._setPosition(a + h * this.easing(this.progress));
-      this._timingThen = f, this._renderId = requestAnimationFrame(b);
+      this._timingThen = f, this._renderId = requestAnimationFrame(v);
     };
-    b();
+    v();
   }
   goto(t, e, n) {
     return isNaN(t) || (t = D(+t, 0, 100), t === this._percent) ? !1 : (this._stopAni(), this._animateTo(t, e, n), this);
@@ -560,8 +560,8 @@ class _ extends Q {
    */
   changeOrientation() {
     const t = this._horizontal;
-    this._horizontal = !t, this.element.classList.remove(t ? "ba-horizontal" : "ba-vertical"), this.element.classList.add(
-      this._horizontal ? "ba-horizontal" : "ba-vertical"
+    this._horizontal = !t, this.element.classList.remove(t ? "sic-horizontal" : "sic-vertical"), this.element.classList.add(
+      this._horizontal ? "sic-horizontal" : "sic-vertical"
     ), this._dimensions(!0);
   }
   showAfter() {
@@ -587,11 +587,11 @@ _.init = () => {
   let s = document.querySelectorAll("[" + Z + "]");
   return s.length === 0 ? !1 : (s.forEach((i) => {
     new _(i);
-  }), v);
+  }), b);
 };
-_.destroyAll = () => v.length ? (v.forEach((s) => {
+_.destroyAll = () => b.length ? (b.forEach((s) => {
   s.destroy();
-}), L = !1, v = [], !0) : !1;
+}), L = !1, b = [], !0) : !1;
 _.getInstance = (s) => W.get(s, "instance");
 _.defaults = J;
 B(_.init);

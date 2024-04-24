@@ -1,17 +1,17 @@
 {
-  "name": "beforeafter",
-  "version": "0.2.11",
+  "name": "slick-image-compare",
+  "version": "0.2.12",
   "description": "before and after image comparison slider",
   "author": "wolfgang jungmayer",
   "license": "MIT",
-  "browser": "dist/beforeafter.umd.js",
+  "browser": "dist/slick-image-compare.umd.js",
   "type": "module",
-  "main": "dist/beforeafter.umd.js",
-  "module": "./dist/beforeafter.js",
+  "main": "dist/slick-image-compare.umd.js",
+  "module": "./dist/slick-image-compare.js",
   "exports": {
     ".": {
-      "import": "./dist/beforeafter.js",
-      "require": "./dist/beforeafter.umd.js"
+      "import": "./dist/slick-image-compare.js",
+      "require": "./dist/slick-image-compare.umd.js"
     }
   },
   "scripts": {
@@ -38,6 +38,7 @@
     "index.js"
   ],
   "keywords": [
+    "slick-image-compare",
     "beforeafter",
     "before-after",
     "before-after-slider",
@@ -60,6 +61,7 @@
     "type": "git",
     "url": "https://github.com/lemon3/beforeafter.git"
   },
+  "homepage": "https://lemon3.github.io/slick-image-compare",
   "devDependencies": {
     "@babel/core": "^7.24.4",
     "@babel/plugin-transform-class-properties": "^7.24.1",

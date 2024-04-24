@@ -1,6 +1,7 @@
-# beforeafter
-before after slider
-tbd ...
+# slick image compare
+is a before and after image comparison slider
+...
+
 
 ## options
 list of the available options:

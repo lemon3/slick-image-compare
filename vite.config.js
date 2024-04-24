@@ -8,7 +8,7 @@ import banner from 'vite-plugin-banner';
 import pkg from './package.json';
 
 const bannerText = `/*!
-* BeforeAfter v${pkg.version}
+* SlickImageCompare v${pkg.version}
 * ${pkg.homepage}
 */`;
 
@@ -17,10 +17,10 @@ export default defineConfig({
     target: 'es2015', // esnext
     lib: {
       entry: resolve(__dirname, 'src/index.js'),
-      name: 'BeforeAfter',
+      name: 'SlickImageCompare',
       fileName: (format) => {
         format = 'es' === format ? '' : `.${format}`;
-        return `beforeafter${format}.js`;
+        return `slick-image-compare${format}.js`;
       },
     },
     copyPublicDir: false,

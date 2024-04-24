@@ -364,8 +364,8 @@
         font-size: 0.75em;
       }
 
-      div[data-beforeafter],
-      .beforeafter {
+      div[data-sic],
+      .sic-slider {
         background-color: #fff;
         box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
         overflow: hidden;
@@ -373,8 +373,8 @@
         position: relative;
       }
 
-      .dark div[data-beforeafter],
-      .dark .beforeafter {
+      .dark div[data-sic],
+      .dark .sic {
         background-color: #202020;
       }
 
@@ -465,7 +465,7 @@
 
   <body class="darkmode">
     <div class="container page">
-      <h1>beforeafter</h1>
+      <h1>sic</h1>
       <p>
         Is a modern Image comparison slider written in Vanilla Javascript with
         no dependencies to other libraries. Best for comparing image retouches,
@@ -478,7 +478,7 @@
 
       <section class="section">
         <h2>Default Settings</h2>
-        <pre><code class="language-xml">&lt;div data-beforeafter&gt;
+        <pre><code class="language-xml">&lt;div data-sic&gt;
   &lt;img src=&quot;04_before.jpg&quot; /&gt;
   &lt;img src=&quot;04_after.jpg&quot; /&gt;
   &lt;div class=&quot;info-box-wrapper&quot;&gt;
@@ -488,7 +488,7 @@
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
 
-        <div data-beforeafter>
+        <div data-sic>
           <img src="04_before.jpg" alt="" />
           <img src="04_after.jpg" alt="" />
           <div class="info-box-wrapper">
@@ -508,8 +508,8 @@
           a trackpad or mouse is available). On touch devices the default slider
           will be used!
         </p>
-        <pre><code class="language-xml">&lt;div class=&quot;beforeafter&quot;
-  data-beforeafter=&quot;{
+        <pre><code class="language-xml">&lt;div class=&quot;sic&quot;
+  data-sic=&quot;{
     followMouse: true,
     beforeLabel: 'before',
     afterLabel: 'after',
@@ -519,8 +519,8 @@
 &lt;/div&gt;
 </code></pre>
         <div
-          class="beforeafter"
-          data-beforeafter="{
+          class="sic"
+          data-sic="{
           followMouse: true,
           beforeLabel: 'before',
           afterLabel: 'after',
@@ -536,8 +536,8 @@
       <!--
       <section class="section">
         <h2>demo 3</h2>
-      <pre><code class="language-xml">&lt;div class=&quot;beforeafter&quot;
-  data-beforeafter=&quot;{
+      <pre><code class="language-xml">&lt;div class=&quot;sic&quot;
+  data-sic=&quot;{
     onlyHandleDraggable: true,
     clickable: true,
     beforeLabel: 'before',
@@ -550,8 +550,8 @@
 </code></pre>
       <div style="margin: 0 auto 1em">
         <div
-          class="beforeafter"
-          data-beforeafter="{
+          class="sic"
+          data-sic="{
             onlyHandleDraggable: true,
             clickable: true,
             beforeLabel: 'before',
@@ -571,8 +571,8 @@
           if set to true, the slider will animate back to the defined start
           position when user-interaction ends.
         </p>
-        <pre><code class="language-xml">&lt;div class=&quot;beforeafter&quot;
-  data-beforeafter=&quot;{
+        <pre><code class="language-xml">&lt;div class=&quot;sic&quot;
+  data-sic=&quot;{
     snapToStart: true,
     beforeLabel: 'before',
     afterLabel: 'after',
@@ -583,8 +583,8 @@
 </code></pre>
 
         <div
-          class="beforeafter"
-          data-beforeafter="{
+          class="sic"
+          data-sic="{
             snapToStart: true,
             beforeLabel: 'before',
             afterLabel: 'after',
@@ -613,7 +613,7 @@
   snapToStart: true,
 };
 
-const ba = new BeforeAfter('#adv', options);</code></pre>
+const ba = new sic('#adv', options);</code></pre>
         <div class="row">
           <div class="col col50">
             <div id="adv-events" class="panel">
@@ -673,8 +673,8 @@ const ba = new BeforeAfter('#adv', options);</code></pre>
           </div>
         </div>
         <script type="module">
-          import BeforeAfter from './src/index.js';
-          window.BeforeAfter = BeforeAfter;
+          import sic from './src/index.js';
+          window.sic = sic;
 
           const init = () => {
             document.removeEventListener('DOMContentLoaded', init);
@@ -730,7 +730,7 @@ const ba = new BeforeAfter('#adv', options);</code></pre>
                 changeOrientationInfo();
               },
             };
-            const ba = new BeforeAfter('#adv', options);
+            const ba = new sic('#adv', options);
 
             let destroyed = false;
             let slide = false;

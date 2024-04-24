@@ -3,7 +3,7 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/beforeafter/',
+  base: '/slick-image-compare/',
   build: {
     target: 'es2015', // esnext
     outDir: 'docs',

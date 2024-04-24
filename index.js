@@ -1,2 +1,2 @@
-import BeforeAfter from './dist/beforeafter.js';
-export { BeforeAfter as default };
+import SlickImageCompare from './dist/slick-image-compare.js';
+export { SlickImageCompare as default };

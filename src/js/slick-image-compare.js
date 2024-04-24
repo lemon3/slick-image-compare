@@ -14,7 +14,7 @@ import { defaults } from '@/js/defaults';
 import { Emitter } from '@/js/emitter';
 
 // const names
-const PLUGINNAME = 'beforeafter';
+const PLUGINNAME = 'sic';
 const DATANAME = 'data-' + PLUGINNAME;
 const INTERACTING = 'interacting'; // class name
 
@@ -99,8 +99,8 @@ class BeforeAfter extends Emitter {
       };
     }
 
-    if (!this.element.classList.contains(PLUGINNAME)) {
-      this.element.classList.add(PLUGINNAME);
+    if (!this.element.classList.contains(PLUGINNAME + '-main')) {
+      this.element.classList.add(PLUGINNAME + '-main');
     }
 
     this._snapTimeout = null;
@@ -153,7 +153,7 @@ class BeforeAfter extends Emitter {
     const div = 'div';
     let firstImg, secondImg;
 
-    const clipEl = createEl(div, { class: 'ba-clip' });
+    const clipEl = createEl(div, { class: 'sic-clip' });
 
     if (s.beforeImage || s.afterImage) {
       this.images = [firstImg, secondImg] = [
@@ -185,14 +185,14 @@ class BeforeAfter extends Emitter {
 
     // Create drag element
     const drag = createEl(div, {
-      class: 'ba-handle',
+      class: 'sic-handle',
     });
-    const line1 = createEl(div, { class: 'ba-line ba-line-1' });
-    const line2 = createEl(div, { class: 'ba-line ba-line-2' });
-    const arrows = createEl(div, { class: 'ba-arrows' });
-    const arrow1 = createEl(div, { class: 'ba-arrow ba-arrow-1' });
-    const arrow2 = createEl(div, { class: 'ba-arrow ba-arrow-2' });
-    const dragHandle = createEl(div, { class: 'ba-circle' });
+    const line1 = createEl(div, { class: 'sic-line sic-line-1' });
+    const line2 = createEl(div, { class: 'sic-line sic-line-2' });
+    const arrows = createEl(div, { class: 'sic-arrows' });
+    const arrow1 = createEl(div, { class: 'sic-arrow sic-arrow-1' });
+    const arrow2 = createEl(div, { class: 'sic-arrow sic-arrow-2' });
+    const dragHandle = createEl(div, { class: 'sic-circle' });
 
     arrow1.innerHTML = getArrow(false);
     arrow2.innerHTML = getArrow();
@@ -210,14 +210,14 @@ class BeforeAfter extends Emitter {
     // create labels
     let info1, info2;
     if ('' !== s.beforeLabel) {
-      info1 = createEl(div, { class: 'ba-label ba-label-one' });
+      info1 = createEl(div, { class: 'sic-label sic-label-one' });
       info1.innerHTML = s.beforeLabel;
       this.element.appendChild(info1);
       this._createdEl.push(info1);
     }
 
     if ('' !== s.afterLabel) {
-      info2 = createEl(div, { class: 'ba-label ba-label-two' });
+      info2 = createEl(div, { class: 'sic-label sic-label-two' });
       info2.innerHTML = s.afterLabel;
       this.element.appendChild(info2);
       this._createdEl.push(info2);
@@ -226,7 +226,7 @@ class BeforeAfter extends Emitter {
     this.info2 = s.ltr ? info2 : info1;
 
     this.element.classList.add(
-      this._horizontal ? 'ba-horizontal' : 'ba-vertical'
+      this._horizontal ? 'sic-horizontal' : 'sic-vertical'
     );
     this.element.style.visibility = 'visible';
 
@@ -817,9 +817,9 @@ class BeforeAfter extends Emitter {
   changeOrientation() {
     const prev = this._horizontal;
     this._horizontal = !prev;
-    this.element.classList.remove(prev ? 'ba-horizontal' : 'ba-vertical');
+    this.element.classList.remove(prev ? 'sic-horizontal' : 'sic-vertical');
     this.element.classList.add(
-      this._horizontal ? 'ba-horizontal' : 'ba-vertical'
+      this._horizontal ? 'sic-horizontal' : 'sic-vertical'
     );
     this._dimensions(true);
   }
