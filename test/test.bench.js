@@ -1,18 +1,18 @@
 import { bench, describe } from 'vitest';
-import BeforeAfter from '../src/index';
+import SlickImageCompare from '../src/index';
 import { restrict } from '@/js/utils';
 
 import img01 from '../public/01_after.png';
 import img02 from '../public/01_after.png';
 
 // testing other function
-BeforeAfter.prototype._calcPercent2 = function (pos) {
+SlickImageCompare.prototype._calcPercent2 = function (pos) {
   let val = this._horizontal ? pos.x : pos.y;
   val = restrict(val, this._minPos, this._maxPos);
   return ((val + this._offset) * 100) / this._dim;
 };
 
-BeforeAfter.prototype._renderLoop1 = function (from, to, delta) {
+SlickImageCompare.prototype._renderLoop1 = function (from, to, delta) {
   const render = () => {
     const now = new Date().getTime();
     const dt = now - (this._timingThen || now);
@@ -36,7 +36,7 @@ BeforeAfter.prototype._renderLoop1 = function (from, to, delta) {
   render();
 };
 
-BeforeAfter.prototype._renderLoop2 = function (from, to, delta) {
+SlickImageCompare.prototype._renderLoop2 = function (from, to, delta) {
   const render = () => {
     const now = Date.now();
 
@@ -66,18 +66,18 @@ BeforeAfter.prototype._renderLoop2 = function (from, to, delta) {
 };
 
 const div = document.createElement('div');
-const ba = new BeforeAfter(div, {
+const sic = new SlickImageCompare(div, {
   beforeImage: img01,
   afterImage: img02,
 });
 
 describe('calc', () => {
   bench('calcPercent 1', () => {
-    ba._calcPercent(10);
+    sic._calcPercent(10);
   });
 
   bench('calcPercent 2', () => {
-    ba._calcPercent2(10);
+    sic._calcPercent2(10);
   });
 });
 
@@ -92,21 +92,21 @@ describe('get date', () => {
 });
 
 const setValues = () => {
-  ba._timing.then = 0;
-  ba._timingCurTime = 0;
-  ba.progress = 0;
-  ba._animationDuration = 250;
-  ba.easing = ba.settings.animateEasing;
+  sic._timing.then = 0;
+  sic._timingCurTime = 0;
+  sic.progress = 0;
+  sic._animationDuration = 250;
+  sic.easing = sic.settings.animateEasing;
 };
 
 describe.only('render loop', () => {
   bench('version 1', () => {
     setValues();
-    ba._renderLoop1(10, 70, 60);
+    sic._renderLoop1(10, 70, 60);
   });
 
   bench('version 2', () => {
     setValues();
-    ba._renderLoop2(10, 70, 60);
+    sic._renderLoop2(10, 70, 60);
   });
 });

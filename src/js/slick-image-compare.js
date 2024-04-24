@@ -35,18 +35,7 @@ let instances = [];
 let initialized = false;
 
 const getArrow = (right = true, color = '#ffffff') =>
-  `<svg xmlns="http://www.w3.org/2000/svg"
-    width="32"
-    height="32"
-    viewBox="0 0 32 32"
-    fill="none"
-    stroke="${color}"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="arcs">
-    <path d="${right ? 'm12 24 8-8-8-8' : 'm20 8-8 8 8 8'}"/>
-  </svg>`;
-
+  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="arcs"><path d="${right ? 'm12 24 8-8-8-8' : 'm20 8-8 8 8 8'}"/></svg>`;
 class BeforeAfter extends Emitter {
   constructor(element, options) {
     if (!element) {

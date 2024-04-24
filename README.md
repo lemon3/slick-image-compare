@@ -1,7 +1,43 @@
 # slick image compare
 is a before and after image comparison slider
-...
 
+**[Slick Image Compare Demo >>](https://lemon3.github.io/slick-image-compare/)**
+
+## tl;dr
+
+**module:**
+```Bash
+npm install slick-image-compare
+```
+
+```html
+<div id="my-div"></div>
+```
+
+```js
+import SlickImageCompare from '@/slick-image-compare';
+// import SlickImageCompare from "./node_modules/slick-image-compare/index.js";
+const options = {
+  beforeImage: 'before.jpg',
+  afterImage: 'after.jpg',
+}; // options (see below)
+const sic = new SlickImageCompare('#my-div', options);
+```
+
+**classic:**
+```html
+<link rel="stylesheet" href="https://unpkg.com/slick-image-compare/dist/style.css">
+<script src="https://unpkg.com/slick-image-compare"></script>
+
+<div id="my-div" style="max-width=640px">
+  <img src="before.jpg" alt="before image" />
+  <img src="after.jpg" alt="after image" />
+</div>
+
+<script>
+  const sic = new SlickImageCompare('#my-div');
+</script>
+```
 
 ## options
 list of the available options:
@@ -19,11 +55,13 @@ options = {
   startPos: 50,
 
   // the image src of the first image
+  // leave it at null if there are images in the DOM
   // possible values: all regular image urls
   // default: null
   beforeImage: null,
 
   // the image src of the first image
+  // leave it at null if there are images in the DOM
   // possible values: all regular image urls
   // default: null
   afterImage: null,
@@ -86,7 +124,13 @@ options = {
   // possible values: 0 - 10000 (in ms)
   // default: 1000 (1 sec)
   snapToStartDelay: 1000,
-  snapToStartDuration: 1250, // ms
+
+  // the animation duration for snapping back to start position
+  // possible values: 0 - 10000 (in ms)
+  // default: 1250
+  snapToStartDuration: 1250,
+
+  // the easing function used
   snapToStartEasing: easing.Elastic.easeOut,
 
   // min distance to left and right border
@@ -99,10 +143,18 @@ options = {
   animateInDelay: 100, // in ms
   animateInStartPos: 40, // % from left
 
+  // the default animation duration im ms
   animateDuration: 250, // ms
   animateEasing: easing.Cubic.easeOut,
 
-  beforeLabel: '', // before Image
-  afterLabel: '', // after Image
+  // the label for the before image
+  // possible values: 'Strings'
+  // default: ''
+  beforeLabel: '',
+
+  // the label for the after image
+  // possible values: 'Strings'
+  // default: ''
+  afterLabel: '',
 };
 ```
