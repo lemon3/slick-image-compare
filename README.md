@@ -1,7 +1,9 @@
 # slick image compare
-is a before and after image comparison slider
+Is a modern Image comparison slider written in Vanilla Javascript with no dependencies to other libraries. Best for comparing image retouches, color adjustments, renderings ...
 
 **[Slick Image Compare Demo >>](https://lemon3.github.io/slick-image-compare/)**
+
+*(Started as a jQuery-Plugin back in the days (2013) and was used for a custom WordPress-Plugin)*
 
 ## tl;dr
 
@@ -158,3 +160,7 @@ options = {
   afterLabel: '',
 };
 ```
+
+## todo's
+- add more test
+- update this document ...
