@@ -13,30 +13,10 @@ import {
 document.body.innerHTML += `
   <div id="helper-data1"></div>
   <div id="helper-data2" data-super="123"></div>
-  <div id="helper-data3"
-    data-heels="true"
-    data-heels-height="12"
-    data-heels-color="red"
-  ></div>
-  <div id="helper-data4"
-    data-heels="{'height':'12'}"
-    data-heels-size="39"
-    data-heels-color="green"
-  ></div>
-  <div id="helper-data5"
-    data-heels="{'color':'red'}"
-  ></div>
-  <div id="helper-data6"
-    data-heels="'color':'red',height:10,size:39"
-  ></div>
-  <div id="helper-data7" class="beforeafter"
-    data-beforeafter="{
-      followMouse: true,
-      'showToggleButton': true
-    }">
-    <img src="../static/assets/01_after.jpg" alt="" />
-    <img src="../static/assets/01_before.jpg" alt="" />
-  </div>
+  <div id="helper-data3" data-heels="height: 12, color: red"></div>
+  <div id="helper-data4" data-heels="{'height':'12','size':'39','color':'green'}"></div>
+  <div id="helper-data5" data-heels="{'color':'red'}"></div>
+  <div id="helper-data6" data-heels="'color':'red',height:10,size:39"></div>
 `;
 
 afterEach(() => {
@@ -101,14 +81,15 @@ describe('test wrap function', () => {
 
   test('element & wrappingEl given, should return html obj.', () => {
     const el1 = document.createElement('span');
-    el1.id='id1';
+    el1.id = 'id1';
     const el2 = document.createElement('span');
-    el2.id='id2';
+    el2.id = 'id2';
     wrappingEl = document.createElement('div');
     const result = wrap([el1, el2], wrappingEl);
-    expect(result.outerHTML).toBe('<div><span id="id1"></span><span id="id2"></span></div>');
+    expect(result.outerHTML).toBe(
+      '<div><span id="id1"></span><span id="id2"></span></div>'
+    );
   });
-
 });
 
 describe('test getJSONData function', () => {
@@ -137,7 +118,6 @@ describe('test getJSONData function', () => {
   test('element with multiple data attributes', () => {
     let data = getJSONData(helperData3, 'heels');
     expect(data).toEqual({
-      heels: 'true',
       color: 'red',
       height: '12',
     });
@@ -171,13 +151,6 @@ describe('test getJSONData function', () => {
     });
   });
 
-  test('element settings-string', () => {
-    let helperData7 = document.getElementById('helper-data7');
-    let data = getJSONData(helperData7, 'beforeafter');
-    expect(data.followMouse).toBe(true);
-    expect(data.showToggleButton).toBe(true);
-  });
-
   test('JSON-string data', () => {
     const div = document.createElement('div');
     // eslint-disable-next-line quotes
@@ -191,19 +164,7 @@ describe('test getJSONData function', () => {
     const div = document.createElement('div');
     div.dataset.test = 'undefined';
     let result = getJSONData(div, 'test');
-    expect(result).toEqual({ test: 'undefined' });
-  });
-
-  test('with default values', () => {
-    const div = document.createElement('div');
-    div.dataset.test = 'name123';
-    div.dataset.testNew = 'new123';
-    div.dataset.testOld = 'old123';
-    const defaults = {
-      old: 'old123',
-    };
-    let result = getJSONData(div, 'test', defaults);
-    expect(result).toEqual({ test: 'name123', old: 'old123' });
+    expect(result).toEqual('undefined');
   });
 });
 

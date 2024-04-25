@@ -1,7 +1,7 @@
 # slick image compare
-Is a modern Image comparison slider written in Vanilla Javascript with no dependencies to other libraries. Best for comparing image retouches, color adjustments, renderings ...
+Is a modern image comparison slider written in vanilla JavaScript and has no dependencies on other libraries. Best for comparing images, image retouching, color adjustments, renderings, etc...
 
-**[Slick Image Compare Demo >>](https://lemon3.github.io/slick-image-compare/)**
+**[See a Demo here >>](https://lemon3.github.io/slick-image-compare/)**
 
 *(Started as a jQuery-Plugin back in the days (2013) and was used for a custom WordPress-Plugin)*
 

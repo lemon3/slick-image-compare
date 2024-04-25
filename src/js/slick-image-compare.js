@@ -672,18 +672,19 @@ class BeforeAfter extends Emitter {
     this._oneTime = true;
     this._afterShown = false;
 
-    // form settings
     this._ltr = s.ltr ? true : false;
     this._horizontal = s.horizontal;
 
     this._createGui();
-    this._timing = { time: 0, curTime: 0 };
 
     this._dragEl = s.onlyHandleDraggable ? this._dragHandle : this.element;
     this._animationDuration = s.animateInDuration || 0;
 
+    s.startPos = restrict(s.startPos, 0, 100);
+    s.animateInStartPos = restrict(s.animateInStartPos, 0, 100);
+
     if (!s.startPos) {
-      s.startPos = 0;
+      s.startPos = 50;
     }
     if (!s.animateInStartPos) {
       s.animateInStartPos = 0;

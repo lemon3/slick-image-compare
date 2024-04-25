@@ -100,70 +100,47 @@ export const imageDimensions = (filename) =>
     img.src = filename;
   });
 
+export const getObjectFromString = (string) => {
+  string = string.replace(/[\\ \t\n\r'"]/gm, '').replace(/(\w+)/gi, '"$1"');
+  console.log(string);
+  if ('{' !== string[0]) string = `{${string}}`;
+  try {
+    return JSON.parse(string);
+    // eslint-disable-next-line no-unused-vars
+  } catch (e) {
+    return false;
+  }
+};
+
+export const parseData = (string) => {
+  if (!string.match(/[^\w]+/i)) return string;
+  string = string.replace(/'/g, '"');
+
+  try {
+    return JSON.parse(string);
+    // eslint-disable-next-line no-unused-vars
+  } catch (e) {
+    return getObjectFromString(string);
+  }
+};
+
 /**
  * Helper function to get all dataset values for a given name
  *
  * @param  {Object} el The dom element, e.g. a selected div-element
  * @param  {String} name The name to look for
- * @param  {Object} defaults An Object with default (allowed) values
  * @return {mixed} Object with all collected data for the given element und name or false, if name was not found
  */
-export const getJSONData = (el, name, defaults = null) => {
-  if (!el) {
-    return false;
-  }
-
-  // get all
-  if (undefined === name || undefined === el.dataset[name]) {
+export const getJSONData = (el, name) => {
+  if (!el) return false;
+  if (undefined === name || 'undefined' === typeof name) {
     return el.dataset;
+  } else if (undefined === el.dataset[name]) {
+    return el.dataset[name];
   }
-
-  let data;
-  try {
-    data = JSON.parse(el.dataset[name].replace(/'/g, '"'));
-    // eslint-disable-next-line no-unused-vars
-  } catch (e) {
-    //
-  }
-
-  if ('object' !== typeof data) {
-    data = el.dataset[name];
-    const newData = {};
-    data = data.replace(/[\\ \t\n\r]/g, '');
-    data = data.replace(/{?([^{])}?/g, '$1');
-    const split = data.split(',');
-    if (split.length > 1) {
-      split.forEach((item) => {
-        if (item) {
-          let [key, value] = item.split(':');
-          value = value.replace(/'/g, '');
-          if ('true' === value) {
-            value = true;
-          } else if ('false' === value) {
-            value = false;
-          }
-          newData[key.replace(/'/g, '')] = value;
-        }
-      });
-    } else {
-      newData[name] = data;
-    }
-    data = newData;
-  }
-
-  let obj = {};
-  let len = name.length;
-
-  Object.entries(el.dataset).forEach((item) => {
-    if (item[0].toLowerCase().indexOf(name) >= 0 && item[0].length > len) {
-      let key = item[0][len].toLowerCase() + item[0].substring(len + 1);
-      if (null === defaults || (defaults && undefined !== defaults[key])) {
-        obj[key] = item[1];
-      }
-    }
-  });
-
-  return Object.assign(data, obj);
+  const a = parseData(el.dataset[name]);
+  console.log(a);
+  return a;
 };
 
 export const getElements = (element, first = false) => {
