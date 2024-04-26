@@ -100,27 +100,16 @@ export const imageDimensions = (filename) =>
     img.src = filename;
   });
 
-export const getObjectFromString = (string) => {
+export const parseData = (string) => {
+  if (!string.match(/[^\w]+/i)) return string;
   string = string.replace(/[\\ \t\n\r'"]/gm, '').replace(/(\w+)/gi, '"$1"');
-  console.log(string);
   if ('{' !== string[0]) string = `{${string}}`;
+  string = string.replaceAll(',}', '}');
   try {
     return JSON.parse(string);
     // eslint-disable-next-line no-unused-vars
   } catch (e) {
     return false;
-  }
-};
-
-export const parseData = (string) => {
-  if (!string.match(/[^\w]+/i)) return string;
-  string = string.replace(/'/g, '"');
-
-  try {
-    return JSON.parse(string);
-    // eslint-disable-next-line no-unused-vars
-  } catch (e) {
-    return getObjectFromString(string);
   }
 };
 
@@ -138,9 +127,7 @@ export const getJSONData = (el, name) => {
   } else if (undefined === el.dataset[name]) {
     return el.dataset[name];
   }
-  const a = parseData(el.dataset[name]);
-  console.log(a);
-  return a;
+  return parseData(el.dataset[name]);
 };
 
 export const getElements = (element, first = false) => {

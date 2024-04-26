@@ -218,6 +218,7 @@
         font-size: 18px;
         line-height: 1.6em;
         font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+        -webkit-font-smoothing: antialiased;
       }
 
       pre {
@@ -463,7 +464,7 @@
         background-color: #fff !important;
       }
 
-      [data-content='js'] {
+      [data-content='data'] {
         display: none;
       }
 
@@ -491,6 +492,33 @@
         background: rgb(34, 39, 46);
         border-bottom-color: #202020;
       }
+
+      .small {
+        font-size: 0.8em;
+      }
+
+      #adv-events {
+        font-size: 0.8em;
+        width: 100%;
+        line-height: 1em;
+        height: 8em;
+        overflow-y: scroll;
+      }
+      #adv-events span {
+        display: inline-block;
+        background: #213f92;
+        color: #fff;
+        padding: 0 0.5em;
+        margin: 0.25em 0.25em 0.5em 0;
+        line-height: 1.4em;
+      }
+      #adv-events div:nth-child(2n) {
+        background-color: rgba(0,0,0, 0.1);
+      }
+      .dark #adv-events div:nth-child(2n) {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
     </style>
   </head>
 
@@ -511,10 +539,9 @@
         <h2>Default Settings</h2>
 
         <div class="switchButtons">
-          <div class="switch" data-name="data">data api</div>
           <div class="switch" data-name="js">javascript</div>
+          <div class="switch" data-name="data">data api</div>
         </div>
-
         <div class="switch-content" data-content="data">
           <pre><code class="language-xml">&lt;div data-sic&gt;
   &lt;img src=&quot;04_before.jpg&quot; alt=&quot;before&quot; /&gt;
@@ -545,8 +572,8 @@
           <strong>data-sic</strong> is used to set options via data attribute.
         </p>
         <div class="switchButtons">
-          <div class="switch" data-name="data">data api</div>
           <div class="switch" data-name="js">javascript</div>
+          <div class="switch" data-name="data">data api</div>
         </div>
         <div class="switch-content" data-content="data">
           <pre><code class="language-xml">&lt;div data-sic=&quot;startPos:25&quot;&gt;
@@ -599,18 +626,42 @@
           data-sic is used to set the options via data-attribute. Here we use
           the Object syntax. You can also use a comma-separated list.
         </p>
-        comma-separated list:
-        <pre><code class="language-xml">&lt;div data-sic=&quot;followMouse: true, beforeLabel: &#39;before&#39;, afterLabel: &#39;after&#39;&quot;&gt;</code></pre>
-        object syntax:
-        <pre><code class="language-xml">&lt;div data-sic=&quot;{
+        <div class="switchButtons">
+          <div class="switch" data-name="js">javascript</div>
+          <div class="switch" data-name="data">data api</div>
+        </div>
+        <div class="switch-content" data-content="data">
+          <span class="small"
+            >comma-separated list (always use key: 'value'):</span
+          >
+          <pre><code class="language-xml">&lt;div data-sic=&quot;followMouse: true, beforeLabel: &#39;before&#39;, afterLabel: &#39;after&#39;&quot;&gt;
+  &lt;img src=&quot;01_before.png&quot; alt=&quot;before&quot; /&gt;
+  &lt;img src=&quot;01_after.png&quot; alt=&quot;after&quot; /&gt;
+&lt;/div&gt;</code></pre>
+          <span class="small">as object syntax (always use key: 'value'):</span>
+          <pre><code class="language-xml">&lt;div data-sic=&quot;{
     followMouse: true,
     beforeLabel: 'before',
     afterLabel: 'after',
   }&quot;&gt;
-  &lt;img src=&quot;01_before.png&quot; alt=&quot;&quot; /&gt;
-  &lt;img src=&quot;01_after.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;01_before.png&quot; alt=&quot;before&quot; /&gt;
+  &lt;img src=&quot;01_after.png&quot; alt=&quot;after&quot; /&gt;
 &lt;/div&gt;
 </code></pre>
+        </div>
+        <div class="switch-content" data-content="js">
+          <pre><code class="language-xml">&lt;div id=&quot;my-div&quot;&gt;&lt;/div&gt;
+  &lt;img src=&quot;01_before.png&quot; alt=&quot;before&quot; /&gt;
+  &lt;img src=&quot;01_after.png&quot; alt=&quot;after&quot; /&gt;
+&lt;/div&gt;
+</code></pre>
+          <pre><code class="language-javascript">const sic = new SlickImageCompare('my-div', {
+  followMouse: true,
+  beforeLabel: 'before',
+  afterLabel: 'after'
+});
+</code></pre>
+        </div>
         <div
           data-sic="{
           followMouse: true,
@@ -660,7 +711,12 @@
           if set to true, the slider will animate back to the defined start
           position when user-interaction ends.
         </p>
-        <pre><code class="language-xml">&lt;div data-sic=&quot;{
+        <div class="switchButtons">
+          <div class="switch" data-name="js">javascript</div>
+          <div class="switch" data-name="data">data api</div>
+        </div>
+        <div class="switch-content" data-content="data">
+          <pre><code class="language-xml">&lt;div data-sic=&quot;{
     snapToStart: true,
     beforeLabel: 'before',
     afterLabel: 'after',
@@ -669,6 +725,21 @@
   &lt;img src=&quot;02_before.png&quot; alt=&quot;&quot; /&gt;
 &lt;/div&gt;
 </code></pre>
+        </div>
+        <div class="switch-content" data-content="js">
+          <pre><code class="language-xml">&lt;div id=&quot;my-div&quot;&gt;
+  &lt;img src=&quot;02_after.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;02_before.png&quot; alt=&quot;&quot; /&gt;
+&lt;/div&gt;
+</code></pre>
+
+          <pre><code class="language-javascript">const sic = new SlickImageCompare('my-div', {
+  snapToStart: true,
+  beforeLabel: 'before',
+  afterLabel: 'after',
+});
+</code></pre>
+        </div>
 
         <div
           data-sic="{
@@ -687,15 +758,15 @@
 
       <section class="section">
         <h2>Advanced Demo with custom options</h2>
-        html:
+        <span class="small">html:</span>
         <pre><code class="language-html">&lt;div id=&quot;adv&quot;&gt;&lt;/div&gt;
 </code></pre>
-        javascript:
+        <span class="small">javascript:</span>
         <pre><code class="language-javascript">const options = {
   beforeImage: '03_before.png',
   afterImage: '03_after.png',
-  afterLabel: 'after',
-  beforeLabel: 'before',
+  afterLabel: 'blue',
+  beforeLabel: 'pink',
   animateIn: true,
   snapToStart: true,
 };
@@ -703,7 +774,7 @@
 const ba = new sic('#adv', options);</code></pre>
         <div class="row">
           <div class="col col50">
-            <div id="adv-events" class="panel">
+            <div class="panel">
               <div class="line">
                 <h3 id="adv-info"></h3>
               </div>
@@ -751,6 +822,10 @@ const ba = new sic('#adv', options);</code></pre>
                 <button class="button" id="adv-destroy">destroy</button>
               </div> -->
             </div>
+            <div class="panel">
+              events:
+              <div id="adv-events" class="small"></div>
+            </div>
           </div>
           <div class="col col50">
             <div id="adv"></div>
@@ -777,6 +852,7 @@ const ba = new sic('#adv', options);</code></pre>
             const interactionStatus = document.getElementById(
               'adv-interaction-status'
             );
+            const eventInfo = document.getElementById('adv-events');
 
             // action elements
             const rangeBtn = document.getElementById('adv-range');
@@ -785,18 +861,27 @@ const ba = new sic('#adv', options);</code></pre>
             const directionBtn = document.getElementById('adv-direction');
             const orientationBtn = document.getElementById('adv-orientation');
             const smoothCheckbox = document.getElementById('adv-smooth');
+            let eventCount = 0;
 
             const texts = {
               info: ['"before" image is shown', '"after" image is shown'],
               caption: ['pink shoes', 'blue shoes'],
             };
 
+            const addEventInfo = (evt) => {
+              const name = evt.type;
+              eventInfo.innerHTML +=
+              '<div><span>' + eventCount + '</span>' + name + '</div>\n';
+              eventInfo.scrollTop = eventInfo.scrollHeight;
+              eventCount++;
+            };
+
             const changeOrientationInfo = () => {
-              orientationInfo.innerHTML = ba._horizontal
-                ? ba._ltr
+              orientationInfo.innerHTML = sic._horizontal
+                ? sic._ltr
                   ? 'LEFT - RIGHT'
                   : 'RIGHT - LEFT'
-                : ba._ltr
+                : sic._ltr
                   ? 'TOP - BOTTOM'
                   : 'BOTTOM - TOP';
             };
@@ -804,8 +889,8 @@ const ba = new sic('#adv', options);</code></pre>
             const options = {
               beforeImage: '03_before.png',
               afterImage: '03_after.png',
-              afterLabel: 'after',
-              beforeLabel: 'before',
+              afterLabel: 'blue',
+              beforeLabel: 'pink',
               animateIn: true,
               snapToStart: true,
 
@@ -817,7 +902,12 @@ const ba = new sic('#adv', options);</code></pre>
                 changeOrientationInfo();
               },
             };
-            const ba = new SlickImageCompare('#adv', options);
+            const sic = new SlickImageCompare('#adv', options);
+
+            sic.allowedEvents.forEach(evt => {
+              if ('update' === evt || 'drag' === evt) return;
+              sic.addEventListener(evt, addEventInfo);
+            });
 
             let destroyed = false;
             let slide = false;
@@ -847,69 +937,69 @@ const ba = new sic('#adv', options);</code></pre>
             rangeBtn.addEventListener('touchstart', down);
             rangeBtn.addEventListener('touchend', up);
             rangeBtn.addEventListener('input', (e) => {
-              ba.goto(e.target.value, smoothValue);
+              sic.goto(e.target.value, smoothValue);
             });
 
             // destroy.addEventListener('click', (e) => {
             //   if (!destroyed) {
-            //     ba.destroy();
+            //     sic.destroy();
             //     destroy.innerHTML = 'init';
             //     caption.innerHTML = '';
             //     destroyed = true;
             //   } else {
-            //     ba.init();
+            //     sic.init();
             //     destroy.innerHTML = 'destroy';
             //     destroyed = false;
             //   }
             // });
 
-            toggleBtn.addEventListener('click', () => ba.toggle());
+            toggleBtn.addEventListener('click', () => sic.toggle());
 
             directionBtn.addEventListener('click', (e) => {
-              ba.changeDirection();
+              sic.changeDirection();
               changeOrientationInfo();
             });
 
             orientationBtn.addEventListener('click', (e) => {
-              ba.changeOrientation();
-              fromPercent.innerHTML = ba._horizontal ? 'left' : 'top';
+              sic.changeOrientation();
+              fromPercent.innerHTML = sic._horizontal ? 'left' : 'top';
               changeOrientationInfo();
             });
 
             playBtn.addEventListener('click', (e) => {
-              ba.play(50, 3, 2000);
+              sic.play(50, 3, 2000);
             });
 
             // events
-            ba.addEventListener('update', (e) => {
+            sic.addEventListener('update', (e) => {
               let p = Math.round(e.detail.percent * 100) / 100;
               if (!slide) rangeBtn.value = p;
               percent.innerHTML = `${p}%`;
             });
 
-            ba.addEventListener('viewchanged', (e) => {
+            sic.addEventListener('viewchange', (e) => {
               const afterShown = e.detail.afterShown;
               toggleBtn.innerHTML = 'Show ' + (afterShown ? 'before' : 'after');
             });
 
-            ba.addEventListener('beforeshown', (e) => {
+            sic.addEventListener('beforeshown', (e) => {
               // console.log('beforeshown', e);
               info.innerHTML = texts.info[0];
               caption.innerHTML = texts.caption[0];
             });
 
-            ba.addEventListener('aftershown', (e) => {
+            sic.addEventListener('aftershown', (e) => {
               // console.log('aftershown', e);
               info.innerHTML = texts.info[1];
               caption.innerHTML = texts.caption[1];
             });
 
-            ba.addEventListener('interactionend', (e) => {
+            sic.addEventListener('interactionend', (e) => {
               interactionStatus.innerHTML = 'ended';
               // start the timer
             });
 
-            window.ba = ba;
+            window.sic = sic;
           };
 
           if ('complete' === document.readyState) {
@@ -923,7 +1013,7 @@ const ba = new sic('#adv', options);</code></pre>
     <div id="modeSwitch"></div>
     <script>
       const switchBtns = document.querySelectorAll('.switch');
-      let current = 'data';
+      let current = 'js';
       let currentElements = document.querySelectorAll(
         '[data-content="' + current + '"]'
       );
@@ -940,6 +1030,9 @@ const ba = new sic('#adv', options);</code></pre>
         const el = evt.target;
         const name = el.dataset.name;
         if (current === name) return;
+
+        const top = el.offsetTop;
+        const currentScrollTop = document.documentElement.scrollTop;
         let newElements = document.querySelectorAll(
           '[data-content="' + name + '"]'
         );
@@ -947,9 +1040,20 @@ const ba = new sic('#adv', options);</code></pre>
         currentElements.forEach((el) => (el.style.display = 'none'));
         newElements.forEach((el) => (el.style.display = 'block'));
 
+        const delta = el.offsetTop - top;
+        const newScrollTop = document.documentElement.scrollTop;
+        const newScrollDelta = newScrollTop - delta;
+        if (
+          currentScrollTop !== newScrollDelta &&
+          Math.abs(currentScrollTop - newScrollDelta) > 2
+        ) {
+          document.documentElement.scrollTop = currentScrollTop + delta;
+        }
+
         current = name;
         currentElements = newElements;
       };
+
       switchBtns.forEach((switchBtn) => {
         switchBtn.addEventListener('click', switchItems);
         changeClass(switchBtn, current);

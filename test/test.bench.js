@@ -1,6 +1,6 @@
 import { bench, describe } from 'vitest';
 import SlickImageCompare from '../src/index';
-import { restrict } from '@/js/utils';
+import { parseData, restrict } from '@/js/utils';
 
 import img01 from '../public/01_after.png';
 import img02 from '../public/01_after.png';
@@ -99,7 +99,7 @@ const setValues = () => {
   sic.easing = sic.settings.animateEasing;
 };
 
-describe.only('render loop', () => {
+describe('render loop', () => {
   bench('version 1', () => {
     setValues();
     sic._renderLoop1(10, 70, 60);
@@ -109,4 +109,37 @@ describe.only('render loop', () => {
     setValues();
     sic._renderLoop2(10, 70, 60);
   });
+});
+
+describe.only('parseData bench', () => {
+
+  const parseData2 = (string) => {
+    if (!string.match(/[^\w]+/i)) return string;
+    string = string.replace(/[\\ \t\n\r'"]/gm, '').replace(/(\w+)/gi, '"$1"');
+    if ('{' !== string[0]) string = `{${string}}`;
+    if (string.match(/,}/g)) {
+      string = string.replaceAll(',}', '}');
+    }
+    try {
+      return JSON.parse(string);
+      // eslint-disable-next-line no-unused-vars
+    } catch (e) {
+      return false;
+    }
+  };
+
+  const data = `{
+    snapToStart: true,
+    beforeLabel: 'before',
+    afterLabel: 'after',
+  }`;
+
+  bench('version 1', () => {
+    parseData(data);
+  });
+
+  bench('version 1', () => {
+    parseData2(data);
+  });
+
 });

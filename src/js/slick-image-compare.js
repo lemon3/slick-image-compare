@@ -22,9 +22,10 @@ const INTERACTING = 'interacting'; // class name
 const INIT = 'init';
 const DRAG = 'drag';
 const UPDATE = 'update';
-const VIEWCHANGED = 'viewchanged';
+const VIEWCHANGE = 'viewchange';
 const BEFORESHOWN = 'beforeshown';
 const AFTERSHOWN = 'aftershown';
+const INTERACTIONSTART = 'interactionstart';
 const INTERACTIONEND = 'interactionend';
 
 // app event name
@@ -62,8 +63,9 @@ class BeforeAfter extends Emitter {
       UPDATE,
       BEFORESHOWN,
       AFTERSHOWN,
+      INTERACTIONSTART,
       INTERACTIONEND,
-      VIEWCHANGED,
+      VIEWCHANGE,
     ];
 
     instances.push(this);
@@ -488,6 +490,7 @@ class BeforeAfter extends Emitter {
     this._endInteraction = false;
     this._stopAni();
     clearTimeout(this._snapTimeout);
+    this._triggerEvent(INTERACTIONSTART);
 
     if ('touchstart' === e.type) {
       this.isTouch = true;
@@ -597,7 +600,7 @@ class BeforeAfter extends Emitter {
     this._afterShown = status;
     let eventName = this._afterShown ? AFTERSHOWN : BEFORESHOWN;
     this._triggerEvent(eventName);
-    this._triggerEvent(VIEWCHANGED);
+    this._triggerEvent(VIEWCHANGE);
     this._oneTime = false;
   }
 
@@ -736,7 +739,7 @@ class BeforeAfter extends Emitter {
 
       this._appEvents();
       this._triggerEvent(INIT);
-      this._triggerEvent(VIEWCHANGED);
+      this._triggerEvent(VIEWCHANGE);
     });
   }
 

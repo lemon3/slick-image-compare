@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.14
+### Added or Changed
+- added interactionstart event
+- demo/preview update with more documentation
+
 ## v0.2.13
 ### Added or Changed
 - Added basic CSS to JS so the layout doesn't look destroyed.

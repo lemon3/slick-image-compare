@@ -2,19 +2,19 @@
 * SlickImageCompare v0.2.13
 * https://lemon3.github.io/slick-image-compare
 */
-var G = Object.defineProperty;
-var A = Object.getOwnPropertySymbols;
-var q = Object.prototype.hasOwnProperty, B = Object.prototype.propertyIsEnumerable;
-var C = (e, i, t) => i in e ? G(e, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : e[i] = t, z = (e, i) => {
+var q = Object.defineProperty;
+var O = Object.getOwnPropertySymbols;
+var B = Object.prototype.hasOwnProperty, X = Object.prototype.propertyIsEnumerable;
+var D = (e, i, t) => i in e ? q(e, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : e[i] = t, z = (e, i) => {
   for (var t in i || (i = {}))
-    q.call(i, t) && C(e, t, i[t]);
-  if (A)
-    for (var t of A(i))
-      B.call(i, t) && C(e, t, i[t]);
+    B.call(i, t) && D(e, t, i[t]);
+  if (O)
+    for (var t of O(i))
+      X.call(i, t) && D(e, t, i[t]);
   return e;
 };
-var c = (e, i, t) => (C(e, typeof i != "symbol" ? i + "" : i, t), t);
-const j = {
+var c = (e, i, t) => (D(e, typeof i != "symbol" ? i + "" : i, t), t);
+const G = {
   // storage
   _s: /* @__PURE__ */ new WeakMap(),
   put(e, ...i) {
@@ -42,10 +42,10 @@ const j = {
     let t = this._s.get(e).delete(i);
     return this._s.get(e).size === 0 && this._s.delete(e), t;
   }
-}, X = (e) => {
+}, U = (e) => {
   const i = "DOMContentLoaded";
   document.readyState === "complete" || document.readyState === "interactive" ? (e(), document.removeEventListener(i, e)) : document.addEventListener(i, e, !1);
-}, J = (e) => new Promise((i, t) => {
+}, Y = (e) => new Promise((i, t) => {
   const s = new Image();
   s.onload = () => {
     const { naturalWidth: n, naturalHeight: a } = s, r = n / a;
@@ -53,32 +53,16 @@ const j = {
   }, s.onerror = () => {
     t("error");
   }, s.src = e;
-}), U = (e) => {
-  e = e.replace(/[\\ \t\n\r'"]/gm, "").replace(/(\w+)/gi, '"$1"'), console.log(e), e[0] !== "{" && (e = `{${e}}`);
-  try {
-    return JSON.parse(e);
-  } catch (i) {
-    return !1;
-  }
-}, Y = (e) => {
+}), J = (e) => {
   if (!e.match(/[^\w]+/i))
     return e;
-  e = e.replace(/'/g, '"');
+  e = e.replace(/[\\ \t\n\r'"]/gm, "").replace(/(\w+)/gi, '"$1"'), e[0] !== "{" && (e = `{${e}}`), e = e.replaceAll(",}", "}");
   try {
     return JSON.parse(e);
   } catch (i) {
-    return U(e);
-  }
-}, Q = (e, i) => {
-  if (!e)
     return !1;
-  if (i === void 0 || typeof i == "undefined")
-    return e.dataset;
-  if (e.dataset[i] === void 0)
-    return e.dataset[i];
-  const t = Y(e.dataset[i]);
-  return console.log(t), t;
-};
+  }
+}, Q = (e, i) => e ? i === void 0 || typeof i == "undefined" ? e.dataset : e.dataset[i] === void 0 ? e.dataset[i] : J(e.dataset[i]) : !1;
 let w = !1;
 try {
   window.addEventListener(
@@ -93,7 +77,7 @@ try {
 } catch (e) {
   w = !1;
 }
-const x = (e, i, t) => Math.max(i, Math.min(e, t)), b = (e, i, t) => {
+const x = (e, i, t) => Math.max(i, Math.min(e, t)), T = (e, i, t) => {
   if (e = parseFloat(e, 10), i = parseFloat(i, 10), t = parseFloat(t, 10), t < i) {
     let s = t;
     t = i, i = s;
@@ -217,9 +201,9 @@ class V {
     ), this) : this;
   }
 }
-const y = "sic", tt = "data-" + y, E = "interacting", k = "init", H = "drag", N = "update", L = "viewchanged", R = "beforeshown", $ = "aftershown", F = "interactionend", I = "mousedown", et = "resize";
-let T = [], M = !1;
-const W = (e = !0, i = "#ffffff") => `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="${i}" stroke-width="2" stroke-linecap="round" stroke-linejoin="arcs"><path d="${e ? "m12 24 8-8-8-8" : "m20 8-8 8 8 8"}"/></svg>`;
+const y = "sic", tt = "data-" + y, E = "interacting", k = "init", H = "drag", N = "update", L = "viewchange", R = "beforeshown", $ = "aftershown", F = "interactionstart", W = "interactionend", I = "mousedown", et = "resize";
+let b = [], M = !1;
+const j = (e = !0, i = "#ffffff") => `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="${i}" stroke-width="2" stroke-linecap="round" stroke-linejoin="arcs"><path d="${e ? "m12 24 8-8-8-8" : "m20 8-8 8 8 8"}"/></svg>`;
 class d extends V {
   constructor(t, s) {
     if (!t)
@@ -251,7 +235,7 @@ class d extends V {
     });
     // if tapped on canvas
     c(this, "_tapstart", (t) => {
-      t.stopPropagation(), this._endInteraction = !1, this._stopAni(), clearTimeout(this._snapTimeout), t.type === "touchstart" ? (this.isTouch = !0, this._mouseStartEvents(!1)) : I === t.type && (this.isTouch = !1, this._touchStartEvent(!1));
+      t.stopPropagation(), this._endInteraction = !1, this._stopAni(), clearTimeout(this._snapTimeout), this._triggerEvent(F), t.type === "touchstart" ? (this.isTouch = !0, this._mouseStartEvents(!1)) : I === t.type && (this.isTouch = !1, this._touchStartEvent(!1));
       const s = this._calcPercent(this._getPos(t));
       this.settings.animateOnClick ? this._animateTo(s, this.settings.animateDuration) : this._setPosition(s);
     });
@@ -291,8 +275,9 @@ class d extends V {
       R,
       $,
       F,
+      W,
       L
-    ], T.push(this), j.put(t, "instance", this), this.element = t;
+    ], b.push(this), G.put(t, "instance", this), this.element = t;
     const n = Q(t, y);
     if (this.options = s || {}, this.settings = Object.assign({}, d.defaults, n, s), this.images = this.element.querySelectorAll("img"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || !this.images.length))
       return {
@@ -352,8 +337,8 @@ class d extends V {
       ), P), []), this.element.appendChild(n), r.appendChild(a), this.element.appendChild(r), this._createdEl.push(n);
     else {
       const [P, p] = this.images;
-      n = P, a = p.cloneNode(!0), [n, a].forEach((D) => {
-        D.setAttribute("draggable", !1), D.style.width = "100%", D.style.display = "block";
+      n = P, a = p.cloneNode(!0), [n, a].forEach((C) => {
+        C.setAttribute("draggable", !1), C.style.width = "100%", C.style.display = "block";
       }), r.appendChild(a), p.parentNode.replaceChild(r, p), this._originalEl.push(p);
     }
     this._createdEl.push(r);
@@ -365,8 +350,8 @@ class d extends V {
       {
         position: "absolute"
       }
-    ), o = l(s, { class: "sic-line sic-line-1" }), f = l(s, { class: "sic-line sic-line-2" }), _ = l(s, { class: "sic-arrows" }), v = l(s, { class: "sic-arrow sic-arrow-1" }), u = l(s, { class: "sic-arrow sic-arrow-2" }), O = l(s, { class: "sic-circle" });
-    v.innerHTML = W(!1), u.innerHTML = W(), _.appendChild(v), _.appendChild(u), O.appendChild(_), h.appendChild(o), h.appendChild(f), h.appendChild(O), this.element.appendChild(h), this._createdEl.push(h);
+    ), o = l(s, { class: "sic-line sic-line-1" }), f = l(s, { class: "sic-line sic-line-2" }), _ = l(s, { class: "sic-arrows" }), v = l(s, { class: "sic-arrow sic-arrow-1" }), u = l(s, { class: "sic-arrow sic-arrow-2" }), A = l(s, { class: "sic-circle" });
+    v.innerHTML = j(!1), u.innerHTML = j(), _.appendChild(v), _.appendChild(u), A.appendChild(_), h.appendChild(o), h.appendChild(f), h.appendChild(A), this.element.appendChild(h), this._createdEl.push(h);
     let g, m;
     t.beforeLabel !== "" && (g = l(s, { class: "sic-label sic-label-one" }), g.innerHTML = t.beforeLabel, this.element.appendChild(g), this._createdEl.push(g)), t.afterLabel !== "" && (m = l(s, { class: "sic-label sic-label-two" }), m.innerHTML = t.afterLabel, this.element.appendChild(m), this._createdEl.push(m)), this.info1 = t.ltr ? g : m, this.info2 = t.ltr ? m : g, this.element.classList.add(
       this._horizontal ? "sic-horizontal" : "sic-vertical"
@@ -414,7 +399,7 @@ class d extends V {
     this._renderId && (cancelAnimationFrame(this._renderId), this.element.classList.contains("playing") && this.element.classList.remove("playing"), this._renderId = void 0);
   }
   _testInteractionEnd() {
-    this._endInteraction && this._renderId === void 0 && (this._endInteraction = !1, this._interactionEnd(), this._triggerEvent(F));
+    this._endInteraction && this._renderId === void 0 && (this._endInteraction = !1, this._interactionEnd(), this._triggerEvent(W));
   }
   /**
    *
@@ -515,9 +500,9 @@ class d extends V {
     if (this._initialized)
       return this;
     const t = this.settings;
-    this._initialized = !0, this._oneTime = !0, this._afterShown = !1, this._ltr = !!t.ltr, this._horizontal = t.horizontal, this._createGui(), this._dragEl = t.onlyHandleDraggable ? this._dragHandle : this.element, this._animationDuration = t.animateInDuration || 0, t.startPos = b(t.startPos, 0, 100), t.animateInStartPos = b(t.animateInStartPos, 0, 100), t.startPos || (t.startPos = 50), t.animateInStartPos || (t.animateInStartPos = 0), t.animateIn ? this._percent = this._animationDuration > 0 ? t.animateInStartPos : t.startPos : this._percent = t.startPos, this.element.style.opacity = 0, this.isTouch = "ontouchstart" in window || window.DocumentTouch && document instanceof window.DocumentTouch || navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0, this.allowedEvents.forEach((s) => {
+    this._initialized = !0, this._oneTime = !0, this._afterShown = !1, this._ltr = !!t.ltr, this._horizontal = t.horizontal, this._createGui(), this._dragEl = t.onlyHandleDraggable ? this._dragHandle : this.element, this._animationDuration = t.animateInDuration || 0, t.startPos = T(t.startPos, 0, 100), t.animateInStartPos = T(t.animateInStartPos, 0, 100), t.startPos || (t.startPos = 50), t.animateInStartPos || (t.animateInStartPos = 0), t.animateIn ? this._percent = this._animationDuration > 0 ? t.animateInStartPos : t.startPos : this._percent = t.startPos, this.element.style.opacity = 0, this.isTouch = "ontouchstart" in window || window.DocumentTouch && document instanceof window.DocumentTouch || navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0, this.allowedEvents.forEach((s) => {
       t[s] && this.addEventListener(s, t[s]);
-    }), J(this.images[0].src).then(() => {
+    }), Y(this.images[0].src).then(() => {
       this._dimensions(), this._setPosition(this._percent), this.element.style.opacity = 1, t.animateIn && this._animationDuration > 0 && this.settings.animateInStartPos !== this.settings.startPos && setTimeout(
         () => this._animateTo(
           this.settings.startPos,
@@ -536,7 +521,7 @@ class d extends V {
    * @param {Function} easingFun An easing-function eg.: (p) => p (for linear);
    */
   play(t = this._percent, s = 2, n = 2e3, a) {
-    this._stopAni(), clearTimeout(this._snapTimeout), n = b(n, 250, 1e4), t = b(t, 0, 100);
+    this._stopAni(), clearTimeout(this._snapTimeout), n = T(n, 250, 1e4), t = T(t, 0, 100);
     let r = this._percent, h = 100 - r, o = n / 100 * Math.abs(h), f = !0, _ = 0;
     s <= 0 && (s = -1), this.progress = this._timingCurTime = this._timingThen = 0, this.easing = a || S.Quad.easeOut;
     const v = () => {
@@ -554,7 +539,7 @@ class d extends V {
     this.element.classList.add("playing"), v();
   }
   goto(t, s, n) {
-    return isNaN(t) || (t = b(+t, 0, 100), t === this._percent) ? !1 : (this._stopAni(), this._animateTo(t, s, n), this);
+    return isNaN(t) || (t = T(+t, 0, 100), t === this._percent) ? !1 : (this._stopAni(), this._animateTo(t, s, n), this);
   }
   /**
    * ltr = true  (before, 0%) L -> R (after, 100%)
@@ -597,14 +582,14 @@ d.init = () => {
   let e = document.querySelectorAll("[" + tt + "]");
   return e.length === 0 ? !1 : (e.forEach((i) => {
     new d(i);
-  }), T);
+  }), b);
 };
-d.destroyAll = () => T.length ? (T.forEach((e) => {
+d.destroyAll = () => b.length ? (b.forEach((e) => {
   e.destroy();
-}), M = !1, T = [], !0) : !1;
-d.getInstance = (e) => j.get(e, "instance");
+}), M = !1, b = [], !0) : !1;
+d.getInstance = (e) => G.get(e, "instance");
 d.defaults = K;
-X(d.init);
+U(d.init);
 export {
   d as default
 };
