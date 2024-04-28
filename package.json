@@ -69,7 +69,7 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@vitest/coverage-v8": "^1.5.2",
     "eslint": "^9.1.1",
-    "globals": "^15.0.0",
+    "globals": "^15.1.0",
     "jsdom": "^24.0.0",
     "postcss": "^8.4.38",
     "postcss-nested": "^6.0.1",
