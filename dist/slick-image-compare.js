@@ -1,19 +1,19 @@
 /*!
-* SlickImageCompare v0.2.13
+* SlickImageCompare v0.2.14
 * https://lemon3.github.io/slick-image-compare
 */
 var q = Object.defineProperty;
-var O = Object.getOwnPropertySymbols;
+var z = Object.getOwnPropertySymbols;
 var B = Object.prototype.hasOwnProperty, X = Object.prototype.propertyIsEnumerable;
-var D = (e, i, t) => i in e ? q(e, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : e[i] = t, z = (e, i) => {
+var L = (e, i, t) => i in e ? q(e, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : e[i] = t, A = (e, i) => {
   for (var t in i || (i = {}))
-    B.call(i, t) && D(e, t, i[t]);
-  if (O)
-    for (var t of O(i))
-      X.call(i, t) && D(e, t, i[t]);
+    B.call(i, t) && L(e, t, i[t]);
+  if (z)
+    for (var t of z(i))
+      X.call(i, t) && L(e, t, i[t]);
   return e;
 };
-var c = (e, i, t) => (D(e, typeof i != "symbol" ? i + "" : i, t), t);
+var c = (e, i, t) => (L(e, typeof i != "symbol" ? i + "" : i, t), t);
 const G = {
   // storage
   _s: /* @__PURE__ */ new WeakMap(),
@@ -201,7 +201,7 @@ class V {
     ), this) : this;
   }
 }
-const y = "sic", tt = "data-" + y, E = "interacting", k = "init", H = "drag", N = "update", L = "viewchange", R = "beforeshown", $ = "aftershown", F = "interactionstart", W = "interactionend", I = "mousedown", et = "resize";
+const y = "sic", tt = "data-" + y, E = "interacting", k = "init", H = "drag", N = "update", C = "viewchange", R = "beforeshown", $ = "aftershown", F = "interactionstart", W = "interactionend", I = "mousedown", et = "resize";
 let b = [], M = !1;
 const j = (e = !0, i = "#ffffff") => `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="${i}" stroke-width="2" stroke-linecap="round" stroke-linejoin="arcs"><path d="${e ? "m12 24 8-8-8-8" : "m20 8-8 8 8 8"}"/></svg>`;
 class d extends V {
@@ -225,17 +225,17 @@ class d extends V {
       !t && this._oldDim === this._dim || (this._oldDim = this._dim, this._setPosition(this._percent, !0));
     });
     c(this, "_mouseOver", () => {
-      this._stopAni(), this.element.classList.add(E);
+      this.stop(), this.element.classList.add(E);
     });
     c(this, "_mouseOut", () => {
       this.element.classList.remove(E), this.settings.snapToStart && this._snapToStart();
     });
     c(this, "_mouseMove", (t) => {
-      this._stopAni(), this._setPosition(this._calcPercent(this._getPos(t)));
+      this.stop(), this._setPosition(this._calcPercent(this._getPos(t)));
     });
     // if tapped on canvas
     c(this, "_tapstart", (t) => {
-      t.stopPropagation(), this._endInteraction = !1, this._stopAni(), clearTimeout(this._snapTimeout), this._triggerEvent(F), t.type === "touchstart" ? (this.isTouch = !0, this._mouseStartEvents(!1)) : I === t.type && (this.isTouch = !1, this._touchStartEvent(!1));
+      t.stopPropagation(), this._endInteraction = !1, this.stop(), clearTimeout(this._snapTimeout), this._triggerEvent(F), t.type === "touchstart" ? (this.isTouch = !0, this._mouseStartEvents(!1)) : I === t.type && (this.isTouch = !1, this._touchStartEvent(!1));
       const s = this._calcPercent(this._getPos(t));
       this.settings.animateOnClick ? this._animateTo(s, this.settings.animateDuration) : this._setPosition(s);
     });
@@ -244,7 +244,7 @@ class d extends V {
     });
     // moving
     c(this, "_drag", (t) => {
-      this._stopAni();
+      this.stop();
       let s = this._getPos(t), n = this._calcPercent(s);
       if (this.isTouch) {
         t.preventDefault();
@@ -276,7 +276,7 @@ class d extends V {
       $,
       F,
       W,
-      L
+      C
     ], b.push(this), G.put(t, "instance", this), this.element = t;
     const n = Q(t, y);
     if (this.options = s || {}, this.settings = Object.assign({}, d.defaults, n, s), this.images = this.element.querySelectorAll("img"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || !this.images.length))
@@ -286,7 +286,7 @@ class d extends V {
     this.element.classList.contains(y + "-main") || this.element.classList.add(y + "-main"), this._snapTimeout = null, this._dirDetected = !1, this.settings.autoInit && this.init();
   }
   _triggerEvent(t, s) {
-    s = z({
+    s = A({
       instance: this,
       horizontal: this._horizontal,
       ltr: this._ltr,
@@ -337,8 +337,8 @@ class d extends V {
       ), P), []), this.element.appendChild(n), r.appendChild(a), this.element.appendChild(r), this._createdEl.push(n);
     else {
       const [P, p] = this.images;
-      n = P, a = p.cloneNode(!0), [n, a].forEach((C) => {
-        C.setAttribute("draggable", !1), C.style.width = "100%", C.style.display = "block";
+      n = P, a = p.cloneNode(!0), [n, a].forEach((D) => {
+        D.setAttribute("draggable", !1), D.style.width = "100%", D.style.display = "block";
       }), r.appendChild(a), p.parentNode.replaceChild(r, p), this._originalEl.push(p);
     }
     this._createdEl.push(r);
@@ -350,14 +350,14 @@ class d extends V {
       {
         position: "absolute"
       }
-    ), o = l(s, { class: "sic-line sic-line-1" }), f = l(s, { class: "sic-line sic-line-2" }), _ = l(s, { class: "sic-arrows" }), v = l(s, { class: "sic-arrow sic-arrow-1" }), u = l(s, { class: "sic-arrow sic-arrow-2" }), A = l(s, { class: "sic-circle" });
-    v.innerHTML = j(!1), u.innerHTML = j(), _.appendChild(v), _.appendChild(u), A.appendChild(_), h.appendChild(o), h.appendChild(f), h.appendChild(A), this.element.appendChild(h), this._createdEl.push(h);
+    ), o = l(s, { class: "sic-line sic-line-1" }), _ = l(s, { class: "sic-line sic-line-2" }), f = l(s, { class: "sic-arrows" }), v = l(s, { class: "sic-arrow sic-arrow-1" }), u = l(s, { class: "sic-arrow sic-arrow-2" }), O = l(s, { class: "sic-circle" });
+    v.innerHTML = j(!1), u.innerHTML = j(), f.append(v, u), O.append(f), h.append(o, _, O), this.element.append(h), this._createdEl.push(h);
     let g, m;
-    t.beforeLabel !== "" && (g = l(s, { class: "sic-label sic-label-one" }), g.innerHTML = t.beforeLabel, this.element.appendChild(g), this._createdEl.push(g)), t.afterLabel !== "" && (m = l(s, { class: "sic-label sic-label-two" }), m.innerHTML = t.afterLabel, this.element.appendChild(m), this._createdEl.push(m)), this.info1 = t.ltr ? g : m, this.info2 = t.ltr ? m : g, this.element.classList.add(
+    t.beforeLabel !== "" && (g = l(s, { class: "sic-label sic-label-one" }), g.innerHTML = t.beforeLabel, this.element.append(g), this._createdEl.push(g)), t.afterLabel !== "" && (m = l(s, { class: "sic-label sic-label-two" }), m.innerHTML = t.afterLabel, this.element.append(m), this._createdEl.push(m)), this.info1 = t.ltr ? g : m, this.info2 = t.ltr ? m : g, this.element.classList.add(
       this._horizontal ? "sic-horizontal" : "sic-vertical"
     ), this.element.style.position = "relative", this.element.style.overflow = "hidden", this.element.style.visibility = "visible", this._dragHandle = h, this._clipEl = r;
   }
-  /**
+  /**m
    * Method to remove or add mouse events
    *
    * @param {Boolean} add true or false
@@ -375,13 +375,13 @@ class d extends V {
    *
    * @param {Boolean} add true for addEventListener
    *                      false for removeEventListener
-   * @returns
+   * @returns String addEventListener or removeEventListener
    */
   _addRemove(t = !0) {
     return (t ? "add" : "remove") + "EventListener";
   }
   /**
-   * Method to remove or add touch events
+   * Method to add or remove touch events
    *
    * @param {Boolean} add true or false
    */
@@ -389,13 +389,20 @@ class d extends V {
     const s = this._addRemove(t);
     this._dragEl[s]("touchstart", this._dragStart, w), this.settings.clickable && (this.element[s]("touchstart", this._tapstart, !1), this.element[s]("touchend", this._dragEnd, !1));
   }
+  /**
+   * method to add or remove events
+   *
+   * @param {Boolean} add
+   */
   _appEvents(t = !0) {
     this._touchStartEvent(t), this._mouseStartEvents(t);
     const s = this._addRemove(t);
     window[s](et, this._dimensions);
   }
-  // TODO: jumpToEnd parameter?
-  _stopAni() {
+  /**
+   * stop method
+   */
+  stop() {
     this._renderId && (cancelAnimationFrame(this._renderId), this.element.classList.contains("playing") && this.element.classList.remove("playing"), this._renderId = void 0);
   }
   _testInteractionEnd() {
@@ -413,7 +420,7 @@ class d extends V {
       const r = Date.now();
       if (this._timingThen !== 0) {
         if (this._timingCurTime += r - this._timingThen, this.progress = this._timingCurTime / this._animationDuration, this.progress >= 1) {
-          this.progress = 1, this._setPosition(s), this._stopAni(), this._testInteractionEnd();
+          this.progress = 1, this._setPosition(s), this.stop(), this._testInteractionEnd();
           return;
         }
         this._setPosition(t + n * this.easing(this.progress));
@@ -440,7 +447,7 @@ class d extends V {
     this._animationDuration = s, this.easing = n || this.settings.animateEasing, this.progress = 0, this._timingThen = this._timingCurTime = 0, this._renderLoop(this._percent, t, a);
   }
   _snapToStart(t = this.settings.snapToStartDelay) {
-    this._stopAni(), this._snapTimeout = setTimeout(() => {
+    this.stop(), this._snapTimeout = setTimeout(() => {
       this._animateTo(
         this.settings.startPos,
         this.settings.animateDuration,
@@ -457,7 +464,7 @@ class d extends V {
   _changeStatus(t) {
     this._afterShown = t;
     let s = this._afterShown ? $ : R;
-    this._triggerEvent(s), this._triggerEvent(L), this._oneTime = !1;
+    this._triggerEvent(s), this._triggerEvent(C), this._oneTime = !1;
   }
   /**
    * set the handle to a defined position (in percent from left)
@@ -510,7 +517,7 @@ class d extends V {
           this.settings.animateInEasing
         ),
         this.settings.animateInDelay
-      ), this._appEvents(), this._triggerEvent(k), this._triggerEvent(L);
+      ), this._appEvents(), this._triggerEvent(k), this._triggerEvent(C);
     });
   }
   /**
@@ -521,17 +528,17 @@ class d extends V {
    * @param {Function} easingFun An easing-function eg.: (p) => p (for linear);
    */
   play(t = this._percent, s = 2, n = 2e3, a) {
-    this._stopAni(), clearTimeout(this._snapTimeout), n = T(n, 250, 1e4), t = T(t, 0, 100);
-    let r = this._percent, h = 100 - r, o = n / 100 * Math.abs(h), f = !0, _ = 0;
+    this.stop(), clearTimeout(this._snapTimeout), n = T(n, 250, 1e4), t = T(t, 0, 100);
+    let r = this._percent, h = 100 - r, o = n / 100 * Math.abs(h), _ = !0, f = 0;
     s <= 0 && (s = -1), this.progress = this._timingCurTime = this._timingThen = 0, this.easing = a || S.Quad.easeOut;
     const v = () => {
       let u = Date.now();
       if (this._timingCurTime += u - (this._timingThen || u), this.progress = this._timingCurTime / o, this.progress >= 1) {
-        if (_ === s) {
+        if (f === s) {
           this.element.classList.remove("playing");
           return;
         }
-        o = n, f ? (r = 100, h = -100) : (r = 0, h = 100), f = !f, _++, _ === s && (h = f ? t : t - 100, o = n / 100 * Math.abs(h)), this._setPosition(r), u = Date.now(), this._timingCurTime = 0;
+        o = n, _ ? (r = 100, h = -100) : (r = 0, h = 100), _ = !_, f++, f === s && (h = _ ? t : t - 100, o = n / 100 * Math.abs(h)), this._setPosition(r), u = Date.now(), this._timingCurTime = 0;
       } else
         this._setPosition(r + h * this.easing(this.progress));
       this._timingThen = u, this._renderId = requestAnimationFrame(v);
@@ -539,7 +546,7 @@ class d extends V {
     this.element.classList.add("playing"), v();
   }
   goto(t, s, n) {
-    return isNaN(t) || (t = T(+t, 0, 100), t === this._percent) ? !1 : (this._stopAni(), this._animateTo(t, s, n), this);
+    return isNaN(t) || (t = T(+t, 0, 100), t === this._percent) ? !1 : (this.stop(), this._animateTo(t, s, n), this);
   }
   /**
    * ltr = true  (before, 0%) L -> R (after, 100%)
@@ -568,8 +575,8 @@ class d extends V {
   get elem() {
     return this.element;
   }
-  toggle() {
-    this._stopAni(), this._afterShown ? this.showBefore() : this.showAfter();
+  toggleView() {
+    this.stop(), this._afterShown ? this.showBefore() : this.showAfter();
   }
   destroy() {
     this.element.removeAttribute("data-sicinitialized"), this._createdEl.forEach((t) => this.element.removeChild(t)), this._originalEl.forEach((t) => this.element.appendChild(t)), this._createdEl = [], this._originalEl = [], this._percent = this.startPos, this._appEvents(!1), this._initialized = !1;

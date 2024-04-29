@@ -211,15 +211,12 @@ class BeforeAfter extends Emitter {
 
     arrow1.innerHTML = getArrow(false);
     arrow2.innerHTML = getArrow();
-    arrows.appendChild(arrow1);
-    arrows.appendChild(arrow2);
 
-    dragHandle.appendChild(arrows);
-    drag.appendChild(line1);
-    drag.appendChild(line2);
-    drag.appendChild(dragHandle);
+    arrows.append(arrow1, arrow2);
+    dragHandle.append(arrows);
+    drag.append(line1, line2, dragHandle);
 
-    this.element.appendChild(drag);
+    this.element.append(drag);
     this._createdEl.push(drag);
 
     // create labels
@@ -227,14 +224,14 @@ class BeforeAfter extends Emitter {
     if ('' !== s.beforeLabel) {
       info1 = createEl(div, { class: 'sic-label sic-label-one' });
       info1.innerHTML = s.beforeLabel;
-      this.element.appendChild(info1);
+      this.element.append(info1);
       this._createdEl.push(info1);
     }
 
     if ('' !== s.afterLabel) {
       info2 = createEl(div, { class: 'sic-label sic-label-two' });
       info2.innerHTML = s.afterLabel;
-      this.element.appendChild(info2);
+      this.element.append(info2);
       this._createdEl.push(info2);
     }
     this.info1 = s.ltr ? info1 : info2;
@@ -254,7 +251,7 @@ class BeforeAfter extends Emitter {
     this._clipEl = clipEl;
   }
 
-  /**
+  /**m
    * Method to remove or add mouse events
    *
    * @param {Boolean} add true or false
@@ -282,14 +279,14 @@ class BeforeAfter extends Emitter {
    *
    * @param {Boolean} add true for addEventListener
    *                      false for removeEventListener
-   * @returns
+   * @returns String addEventListener or removeEventListener
    */
   _addRemove(add = true) {
     return (add ? 'add' : 'remove') + 'EventListener';
   }
 
   /**
-   * Method to remove or add touch events
+   * Method to add or remove touch events
    *
    * @param {Boolean} add true or false
    */
@@ -303,17 +300,23 @@ class BeforeAfter extends Emitter {
     }
   }
 
+  /**
+   * method to add or remove events
+   *
+   * @param {Boolean} add
+   */
   _appEvents(add = true) {
     this._touchStartEvent(add);
     this._mouseStartEvents(add);
     const fun = this._addRemove(add);
     window[fun](RESIZE, this._dimensions);
-    // this[fun](INTERACTIONEND, this._interactionEnd);
   }
 
-  // TODO: jumpToEnd parameter?
-  _stopAni() {
-    // console.log('_stopAni', this._renderId);
+  /**
+   * stop method
+   */
+  stop() {
+    // console.log('stop', this._renderId);
     if (this._renderId) {
       cancelAnimationFrame(this._renderId);
       if (this.element.classList.contains('playing')) {
@@ -350,7 +353,7 @@ class BeforeAfter extends Emitter {
         if (this.progress >= 1) {
           this.progress = 1;
           this._setPosition(to);
-          this._stopAni();
+          this.stop();
           this._testInteractionEnd();
           return;
         }
@@ -400,7 +403,7 @@ class BeforeAfter extends Emitter {
   }
 
   _snapToStart(delay = this.settings.snapToStartDelay) {
-    this._stopAni();
+    this.stop();
     // TODO: check snapToStartDelay value
     this._snapTimeout = setTimeout(() => {
       this._animateTo(
@@ -459,6 +462,9 @@ class BeforeAfter extends Emitter {
         y + this.height - dragHandleDim - this.settings.handleMinDistance;
     }
 
+    // this._clipEl.style.width = this.width;
+    // this._clipEl.style.height = this.height;
+
     if (!force && this._oldDim === this._dim) {
       return;
     }
@@ -468,7 +474,7 @@ class BeforeAfter extends Emitter {
   };
 
   _mouseOver = () => {
-    this._stopAni();
+    this.stop();
     this.element.classList.add(INTERACTING);
   };
 
@@ -480,7 +486,7 @@ class BeforeAfter extends Emitter {
   };
 
   _mouseMove = (e) => {
-    this._stopAni();
+    this.stop();
     this._setPosition(this._calcPercent(this._getPos(e)));
   };
 
@@ -488,7 +494,7 @@ class BeforeAfter extends Emitter {
   _tapstart = (e) => {
     e.stopPropagation();
     this._endInteraction = false;
-    this._stopAni();
+    this.stop();
     clearTimeout(this._snapTimeout);
     this._triggerEvent(INTERACTIONSTART);
 
@@ -529,7 +535,7 @@ class BeforeAfter extends Emitter {
   // moving
   _drag = (e) => {
     // console.log('_drag', e.type);
-    this._stopAni();
+    this.stop();
 
     let currentPos = this._getPos(e);
     let percent = this._calcPercent(currentPos);
@@ -717,6 +723,7 @@ class BeforeAfter extends Emitter {
     // read the first image
     imageDimensions(this.images[0].src).then(() => {
       // this.image = dimensions;
+      // console.log(dimensions);
       this._dimensions();
       this._setPosition(this._percent);
       this.element.style.opacity = 1;
@@ -751,7 +758,7 @@ class BeforeAfter extends Emitter {
    * @param {Function} easingFun An easing-function eg.: (p) => p (for linear);
    */
   play(stopAt = this._percent, repetitions = 2, duration = 2000, easingFun) {
-    this._stopAni();
+    this.stop();
     clearTimeout(this._snapTimeout);
     duration = restrict(duration, 250, 10000);
     stopAt = restrict(stopAt, 0, 100);
@@ -819,7 +826,7 @@ class BeforeAfter extends Emitter {
     if (percent === this._percent) {
       return !1;
     }
-    this._stopAni();
+    this.stop();
     this._animateTo(percent, duration, easing);
 
     return this;
@@ -864,8 +871,8 @@ class BeforeAfter extends Emitter {
     return this.element;
   }
 
-  toggle() {
-    this._stopAni();
+  toggleView() {
+    this.stop();
     if (this._afterShown) {
       this.showBefore();
     } else {
