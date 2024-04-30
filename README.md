@@ -84,7 +84,7 @@ const sic = new SlickImageCompare('#my-div', options);
 the same using the **data-sic** attribute
 #### data api
 ```html
-<div data-sic={
+<div data-sic="{
   startPos: 20,
   afterLabel: 'after',
   beforeLabel: 'before'
