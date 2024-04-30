@@ -7,6 +7,7 @@ import {
   getJSONData,
   createEl,
   dataStorage,
+  isTrue,
 } from '@/js/utils';
 
 import { easing } from './easing';
@@ -81,9 +82,11 @@ class BeforeAfter extends Emitter {
 
     // no images are given
     this.images = this.element.querySelectorAll('img');
+    this.picture = this.element.querySelectorAll('picture');
     if (
       (!this.settings.beforeImage || !this.settings.afterImage) &&
-      (!this.images || !this.images.length)
+      (!this.images || !this.images.length) &&
+      (!this.picture || !this.picture.length)
     ) {
       return {
         error: true,
@@ -175,7 +178,8 @@ class BeforeAfter extends Emitter {
 
       this._createdEl.push(firstImg);
     } else {
-      const [first, second] = this.images;
+      const [first, second] =
+        this.picture && 2 === this.picture.length ? this.picture : this.images;
       firstImg = first;
       secondImg = second.cloneNode(true);
 
@@ -430,7 +434,24 @@ class BeforeAfter extends Emitter {
     }
   }
 
-  _dimensions = (force) => {
+  /**
+   * helper for the picture element
+   * @param {string} element the first image element
+   */
+  _checkCurrentImageSource(element) {
+    clearTimeout(this._checkTo);
+    this._checkTo = setTimeout(() => {
+      const currentSrc = element.currentSrc;
+      if (this._firstImageSrc !== currentSrc) {
+        // console.log('image source changed', currentSrc);
+        this._firstImageSrc = currentSrc;
+        // TODO: if not playing
+        this._dimensions(null, false, false);
+      }
+    }, 250);
+  }
+
+  _dimensions = (evt, force = false, check = !this._horizontal) => {
     const bounding = this.element.getBoundingClientRect();
     const cs = getComputedStyle(this.element);
     const borderX =
@@ -462,13 +483,14 @@ class BeforeAfter extends Emitter {
         y + this.height - dragHandleDim - this.settings.handleMinDistance;
     }
 
-    // this._clipEl.style.width = this.width;
-    // this._clipEl.style.height = this.height;
-
     if (!force && this._oldDim === this._dim) {
       return;
     }
     this._oldDim = this._dim;
+
+    if (check && this._usePicture) {
+      this._checkCurrentImageSource(this._firstImage);
+    }
 
     this._setPosition(this._percent, true);
   };
@@ -590,16 +612,20 @@ class BeforeAfter extends Emitter {
   _getClipRect(pos) {
     if (this._horizontal) {
       if (this._ltr) {
-        return `rect(0 ${pos}px ${this.height}px 0)`;
+        // return `rect(0 ${pos}px ${this.height}px 0)`;
+        return `rect(0 ${pos}px 100% 0)`;
       }
-      return `rect(0 ${this.width}px ${this.height}px ${pos}px)`;
+      // return `rect(0 ${this.width}px ${this.height}px ${pos}px)`;
+      return `rect(0 ${this.width}px 100% ${pos}px)`;
     }
 
     // vertical
     if (this._ltr) {
-      return `rect(0 ${this.width}px ${pos}px 0)`;
+      // return `rect(0 ${this.width}px ${pos}px 0)`;
+      return `rect(0 100% ${pos}px 0)`;
     }
-    return `rect(${pos}px ${this.width}px ${this.height}px 0)`;
+    // return `rect(${pos}px ${this.width}px ${this.height}px 0)`;
+    return `rect(${pos}px 100% 100% 0)`;
   }
 
   _changeStatus(status) {
@@ -681,8 +707,9 @@ class BeforeAfter extends Emitter {
     this._oneTime = true;
     this._afterShown = false;
 
-    this._ltr = s.ltr ? true : false;
-    this._horizontal = s.horizontal;
+    this._ltr = isTrue(s.ltr);
+    this._horizontal = isTrue(s.horizontal);
+    this._usePicture = this.picture && 2 === this.picture.length;
 
     this._createGui();
 
@@ -721,7 +748,13 @@ class BeforeAfter extends Emitter {
     });
 
     // read the first image
-    imageDimensions(this.images[0].src).then(() => {
+    this._firstImage = this._usePicture
+      ? this.picture[0].querySelector('img')
+      : this.images[0];
+
+    this._firstImageSrc = this._firstImage.currentSrc || this._firstImage.src;
+
+    imageDimensions(this._firstImageSrc).then(() => {
       // this.image = dimensions;
       // console.log(dimensions);
       this._dimensions();
@@ -843,7 +876,7 @@ class BeforeAfter extends Emitter {
     this.info1 = this.info2;
     this.info2 = tmp;
     this._percent = 100 - this._percent;
-    this._dimensions(true);
+    this._dimensions(null, true);
   }
 
   /**
@@ -856,7 +889,7 @@ class BeforeAfter extends Emitter {
     this.element.classList.add(
       this._horizontal ? 'sic-horizontal' : 'sic-vertical'
     );
-    this._dimensions(true);
+    this._dimensions(null, true);
   }
 
   showAfter() {

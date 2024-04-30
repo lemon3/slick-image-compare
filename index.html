@@ -707,6 +707,54 @@
             alt=""
           />
         </div>
+        <div class="caption">Deer in the wild (COLOR GRADING)</div>
+      </section>
+
+      <section class="section">
+        <h2>Responsive image (via &lt;picture&gt; element)</h2>
+        <p>
+          The only restriction: all (before, after) responsive images must have exactly the
+          same size and the media queries must match (see below).
+        </p>
+        <div class="switchButtons">
+          <div class="switch" data-name="js">javascript</div>
+          <div class="switch" data-name="data">data api</div>
+        </div>
+        <div class="switch-content" data-content="data">
+          <pre><code class="language-xml">&lt;div data-sic&gt;
+  &lt;picture&gt;
+    &lt;source srcset=&quot;07_before_sm.jpg&quot; media=&quot;(max-width: 639px)&quot; /&gt;
+    &lt;img src=&quot;07_before_md.jpg&quot; alt=&quot;&quot; /&gt;
+  &lt;/picture&gt;
+  &lt;picture&gt;
+    &lt;source srcset=&quot;07_after_sm.jpg&quot; media=&quot;(max-width: 639px)&quot; /&gt;
+    &lt;img src=&quot;07_after_md.jpg&quot; alt=&quot;&quot; /&gt;
+  &lt;/picture&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+        <div class="switch-content" data-content="js">
+          <pre><code class="language-xml">&lt;div id=&quot;my-div&quot;&gt;
+  &lt;picture&gt;
+    &lt;source srcset=&quot;07_before_sm.jpg&quot; media=&quot;(max-width: 639px)&quot; /&gt;
+    &lt;img src=&quot;07_before_md.jpg&quot; alt=&quot;&quot; /&gt;
+  &lt;/picture&gt;
+  &lt;picture&gt;
+    &lt;source srcset=&quot;07_after_sm.jpg&quot; media=&quot;(max-width: 639px)&quot; /&gt;
+    &lt;img src=&quot;07_after_md.jpg&quot; alt=&quot;&quot; /&gt;
+  &lt;/picture&gt;
+&lt;/div&gt;</code></pre>
+          <pre><code class="language-javascript">const sic = new SlickImageCompare('my-div');</code></pre>
+        </div>
+        <div data-sic>
+          <picture>
+            <source srcset="07_before_sm.jpg" media="(max-width: 639px)" />
+            <img src="07_before_md.jpg" alt="" />
+          </picture>
+          <picture>
+            <source srcset="07_after_sm.jpg" media="(max-width: 639px)" />
+            <img src="07_after_md.jpg" alt="" />
+          </picture>
+        </div>
         <div class="caption">color grading an image</div>
       </section>
 
@@ -1126,7 +1174,7 @@ const ba = new sic('#adv', options);</code></pre>
       </svg>
     </a>
     <script>
-      const switchBtns = document.querySelectorAll('.switch');
+      const switchButtons = document.querySelectorAll('.switch');
       let current = 'js';
       let currentElements = document.querySelectorAll(
         '[data-content="' + current + '"]'
@@ -1150,7 +1198,7 @@ const ba = new sic('#adv', options);</code></pre>
         let newElements = document.querySelectorAll(
           '[data-content="' + name + '"]'
         );
-        switchBtns.forEach((el) => changeClass(el, name));
+        switchButtons.forEach((el) => changeClass(el, name));
         currentElements.forEach((el) => (el.style.display = 'none'));
         newElements.forEach((el) => (el.style.display = 'block'));
 
@@ -1168,7 +1216,7 @@ const ba = new sic('#adv', options);</code></pre>
         currentElements = newElements;
       };
 
-      switchBtns.forEach((switchBtn) => {
+      switchButtons.forEach((switchBtn) => {
         switchBtn.addEventListener('click', switchItems);
         changeClass(switchBtn, current);
       });

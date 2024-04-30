@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.3.0
+### Added or Changed
+- added picture element support
+- optimization of responsive images via srcset attribute
+
 ## v0.2.14
 ### Added or Changed
 - added interactionstart event

@@ -1,19 +1,19 @@
 /*!
-* SlickImageCompare v0.2.14
+* SlickImageCompare v0.3.0
 * https://lemon3.github.io/slick-image-compare
 */
-var q = Object.defineProperty;
+var B = Object.defineProperty;
 var z = Object.getOwnPropertySymbols;
-var B = Object.prototype.hasOwnProperty, X = Object.prototype.propertyIsEnumerable;
-var L = (e, i, t) => i in e ? q(e, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : e[i] = t, A = (e, i) => {
+var X = Object.prototype.hasOwnProperty, U = Object.prototype.propertyIsEnumerable;
+var L = (e, i, t) => i in e ? B(e, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : e[i] = t, A = (e, i) => {
   for (var t in i || (i = {}))
-    B.call(i, t) && L(e, t, i[t]);
+    X.call(i, t) && L(e, t, i[t]);
   if (z)
     for (var t of z(i))
-      X.call(i, t) && L(e, t, i[t]);
+      U.call(i, t) && L(e, t, i[t]);
   return e;
 };
-var c = (e, i, t) => (L(e, typeof i != "symbol" ? i + "" : i, t), t);
+var d = (e, i, t) => (L(e, typeof i != "symbol" ? i + "" : i, t), t);
 const G = {
   // storage
   _s: /* @__PURE__ */ new WeakMap(),
@@ -42,10 +42,10 @@ const G = {
     let t = this._s.get(e).delete(i);
     return this._s.get(e).size === 0 && this._s.delete(e), t;
   }
-}, U = (e) => {
+}, k = (e) => e === !0 || e === "true" || e === 1 || e === "1", Y = (e) => {
   const i = "DOMContentLoaded";
   document.readyState === "complete" || document.readyState === "interactive" ? (e(), document.removeEventListener(i, e)) : document.addEventListener(i, e, !1);
-}, Y = (e) => new Promise((i, t) => {
+}, J = (e) => new Promise((i, t) => {
   const s = new Image();
   s.onload = () => {
     const { naturalWidth: n, naturalHeight: a } = s, r = n / a;
@@ -53,7 +53,7 @@ const G = {
   }, s.onerror = () => {
     t("error");
   }, s.src = e;
-}), J = (e) => {
+}), Q = (e) => {
   if (!e.match(/[^\w]+/i))
     return e;
   e = e.replace(/[\\ \t\n\r'"]/gm, "").replace(/(\w+)/gi, '"$1"'), e[0] !== "{" && (e = `{${e}}`), e = e.replaceAll(",}", "}");
@@ -62,7 +62,7 @@ const G = {
   } catch (i) {
     return !1;
   }
-}, Q = (e, i) => e ? i === void 0 || typeof i == "undefined" ? e.dataset : e.dataset[i] === void 0 ? e.dataset[i] : J(e.dataset[i]) : !1;
+}, Z = (e, i) => e ? i === void 0 || typeof i == "undefined" ? e.dataset : e.dataset[i] === void 0 ? e.dataset[i] : Q(e.dataset[i]) : !1;
 let w = !1;
 try {
   window.addEventListener(
@@ -77,13 +77,13 @@ try {
 } catch (e) {
   w = !1;
 }
-const x = (e, i, t) => Math.max(i, Math.min(e, t)), T = (e, i, t) => {
+const H = (e, i, t) => Math.max(i, Math.min(e, t)), T = (e, i, t) => {
   if (e = parseFloat(e, 10), i = parseFloat(i, 10), t = parseFloat(t, 10), t < i) {
     let s = t;
     t = i, i = s;
   }
   return !isNaN(i) && e < i ? i : !isNaN(t) && e > t ? t : e;
-}, Z = (e, i, t, s) => {
+}, K = (e, i, t, s) => {
   if (i)
     for (let n in i)
       Object.prototype.hasOwnProperty.call(i, n) && e.setAttribute(n, i[n]);
@@ -91,7 +91,7 @@ const x = (e, i, t) => Math.max(i, Math.min(e, t)), T = (e, i, t) => {
     for (let n in t)
       Object.prototype.hasOwnProperty.call(t, n) && (e.style[n] = t[n]);
   return s && (e.innerHTML = s), e;
-}, l = (e, i, t, s) => Z(document.createElement(e), i, t, s), S = {
+}, c = (e, i, t, s) => K(document.createElement(e), i, t, s), S = {
   Linear: (e) => e,
   // Pow: {},
   Quad: {
@@ -112,7 +112,7 @@ const x = (e, i, t) => Math.max(i, Math.min(e, t)), T = (e, i, t) => {
       return e === 0 || e === 1 ? e : Math.pow(2, -10 * e) * Math.sin((e * 10 - 0.75) * i) + 1;
     }
   }
-}, K = {
+}, V = {
   autoInit: !0,
   startPos: 50,
   // % from left
@@ -156,7 +156,7 @@ const x = (e, i, t) => Math.max(i, Math.min(e, t)), T = (e, i, t) => {
   afterLabel: ""
   // after Image
 };
-class V {
+class tt {
   /**
    * class constructor
    */
@@ -201,49 +201,49 @@ class V {
     ), this) : this;
   }
 }
-const y = "sic", tt = "data-" + y, E = "interacting", k = "init", H = "drag", N = "update", C = "viewchange", R = "beforeshown", $ = "aftershown", F = "interactionstart", W = "interactionend", I = "mousedown", et = "resize";
-let b = [], M = !1;
+const y = "sic", et = "data-" + y, E = "interacting", N = "init", R = "drag", x = "update", C = "viewchange", F = "beforeshown", W = "aftershown", $ = "interactionstart", q = "interactionend", b = "mousedown", st = "resize";
+let I = [], M = !1;
 const j = (e = !0, i = "#ffffff") => `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="${i}" stroke-width="2" stroke-linecap="round" stroke-linejoin="arcs"><path d="${e ? "m12 24 8-8-8-8" : "m20 8-8 8 8 8"}"/></svg>`;
-class d extends V {
+class u extends tt {
   constructor(t, s) {
     if (!t)
       return { error: !0 };
     if (t = typeof t == "string" ? document.querySelector(t) : t, t === null || t.length === 0)
       return { error: !0 };
     super();
-    c(this, "_dimensions", (t) => {
-      const s = this.element.getBoundingClientRect(), n = getComputedStyle(this.element), a = parseFloat(n.borderLeftWidth) + parseFloat(n.borderRightWidth), r = parseFloat(n.borderTopWidth) + parseFloat(n.borderBottomWidth);
-      this.width = s.width - a, this.height = s.height - r;
+    d(this, "_dimensions", (t, s = !1, n = !this._horizontal) => {
+      const a = this.element.getBoundingClientRect(), r = getComputedStyle(this.element), l = parseFloat(r.borderLeftWidth) + parseFloat(r.borderRightWidth), _ = parseFloat(r.borderTopWidth) + parseFloat(r.borderBottomWidth);
+      this.width = a.width - l, this.height = a.height - _;
       let h;
       if (this._horizontal) {
-        const o = s.x;
+        const o = a.x;
         h = this._dragHandle.offsetWidth * 0.5, this._dim = this.width, this._offset = h - o, this._minPos = o + this.settings.handleMinDistance - h, this._maxPos = o + this.width - h - this.settings.handleMinDistance;
       } else {
         const o = this.element.offsetTop;
         h = this._dragHandle.offsetHeight * 0.5, this._dim = this.height, this._offset = h - o, this._minPos = o + this.settings.handleMinDistance - h, this._maxPos = o + this.height - h - this.settings.handleMinDistance;
       }
-      !t && this._oldDim === this._dim || (this._oldDim = this._dim, this._setPosition(this._percent, !0));
+      !s && this._oldDim === this._dim || (this._oldDim = this._dim, n && this._usePicture && this._checkCurrentImageSource(this._firstImage), this._setPosition(this._percent, !0));
     });
-    c(this, "_mouseOver", () => {
+    d(this, "_mouseOver", () => {
       this.stop(), this.element.classList.add(E);
     });
-    c(this, "_mouseOut", () => {
+    d(this, "_mouseOut", () => {
       this.element.classList.remove(E), this.settings.snapToStart && this._snapToStart();
     });
-    c(this, "_mouseMove", (t) => {
+    d(this, "_mouseMove", (t) => {
       this.stop(), this._setPosition(this._calcPercent(this._getPos(t)));
     });
     // if tapped on canvas
-    c(this, "_tapstart", (t) => {
-      t.stopPropagation(), this._endInteraction = !1, this.stop(), clearTimeout(this._snapTimeout), this._triggerEvent(F), t.type === "touchstart" ? (this.isTouch = !0, this._mouseStartEvents(!1)) : I === t.type && (this.isTouch = !1, this._touchStartEvent(!1));
+    d(this, "_tapstart", (t) => {
+      t.stopPropagation(), this._endInteraction = !1, this.stop(), clearTimeout(this._snapTimeout), this._triggerEvent($), t.type === "touchstart" ? (this.isTouch = !0, this._mouseStartEvents(!1)) : b === t.type && (this.isTouch = !1, this._touchStartEvent(!1));
       const s = this._calcPercent(this._getPos(t));
       this.settings.animateOnClick ? this._animateTo(s, this.settings.animateDuration) : this._setPosition(s);
     });
-    c(this, "_dragStart", (t) => {
-      t.stopPropagation(), this.startPos = this._getPos(t), this.element.classList.add(E), this._tapstart(t), t.type === "touchstart" ? (window.addEventListener("touchmove", this._drag, w), window.addEventListener("touchend", this._dragEnd, !1)) : I === t.type && (this.settings.followMouse || (window.addEventListener("mousemove", this._drag, !1), window.addEventListener("mouseup", this._dragEnd, !1)));
+    d(this, "_dragStart", (t) => {
+      t.stopPropagation(), this.startPos = this._getPos(t), this.element.classList.add(E), this._tapstart(t), t.type === "touchstart" ? (window.addEventListener("touchmove", this._drag, w), window.addEventListener("touchend", this._dragEnd, !1)) : b === t.type && (this.settings.followMouse || (window.addEventListener("mousemove", this._drag, !1), window.addEventListener("mouseup", this._dragEnd, !1)));
     });
     // moving
-    c(this, "_drag", (t) => {
+    d(this, "_drag", (t) => {
       this.stop();
       let s = this._getPos(t), n = this._calcPercent(s);
       if (this.isTouch) {
@@ -261,25 +261,25 @@ class d extends V {
           this.element.classList.add(E), this._dirDetected = !0;
         }
       }
-      this._setPosition(n), this._triggerEvent(H);
+      this._setPosition(n), this._triggerEvent(R);
     });
-    c(this, "_dragEnd", (t) => {
+    d(this, "_dragEnd", (t) => {
       this._endInteraction = !0, t.type === "touchend" ? (this.isTouch = !0, window.removeEventListener("touchmove", this._drag, w), window.removeEventListener("touchend", this._dragEnd)) : t.type === "mouseup" && (this.isTouch = !1, this.settings.followMouse || (window.removeEventListener("mousemove", this._drag, !1), window.removeEventListener("mouseup", this._dragEnd, !1))), this._testInteractionEnd(), this._dirDetected = !1;
     });
     if (t.dataset.sicinitialized)
-      return d.getInstance(t);
+      return u.getInstance(t);
     t.dataset.sicinitialized = !0, this.allowedEvents = [
-      k,
-      H,
       N,
       R,
-      $,
+      x,
       F,
       W,
+      $,
+      q,
       C
-    ], b.push(this), G.put(t, "instance", this), this.element = t;
-    const n = Q(t, y);
-    if (this.options = s || {}, this.settings = Object.assign({}, d.defaults, n, s), this.images = this.element.querySelectorAll("img"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || !this.images.length))
+    ], I.push(this), G.put(t, "instance", this), this.element = t;
+    const n = Z(t, y);
+    if (this.options = s || {}, this.settings = Object.assign({}, u.defaults, n, s), this.images = this.element.querySelectorAll("img"), this.picture = this.element.querySelectorAll("picture"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || !this.images.length) && (!this.picture || !this.picture.length))
       return {
         error: !0
       };
@@ -315,7 +315,7 @@ class d extends V {
     this._originalEl = [], this._createdEl = [];
     const s = "div";
     let n, a;
-    const r = l(
+    const r = c(
       s,
       { class: "sic-clip" },
       {
@@ -329,20 +329,20 @@ class d extends V {
         t.beforeImage,
         t.afterImage
       ].reduce((P, p) => (P.push(
-        l(
+        c(
           "img",
           { draggable: !1, src: p },
           { width: "100%", display: "block" }
         )
       ), P), []), this.element.appendChild(n), r.appendChild(a), this.element.appendChild(r), this._createdEl.push(n);
     else {
-      const [P, p] = this.images;
+      const [P, p] = this.picture && this.picture.length === 2 ? this.picture : this.images;
       n = P, a = p.cloneNode(!0), [n, a].forEach((D) => {
         D.setAttribute("draggable", !1), D.style.width = "100%", D.style.display = "block";
       }), r.appendChild(a), p.parentNode.replaceChild(r, p), this._originalEl.push(p);
     }
     this._createdEl.push(r);
-    const h = l(
+    const l = c(
       s,
       {
         class: "sic-handle"
@@ -350,12 +350,12 @@ class d extends V {
       {
         position: "absolute"
       }
-    ), o = l(s, { class: "sic-line sic-line-1" }), _ = l(s, { class: "sic-line sic-line-2" }), f = l(s, { class: "sic-arrows" }), v = l(s, { class: "sic-arrow sic-arrow-1" }), u = l(s, { class: "sic-arrow sic-arrow-2" }), O = l(s, { class: "sic-circle" });
-    v.innerHTML = j(!1), u.innerHTML = j(), f.append(v, u), O.append(f), h.append(o, _, O), this.element.append(h), this._createdEl.push(h);
+    ), _ = c(s, { class: "sic-line sic-line-1" }), h = c(s, { class: "sic-line sic-line-2" }), o = c(s, { class: "sic-arrows" }), v = c(s, { class: "sic-arrow sic-arrow-1" }), f = c(s, { class: "sic-arrow sic-arrow-2" }), O = c(s, { class: "sic-circle" });
+    v.innerHTML = j(!1), f.innerHTML = j(), o.append(v, f), O.append(o), l.append(_, h, O), this.element.append(l), this._createdEl.push(l);
     let g, m;
-    t.beforeLabel !== "" && (g = l(s, { class: "sic-label sic-label-one" }), g.innerHTML = t.beforeLabel, this.element.append(g), this._createdEl.push(g)), t.afterLabel !== "" && (m = l(s, { class: "sic-label sic-label-two" }), m.innerHTML = t.afterLabel, this.element.append(m), this._createdEl.push(m)), this.info1 = t.ltr ? g : m, this.info2 = t.ltr ? m : g, this.element.classList.add(
+    t.beforeLabel !== "" && (g = c(s, { class: "sic-label sic-label-one" }), g.innerHTML = t.beforeLabel, this.element.append(g), this._createdEl.push(g)), t.afterLabel !== "" && (m = c(s, { class: "sic-label sic-label-two" }), m.innerHTML = t.afterLabel, this.element.append(m), this._createdEl.push(m)), this.info1 = t.ltr ? g : m, this.info2 = t.ltr ? m : g, this.element.classList.add(
       this._horizontal ? "sic-horizontal" : "sic-vertical"
-    ), this.element.style.position = "relative", this.element.style.overflow = "hidden", this.element.style.visibility = "visible", this._dragHandle = h, this._clipEl = r;
+    ), this.element.style.position = "relative", this.element.style.overflow = "hidden", this.element.style.visibility = "visible", this._dragHandle = l, this._clipEl = r;
   }
   /**m
    * Method to remove or add mouse events
@@ -368,7 +368,7 @@ class d extends V {
       const a = this.element;
       a[s]("mouseenter", this._mouseOver, !1), a[s]("mouseleave", this._mouseOut, !1), a[s]("mousemove", this._mouseMove, !1);
     } else
-      this._dragEl[s](I, this._dragStart), n.onlyHandleDraggable && n.clickable && (this.element[s](I, this._tapstart, !1), this.element[s]("mouseup", this._dragEnd, !1));
+      this._dragEl[s](b, this._dragStart), n.onlyHandleDraggable && n.clickable && (this.element[s](b, this._tapstart, !1), this.element[s]("mouseup", this._dragEnd, !1));
   }
   /**
    * Helper method.
@@ -397,7 +397,7 @@ class d extends V {
   _appEvents(t = !0) {
     this._touchStartEvent(t), this._mouseStartEvents(t);
     const s = this._addRemove(t);
-    window[s](et, this._dimensions);
+    window[s](st, this._dimensions);
   }
   /**
    * stop method
@@ -406,7 +406,7 @@ class d extends V {
     this._renderId && (cancelAnimationFrame(this._renderId), this.element.classList.contains("playing") && this.element.classList.remove("playing"), this._renderId = void 0);
   }
   _testInteractionEnd() {
-    this._endInteraction && this._renderId === void 0 && (this._endInteraction = !1, this._interactionEnd(), this._triggerEvent(W));
+    this._endInteraction && this._renderId === void 0 && (this._endInteraction = !1, this._interactionEnd(), this._triggerEvent(q));
   }
   /**
    *
@@ -439,7 +439,7 @@ class d extends V {
    * @returns
    */
   _animateTo(t, s, n) {
-    if (t = x(+t, 0, 100), !s) {
+    if (t = H(+t, 0, 100), !s) {
       this._setPosition(t);
       return;
     }
@@ -458,12 +458,22 @@ class d extends V {
   _interactionEnd() {
     this.element.classList.remove(E), this.isTouch ? this._mouseStartEvents() : this._touchStartEvent(), this.settings.snapToStart && this._snapToStart();
   }
+  /**
+   * helper for the picture element
+   * @param {string} element the first image element
+   */
+  _checkCurrentImageSource(t) {
+    clearTimeout(this._checkTo), this._checkTo = setTimeout(() => {
+      const s = t.currentSrc;
+      this._firstImageSrc !== s && (this._firstImageSrc = s, this._dimensions(null, !1, !1));
+    }, 250);
+  }
   _getClipRect(t) {
-    return this._horizontal ? this._ltr ? `rect(0 ${t}px ${this.height}px 0)` : `rect(0 ${this.width}px ${this.height}px ${t}px)` : this._ltr ? `rect(0 ${this.width}px ${t}px 0)` : `rect(${t}px ${this.width}px ${this.height}px 0)`;
+    return this._horizontal ? this._ltr ? `rect(0 ${t}px 100% 0)` : `rect(0 ${this.width}px 100% ${t}px)` : this._ltr ? `rect(0 100% ${t}px 0)` : `rect(${t}px 100% 100% 0)`;
   }
   _changeStatus(t) {
     this._afterShown = t;
-    let s = this._afterShown ? $ : R;
+    let s = this._afterShown ? W : F;
     this._triggerEvent(s), this._triggerEvent(C), this._oneTime = !1;
   }
   /**
@@ -477,7 +487,7 @@ class d extends V {
     const n = this._dim * 0.01 * t;
     this._clipEl.style.clipPath = this._getClipRect(n), this._dragHandle.style.transform = this._horizontal ? `translate(${n}px, 0)` : `translate(0, ${n}px)`, this.info1 && (this.info1.style.opacity = t < 50 ? 1 : (100 - t) / 50), this.info2 && (this.info2.style.opacity = t > 50 ? 1 : t / 50);
     let a = this._ltr ? this._afterShown : !this._afterShown;
-    t > 70 && (this._oneTime || !a) ? this._changeStatus(this._ltr) : t < 30 && (this._oneTime || a) && this._changeStatus(!this._ltr), this._triggerEvent(N);
+    t > 70 && (this._oneTime || !a) ? this._changeStatus(this._ltr) : t < 30 && (this._oneTime || a) && this._changeStatus(!this._ltr), this._triggerEvent(x);
   }
   /**
    * convert pixel position to percent from left
@@ -486,7 +496,7 @@ class d extends V {
    */
   _calcPercent(t) {
     let s = this._horizontal ? t.x : t.y;
-    return s = x(s, this._minPos, this._maxPos), (s + this._offset) * 100 / this._dim;
+    return s = H(s, this._minPos, this._maxPos), (s + this._offset) * 100 / this._dim;
   }
   // /**
   //  * convert percent to left pixel value
@@ -507,9 +517,9 @@ class d extends V {
     if (this._initialized)
       return this;
     const t = this.settings;
-    this._initialized = !0, this._oneTime = !0, this._afterShown = !1, this._ltr = !!t.ltr, this._horizontal = t.horizontal, this._createGui(), this._dragEl = t.onlyHandleDraggable ? this._dragHandle : this.element, this._animationDuration = t.animateInDuration || 0, t.startPos = T(t.startPos, 0, 100), t.animateInStartPos = T(t.animateInStartPos, 0, 100), t.startPos || (t.startPos = 50), t.animateInStartPos || (t.animateInStartPos = 0), t.animateIn ? this._percent = this._animationDuration > 0 ? t.animateInStartPos : t.startPos : this._percent = t.startPos, this.element.style.opacity = 0, this.isTouch = "ontouchstart" in window || window.DocumentTouch && document instanceof window.DocumentTouch || navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0, this.allowedEvents.forEach((s) => {
+    this._initialized = !0, this._oneTime = !0, this._afterShown = !1, this._ltr = k(t.ltr), this._horizontal = k(t.horizontal), this._usePicture = this.picture && this.picture.length === 2, this._createGui(), this._dragEl = t.onlyHandleDraggable ? this._dragHandle : this.element, this._animationDuration = t.animateInDuration || 0, t.startPos = T(t.startPos, 0, 100), t.animateInStartPos = T(t.animateInStartPos, 0, 100), t.startPos || (t.startPos = 50), t.animateInStartPos || (t.animateInStartPos = 0), t.animateIn ? this._percent = this._animationDuration > 0 ? t.animateInStartPos : t.startPos : this._percent = t.startPos, this.element.style.opacity = 0, this.isTouch = "ontouchstart" in window || window.DocumentTouch && document instanceof window.DocumentTouch || navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0, this.allowedEvents.forEach((s) => {
       t[s] && this.addEventListener(s, t[s]);
-    }), Y(this.images[0].src).then(() => {
+    }), this._firstImage = this._usePicture ? this.picture[0].querySelector("img") : this.images[0], this._firstImageSrc = this._firstImage.currentSrc || this._firstImage.src, J(this._firstImageSrc).then(() => {
       this._dimensions(), this._setPosition(this._percent), this.element.style.opacity = 1, t.animateIn && this._animationDuration > 0 && this.settings.animateInStartPos !== this.settings.startPos && setTimeout(
         () => this._animateTo(
           this.settings.startPos,
@@ -517,7 +527,7 @@ class d extends V {
           this.settings.animateInEasing
         ),
         this.settings.animateInDelay
-      ), this._appEvents(), this._triggerEvent(k), this._triggerEvent(C);
+      ), this._appEvents(), this._triggerEvent(N), this._triggerEvent(C);
     });
   }
   /**
@@ -529,19 +539,19 @@ class d extends V {
    */
   play(t = this._percent, s = 2, n = 2e3, a) {
     this.stop(), clearTimeout(this._snapTimeout), n = T(n, 250, 1e4), t = T(t, 0, 100);
-    let r = this._percent, h = 100 - r, o = n / 100 * Math.abs(h), _ = !0, f = 0;
+    let r = this._percent, l = 100 - r, _ = n / 100 * Math.abs(l), h = !0, o = 0;
     s <= 0 && (s = -1), this.progress = this._timingCurTime = this._timingThen = 0, this.easing = a || S.Quad.easeOut;
     const v = () => {
-      let u = Date.now();
-      if (this._timingCurTime += u - (this._timingThen || u), this.progress = this._timingCurTime / o, this.progress >= 1) {
-        if (f === s) {
+      let f = Date.now();
+      if (this._timingCurTime += f - (this._timingThen || f), this.progress = this._timingCurTime / _, this.progress >= 1) {
+        if (o === s) {
           this.element.classList.remove("playing");
           return;
         }
-        o = n, _ ? (r = 100, h = -100) : (r = 0, h = 100), _ = !_, f++, f === s && (h = _ ? t : t - 100, o = n / 100 * Math.abs(h)), this._setPosition(r), u = Date.now(), this._timingCurTime = 0;
+        _ = n, h ? (r = 100, l = -100) : (r = 0, l = 100), h = !h, o++, o === s && (l = h ? t : t - 100, _ = n / 100 * Math.abs(l)), this._setPosition(r), f = Date.now(), this._timingCurTime = 0;
       } else
-        this._setPosition(r + h * this.easing(this.progress));
-      this._timingThen = u, this._renderId = requestAnimationFrame(v);
+        this._setPosition(r + l * this.easing(this.progress));
+      this._timingThen = f, this._renderId = requestAnimationFrame(v);
     };
     this.element.classList.add("playing"), v();
   }
@@ -555,7 +565,7 @@ class d extends V {
   changeDirection() {
     this._ltr = !this._ltr;
     let t;
-    t = this.info1, this.info1 = this.info2, this.info2 = t, this._percent = 100 - this._percent, this._dimensions(!0);
+    t = this.info1, this.info1 = this.info2, this.info2 = t, this._percent = 100 - this._percent, this._dimensions(null, !0);
   }
   /**
    * horizontal or vertical slider
@@ -564,7 +574,7 @@ class d extends V {
     const t = this._horizontal;
     this._horizontal = !t, this.element.classList.remove(t ? "sic-horizontal" : "sic-vertical"), this.element.classList.add(
       this._horizontal ? "sic-horizontal" : "sic-vertical"
-    ), this._dimensions(!0);
+    ), this._dimensions(null, !0);
   }
   showAfter() {
     this._setPosition(this._ltr ? 100 : 0);
@@ -582,21 +592,21 @@ class d extends V {
     this.element.removeAttribute("data-sicinitialized"), this._createdEl.forEach((t) => this.element.removeChild(t)), this._originalEl.forEach((t) => this.element.appendChild(t)), this._createdEl = [], this._originalEl = [], this._percent = this.startPos, this._appEvents(!1), this._initialized = !1;
   }
 }
-d.init = () => {
+u.init = () => {
   if (M)
     return !0;
   M = !0;
-  let e = document.querySelectorAll("[" + tt + "]");
+  let e = document.querySelectorAll("[" + et + "]");
   return e.length === 0 ? !1 : (e.forEach((i) => {
-    new d(i);
-  }), b);
+    new u(i);
+  }), I);
 };
-d.destroyAll = () => b.length ? (b.forEach((e) => {
+u.destroyAll = () => I.length ? (I.forEach((e) => {
   e.destroy();
-}), M = !1, b = [], !0) : !1;
-d.getInstance = (e) => G.get(e, "instance");
-d.defaults = K;
-U(d.init);
+}), M = !1, I = [], !0) : !1;
+u.getInstance = (e) => G.get(e, "instance");
+u.defaults = V;
+Y(u.init);
 export {
-  d as default
+  u as default
 };

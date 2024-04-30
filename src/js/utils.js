@@ -46,6 +46,9 @@ export const dataStorage = {
   },
 };
 
+export const isTrue = (value) =>
+  value === true || value === 'true' || value === 1 || value === '1';
+
 /**
  * a short document Ready Implementation
  * @param  {Function} cb - The Callback function
@@ -83,7 +86,7 @@ export const stringToBoolean = (string) => {
   }
 };
 
-export const imageDimensions = (filename) =>
+export const imageDimensions = (source) =>
   new Promise((resolve, reject) => {
     const img = new Image();
 
@@ -97,7 +100,7 @@ export const imageDimensions = (filename) =>
       reject('error');
     };
 
-    img.src = filename;
+    img.src = source;
   });
 
 export const parseData = (string) => {
