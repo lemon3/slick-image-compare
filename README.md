@@ -41,7 +41,98 @@ const sic = new SlickImageCompare('#my-div', options);
 </script>
 ```
 
-## options
+## Default Settings
+use it with the default settings
+#### javascript
+```html
+<div id="my-div">
+  <img src="01_before.jpg" alt="before" />
+  <img src="01_after.jpg" alt="after" />
+</div>
+```
+```js
+const sic = new SlickImageCompare('#my-div');
+```
+you can also use the data-api (**data-sic** must be used) like so.
+Btw.: The preferred method is the javascript approach!
+#### data api
+```html
+<div data-sic>
+  <img src="01_before.jpg" alt="before" />
+  <img src="01_after.jpg" alt="after" />
+</div>
+```
+
+## Start Position and Labels
+we use a custom start position and labels here.
+#### javascript
+```html
+<div id="my-div">
+  <img src="01_before.jpg" alt="before" />
+  <img src="01_after.jpg" alt="after" />
+</div>
+```
+```js
+// for more options see Options section below.
+const options = {
+  startPos: 20,
+  afterLabel: 'after',
+  beforeLabel: 'before'
+};
+const sic = new SlickImageCompare('#my-div', options);
+```
+the same using the **data-sic** attribute
+#### data api
+```html
+<div data-sic={
+  startPos: 20,
+  afterLabel: 'after',
+  beforeLabel: 'before'
+}">
+  <img src="01_before.jpg" alt="before" />
+  <img src="01_after.jpg" alt="after" />
+</div>
+```
+
+## Events
+you can listen to all kind of events, to extend the functionality of the image compare slider.
+List of available events
+
+| name             | called ...                                                                    |
+| ---------------- | ----------------------------------------------------------------------------- |
+| init             | after **initialization**                                                      |
+| drag             | on **interaction** (drag, mousemove)                                          |
+| update           | on every handle position change                                               |
+| beforeshown      | if the **before** image is shown (70% or more)                                |
+| aftershown       | if the **after** image is shown (70% or more)                                 |
+| interactionstart | user begins interaction                                                       |
+| interactionend   | user ends interaction                                                         |
+| viewchange       | changed form **before** image shown to **after** image shown (and vice versa) |
+
+#### example
+using **viewchange** event
+```html
+<div id="my-div">
+  <img src="01_before.jpg" alt="before" />
+  <img src="01_after.jpg" alt="after" />
+</div>
+<div id="my-text-box"></div>
+```
+```js
+// create an instance
+const sic = new SlickImageCompare('#my-div');
+
+const myTextBox = document.getElementById('my-text-box');
+const changeText = (evt) => {
+  const afterShown = evt.detail.afterShown;
+  myTextBox.innerHTML = afterShown ? 'After' : 'Before';
+}
+
+// listen for events
+sic.addEventListener('viewchange', changeText);
+```
+
+## Options
 list of the available options:
 
 ```js
@@ -164,4 +255,3 @@ options = {
 ## todo's
 - add more test
 - update this document ...
-- **picture** element support

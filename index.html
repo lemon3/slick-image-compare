@@ -582,7 +582,7 @@
   &lt;img src=&quot;04_before.jpg&quot; alt=&quot;before&quot; /&gt;
   &lt;img src=&quot;04_after.jpg&quot; alt=&quot;after&quot; /&gt;
 &lt;/div&gt;</code></pre>
-          <pre><code class="language-javascript">const sic = new SlickImageCompare('my-div');
+          <pre><code class="language-javascript">const sic = new SlickImageCompare('#my-div');
 </code></pre>
         </div>
 
@@ -631,7 +631,7 @@
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
-          <pre><code class="language-javascript">const sic = new SlickImageCompare('my-div', {
+          <pre><code class="language-javascript">const sic = new SlickImageCompare('#my-div', {
   startPos: 25
 });</code></pre>
         </div>
@@ -691,7 +691,7 @@
     alt=&quot;deer&quot;
   /&gt;
 &lt;/div&gt;</code></pre>
-          <pre><code class="language-javascript">const sic = new SlickImageCompare('my-div');</code></pre>
+          <pre><code class="language-javascript">const sic = new SlickImageCompare('#my-div');</code></pre>
         </div>
         <div data-sic>
           <img
@@ -713,8 +713,8 @@
       <section class="section">
         <h2>Responsive image (via &lt;picture&gt; element)</h2>
         <p>
-          The only restriction: all (before, after) responsive images must have exactly the
-          same size and the media queries must match (see below).
+          The only restriction: all (before, after) responsive images must have
+          exactly the same size and the media queries must match (see below).
         </p>
         <div class="switchButtons">
           <div class="switch" data-name="js">javascript</div>
@@ -743,7 +743,7 @@
     &lt;img src=&quot;07_after_md.jpg&quot; alt=&quot;&quot; /&gt;
   &lt;/picture&gt;
 &lt;/div&gt;</code></pre>
-          <pre><code class="language-javascript">const sic = new SlickImageCompare('my-div');</code></pre>
+          <pre><code class="language-javascript">const sic = new SlickImageCompare('#my-div');</code></pre>
         </div>
         <div data-sic>
           <picture>
@@ -798,7 +798,7 @@
   &lt;img src=&quot;01_after.png&quot; alt=&quot;after&quot; /&gt;
 &lt;/div&gt;
 </code></pre>
-          <pre><code class="language-javascript">const sic = new SlickImageCompare('my-div', {
+          <pre><code class="language-javascript">const sic = new SlickImageCompare('#my-div', {
   followMouse: true,
   beforeLabel: 'before',
   afterLabel: 'after'
@@ -876,7 +876,7 @@
 &lt;/div&gt;
 </code></pre>
 
-          <pre><code class="language-javascript">const sic = new SlickImageCompare('my-div', {
+          <pre><code class="language-javascript">const sic = new SlickImageCompare('#my-div', {
   snapToStart: true,
   beforeLabel: 'before',
   afterLabel: 'after',
