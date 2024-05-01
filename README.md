@@ -1,7 +1,15 @@
+<!-- PROJECT SHIELDS -->
+[![MIT License][license-shield]][license-url]
+
 # slick image compare
 Is a modern image comparison slider written in vanilla JavaScript and has no dependencies on other libraries. Best for comparing images, image retouching, color adjustments, renderings, etc...
 
-**[See a Demo here >>](https://lemon3.github.io/slick-image-compare/)**
+<div style="text-align: center;">
+<a href="https://lemon3.github.io/slick-image-compare/">
+  <img src="https://raw.githubusercontent.com/lemon3/slick-image-compare/main/_assets/image-compare.gif" alt="demo" width="500" height="auto">
+</a><br>
+<a href="https://lemon3.github.io/slick-image-compare/" style="font-weight:bold;">DOCUMENTARY (API) AND DEMOS &gt;&gt;</a>
+</div>
 
 *(Started as a jQuery-Plugin back in the days (2013) and was used for a custom WordPress-Plugin)*
 
@@ -255,3 +263,7 @@ options = {
 ## todo's
 - add more test
 - update this document ...
+
+<!-- MARKDOWN LINKS & IMAGES -->
+[license-shield]: https://img.shields.io/github/license/lemon3/slick-image-compare?style=for-the-badge
+[license-url]: https://github.com/lemon3/slick-image-compare/blob/main/LICENSE
