@@ -231,8 +231,14 @@ options = {
   // the easing function used
   snapToStartEasing: easing.Elastic.easeOut,
 
+  // define an angle for the handle (parting line)
+  // possible values: -30 - 30
+  // default: 0
+  handleAngle: 0,
+
   // min distance to left and right border
   handleMinDistance: 0,
+
 
   // animate in
   animateIn: false,

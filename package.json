@@ -1,6 +1,6 @@
 {
   "name": "slick-image-compare",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "before and after image comparison slider",
   "author": "wolfgang jungmayer",
   "license": "MIT",
@@ -63,11 +63,11 @@
   },
   "homepage": "https://lemon3.github.io/slick-image-compare",
   "devDependencies": {
-    "@babel/core": "^7.24.4",
+    "@babel/core": "^7.24.5",
     "@babel/plugin-transform-class-properties": "^7.24.1",
-    "@babel/preset-env": "^7.24.4",
+    "@babel/preset-env": "^7.24.5",
     "@rollup/plugin-terser": "^0.4.4",
-    "@vitest/coverage-v8": "^1.5.2",
+    "@vitest/coverage-v8": "^1.5.3",
     "eslint": "^9.1.1",
     "globals": "^15.1.0",
     "jsdom": "^24.0.0",
@@ -78,6 +78,6 @@
     "vite": "^5.2.10",
     "vite-plugin-babel": "^1.2.0",
     "vite-plugin-banner": "^0.7.1",
-    "vitest": "^1.5.2"
+    "vitest": "^1.5.3"
   }
 }

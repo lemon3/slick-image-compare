@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.4.0
+### Added or Changed
+- it is now possible to change the angle of the handle (parting line)
+- general improvements
+
 ## v0.3.0
 ### Added or Changed
 - added picture element support

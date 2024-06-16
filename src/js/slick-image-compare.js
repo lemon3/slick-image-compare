@@ -31,6 +31,7 @@ const INTERACTIONEND = 'interactionend';
 
 // app event name
 const MOUSEDOWN = 'mousedown';
+const MOUSEUP = 'mouseup';
 const RESIZE = 'resize';
 
 let instances = [];
@@ -38,6 +39,7 @@ let initialized = false;
 
 const getArrow = (right = true, color = '#ffffff') =>
   `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="arcs"><path d="${right ? 'm12 24 8-8-8-8' : 'm20 8-8 8 8 8'}"/></svg>`;
+
 class BeforeAfter extends Emitter {
   constructor(element, options) {
     if (!element) {
@@ -76,6 +78,7 @@ class BeforeAfter extends Emitter {
 
     // from data api
     const data = getJSONData(element, PLUGINNAME);
+    // console.log(data);
 
     this.options = options || {}; // user options
     this.settings = Object.assign({}, BeforeAfter.defaults, data, options);
@@ -206,8 +209,20 @@ class BeforeAfter extends Emitter {
         position: 'absolute',
       }
     );
-    const line1 = createEl(div, { class: 'sic-line sic-line-1' });
-    const line2 = createEl(div, { class: 'sic-line sic-line-2' });
+
+    let line1Style, line2Style;
+    if (this._angle) {
+      line1Style = {
+        transform: `rotate(${this._angle}deg)`,
+        transformOrigin: 'bottom center',
+      };
+      line2Style = {
+        transform: `rotate(${this._angle}deg)`,
+        transformOrigin: 'top center',
+      };
+    }
+    const line1 = createEl(div, { class: 'sic-line sic-line-1' }, line1Style);
+    const line2 = createEl(div, { class: 'sic-line sic-line-2' }, line2Style);
     const arrows = createEl(div, { class: 'sic-arrows' });
     const arrow1 = createEl(div, { class: 'sic-arrow sic-arrow-1' });
     const arrow2 = createEl(div, { class: 'sic-arrow sic-arrow-2' });
@@ -227,14 +242,14 @@ class BeforeAfter extends Emitter {
     let info1, info2;
     if ('' !== s.beforeLabel) {
       info1 = createEl(div, { class: 'sic-label sic-label-one' });
-      info1.innerHTML = s.beforeLabel;
+      info1.innerHTML = decodeURIComponent(s.beforeLabel);
       this.element.append(info1);
       this._createdEl.push(info1);
     }
 
     if ('' !== s.afterLabel) {
       info2 = createEl(div, { class: 'sic-label sic-label-two' });
-      info2.innerHTML = s.afterLabel;
+      info2.innerHTML = decodeURIComponent(s.afterLabel);
       this.element.append(info2);
       this._createdEl.push(info2);
     }
@@ -273,7 +288,7 @@ class BeforeAfter extends Emitter {
       this._dragEl[fun](MOUSEDOWN, this._dragStart);
       if (s.onlyHandleDraggable && s.clickable) {
         this.element[fun](MOUSEDOWN, this._tapstart, false);
-        this.element[fun]('mouseup', this._dragEnd, false);
+        this.element[fun](MOUSEUP, this._dragEnd, false);
       }
     }
   }
@@ -492,6 +507,10 @@ class BeforeAfter extends Emitter {
       this._checkCurrentImageSource(this._firstImage);
     }
 
+    if (this._radians) {
+      this._angleOffset = (Math.tan(this._radians) * this.height) / 2;
+    }
+
     this._setPosition(this._percent, true);
   };
 
@@ -549,7 +568,7 @@ class BeforeAfter extends Emitter {
     } else if (MOUSEDOWN === e.type) {
       if (!this.settings.followMouse) {
         window.addEventListener('mousemove', this._drag, false);
-        window.addEventListener('mouseup', this._dragEnd, false);
+        window.addEventListener(MOUSEUP, this._dragEnd, false);
       }
     }
   };
@@ -597,11 +616,11 @@ class BeforeAfter extends Emitter {
       this.isTouch = true;
       window.removeEventListener('touchmove', this._drag, passiveIfSupported);
       window.removeEventListener('touchend', this._dragEnd);
-    } else if ('mouseup' === e.type) {
+    } else if (MOUSEUP === e.type) {
       this.isTouch = false;
       if (!this.settings.followMouse) {
         window.removeEventListener('mousemove', this._drag, false);
-        window.removeEventListener('mouseup', this._dragEnd, false);
+        window.removeEventListener(MOUSEUP, this._dragEnd, false);
       }
     }
 
@@ -609,6 +628,15 @@ class BeforeAfter extends Emitter {
     this._dirDetected = false;
   };
 
+  _getClipPolygon(pos) {
+    return `polygon(0 0, ${pos + this._angleOffset}px 0, ${pos - this._angleOffset}px 100%, 0 100%)`;
+  }
+
+  /**
+   *
+   * @param {number} pos the pixel value from the left position
+   * @returns
+   */
   _getClipRect(pos) {
     if (this._horizontal) {
       if (this._ltr) {
@@ -647,7 +675,7 @@ class BeforeAfter extends Emitter {
     this._percent = percent;
 
     const pos = this._dim * 0.01 * percent; // this.width * percent * 0.01;
-    this._clipEl.style.clipPath = this._getClipRect(pos);
+    this._clipEl.style.clipPath = this._getClip(pos); //this._getClipRect(pos);
     this._dragHandle.style.transform = this._horizontal
       ? `translate(${pos}px, 0)`
       : `translate(0, ${pos}px)`;
@@ -710,6 +738,15 @@ class BeforeAfter extends Emitter {
     this._ltr = isTrue(s.ltr);
     this._horizontal = isTrue(s.horizontal);
     this._usePicture = this.picture && 2 === this.picture.length;
+    // console.log(s.handleAngle);
+    this._angle = restrict(s.handleAngle, -30, 30);
+    // console.log(this._angle);
+
+    this._getClip = this._getClipRect;
+    if (this._angle) {
+      this._radians = (this._angle * Math.PI) / 180;
+      this._getClip = this._getClipPolygon;
+    }
 
     this._createGui();
 
@@ -846,6 +883,10 @@ class BeforeAfter extends Emitter {
     };
     this.element.classList.add('playing');
     render();
+  }
+
+  animateTo(percent, duration = this.settings.animateDuration) {
+    return this.goto(percent, duration, easing);
   }
 
   goto(percent, duration, easing) {

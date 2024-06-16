@@ -27,6 +27,8 @@ export const defaults = {
 
   handleMinDistance: 0, // min distance to left and right border in px TODO: also %
 
+  handleAngle: 0, // angle of the parting line
+
   // animate in
   animateIn: false,
   animateInDuration: 1250, // ms

@@ -105,15 +105,47 @@ export const imageDimensions = (source) =>
 
 export const parseData = (string) => {
   if (!string.match(/[^\w]+/i)) return string;
-  string = string.replace(/[\\ \t\n\r'"]/gm, '').replace(/(\w+)/gi, '"$1"');
-  if ('{' !== string[0]) string = `{${string}}`;
-  string = string.replaceAll(',}', '}');
-  try {
-    return JSON.parse(string);
-    // eslint-disable-next-line no-unused-vars
-  } catch (e) {
-    return false;
-  }
+
+  const obj = {};
+  // {beforeLabel: 'color', afterLabel: 'b%20%26%20w', handleAngle: '8'}
+  string = string.replace('{', '').replace('}', '').trim();
+  const keyValues = string.split(',');
+
+  keyValues.forEach((keyVal) => {
+    if ('' === keyVal) {
+      return;
+    }
+    let [key, val] = keyVal.split(':');
+    // eslint-disable-next-line quotes
+    key = key.trim().replaceAll("'", '');
+    // val = encodeURIComponent(val.trim().replaceAll("'", ''));
+    // eslint-disable-next-line quotes
+    val = val.trim().replaceAll("'", '');
+    obj[key] = val;
+  });
+
+  return obj;
+
+  // const matches = string.matchAll(/: *'([\w +-_%&]*)'/gi);
+  // for (const match of matches) {
+  //   const enc = encodeURIComponent(match[1]);
+  //   if (enc !== match[1]) {
+  //     string = string.replace(match[0], `: '${enc}'`);
+  //   }
+  // }
+
+  // string = string
+  //   .replace(/[\\ \t\n\r'"]/gm, '')
+  //   .replace(/([\w-.%]+)/gi, '"$1"');
+  // if ('{' !== string[0]) string = `{${string}}`;
+  // string = string.replaceAll(',}', '}');
+
+  // try {
+  //   return JSON.parse(string);
+  //   // eslint-disable-next-line no-unused-vars
+  // } catch (e) {
+  //   return false;
+  // }
 };
 
 /**
