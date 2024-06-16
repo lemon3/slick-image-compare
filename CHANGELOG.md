@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.1
+### Added or Changed
+- small css bugfix
+
 ## v0.4.0
 ### Added or Changed
 - it is now possible to change the angle of the handle (parting line)
