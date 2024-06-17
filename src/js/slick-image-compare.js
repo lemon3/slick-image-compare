@@ -221,8 +221,9 @@ class BeforeAfter extends Emitter {
         transformOrigin: 'top center',
       };
     }
-    const line1 = createEl(div, { class: 'sic-line sic-line-1' }, line1Style);
-    const line2 = createEl(div, { class: 'sic-line sic-line-2' }, line2Style);
+    this.line1 = createEl(div, { class: 'sic-line sic-line-1' }, line1Style);
+    this.line2 = createEl(div, { class: 'sic-line sic-line-2' }, line2Style);
+
     const arrows = createEl(div, { class: 'sic-arrows' });
     const arrow1 = createEl(div, { class: 'sic-arrow sic-arrow-1' });
     const arrow2 = createEl(div, { class: 'sic-arrow sic-arrow-2' });
@@ -233,28 +234,34 @@ class BeforeAfter extends Emitter {
 
     arrows.append(arrow1, arrow2);
     dragHandle.append(arrows);
-    drag.append(line1, line2, dragHandle);
+    drag.append(this.line1, this.line2, dragHandle);
 
     this.element.append(drag);
     this._createdEl.push(drag);
 
     // create labels
     let info1, info2;
+    const beforeLabel = decodeURIComponent(
+      this._ltr ? s.afterLabel : s.beforeLabel
+    );
+    const afterLabel = decodeURIComponent(
+      this._ltr ? s.beforeLabel : s.afterLabel
+    );
     if ('' !== s.beforeLabel) {
       info1 = createEl(div, { class: 'sic-label sic-label-one' });
-      info1.innerHTML = decodeURIComponent(s.beforeLabel);
+      info1.innerHTML = beforeLabel;
       this.element.append(info1);
       this._createdEl.push(info1);
     }
 
     if ('' !== s.afterLabel) {
       info2 = createEl(div, { class: 'sic-label sic-label-two' });
-      info2.innerHTML = decodeURIComponent(s.afterLabel);
+      info2.innerHTML = afterLabel;
       this.element.append(info2);
       this._createdEl.push(info2);
     }
-    this.info1 = s.ltr ? info1 : info2;
-    this.info2 = s.ltr ? info2 : info1;
+    this.info1 = this._ltr ? info2 : info1;
+    this.info2 = this._ltr ? info1 : info2;
 
     this.element.classList.add(
       this._horizontal ? 'sic-horizontal' : 'sic-vertical'
@@ -508,7 +515,10 @@ class BeforeAfter extends Emitter {
     }
 
     if (this._radians) {
-      this._angleOffset = (Math.tan(this._radians) * this.height) / 2;
+      this._angleOffset =
+        Math.tan(this._radians) *
+        0.5 *
+        (this._horizontal ? this.height : this.width);
     }
 
     this._setPosition(this._percent, true);
@@ -629,7 +639,17 @@ class BeforeAfter extends Emitter {
   };
 
   _getClipPolygon(pos) {
-    return `polygon(0 0, ${pos + this._angleOffset}px 0, ${pos - this._angleOffset}px 100%, 0 100%)`;
+    if (this._horizontal) {
+      if (this._ltr) {
+        return `polygon(0 0, ${pos + this._angleOffset}px 0, ${pos - this._angleOffset}px 100%, 0 100%)`;
+      }
+      return `polygon(${pos + this._angleOffset}px 0, 100% 0, 100% 100%, ${pos - this._angleOffset}px 100%)`;
+    }
+
+    if (this._ltr) {
+      return `polygon(0 0, 100% 0, 100% ${pos + this._angleOffset}px, 0 ${pos - this._angleOffset}px)`;
+    }
+    return `polygon(0 ${pos - this._angleOffset}px, 100% ${pos + this._angleOffset}px, 100% 100%, 0 100%)`;
   }
 
   /**
@@ -906,16 +926,49 @@ class BeforeAfter extends Emitter {
     return this;
   }
 
+  setAngle(angle) {
+    angle = +angle;
+    this._angle = angle;
+
+    if (0 === this._angle) {
+      this._getClip = this._getClipRect;
+      this.line1.removeAttribute('style');
+      this.line2.removeAttribute('style');
+      this._radians = null;
+    } else {
+      this._getClip = this._getClipPolygon;
+      this._radians = (this._angle * Math.PI) / 180;
+      this.line1.style.transform = `rotate(${this._angle}deg)`;
+      this.line2.style.transform = `rotate(${this._angle}deg)`;
+
+      if (this._horizontal) {
+        this.line1.style.transformOrigin = 'bottom center';
+        this.line2.style.transformOrigin = 'top center';
+      } else {
+        this.line1.style.transformOrigin = 'right bottom';
+        this.line2.style.transformOrigin = 'left bottom';
+      }
+    }
+
+    this._dimensions(null, true);
+  }
+
   /**
    * ltr = true  (before, 0%) L -> R (after, 100%)
    * ltr = false (after, 0%)  R -> L (before, 100%)
    */
   changeDirection() {
     this._ltr = !this._ltr;
+    // let tmp;
+    // tmp = this.info1;
+    // this.info1 = this.info2;
+    // this.info2 = tmp;
+
     let tmp;
-    tmp = this.info1;
-    this.info1 = this.info2;
-    this.info2 = tmp;
+    tmp = this.info1.innerHTML;
+    this.info1.innerHTML = this.info2.innerHTML;
+    this.info2.innerHTML = tmp;
+
     this._percent = 100 - this._percent;
     this._dimensions(null, true);
   }
@@ -930,7 +983,8 @@ class BeforeAfter extends Emitter {
     this.element.classList.add(
       this._horizontal ? 'sic-horizontal' : 'sic-vertical'
     );
-    this._dimensions(null, true);
+
+    this.setAngle(this._angle);
   }
 
   showAfter() {

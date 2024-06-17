@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.2
+### Added or Changed
+- small css bugfix (vertical view)
+- improve handle-angle (horizontal and vertical view)
+- demo update
+
 ## v0.4.1
 ### Added or Changed
 - small css bugfix

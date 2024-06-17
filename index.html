@@ -650,6 +650,7 @@
 
       <section class="section">
         <h2>Use a custom angle for the handle</h2>
+        <p>To create a little more dynamic, the angle of the handle can be changed.</p>
         <div class="switchButtons">
           <div class="switch" data-name="js">javascript</div>
           <div class="switch" data-name="data">data api</div>
@@ -973,6 +974,23 @@ const ba = new sic('#adv', options);</code></pre>
                 <label for="adv-smooth">smooth</label>
               </div>
               <div class="line">
+                <div class="label">handleAngle:</div>
+                <input
+                  id="adv-handle-angle"
+                  type="range"
+                  step="1"
+                  min="-15"
+                  max="15"
+                  value="0"
+                />
+                <input
+                  type="text"
+                  id="adv-handle-angle-value"
+                  readonly
+                  style="width: 40px"
+                />
+              </div>
+              <div class="line">
                 interaction status:&nbsp;<span id="adv-interaction-status"
                   >none</span
                 >
@@ -1031,6 +1049,8 @@ const ba = new sic('#adv', options);</code></pre>
 
             // action elements
             const rangeBtn = document.getElementById('adv-range');
+            const angleSlider = document.getElementById('adv-handle-angle');
+            const angleSliderValue = document.getElementById('adv-handle-angle-value');
             const toggleBtn = document.getElementById('adv-toggle');
             const playBtn = document.getElementById('adv-play');
             const directionBtn = document.getElementById('adv-direction');
@@ -1114,6 +1134,13 @@ const ba = new sic('#adv', options);</code></pre>
             rangeBtn.addEventListener('input', (e) => {
               sic.goto(e.target.value, smoothValue);
             });
+
+            angleSliderValue.value = angleSlider.value;
+            const setAngleSlider = (e) => {
+              angleSliderValue.value = e.target.value;
+              sic.setAngle(e.target.value);
+            };
+            angleSlider.addEventListener('input', setAngleSlider);
 
             // destroy.addEventListener('click', (e) => {
             //   if (!destroyed) {

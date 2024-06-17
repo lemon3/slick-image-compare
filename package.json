@@ -1,6 +1,6 @@
 {
   "name": "slick-image-compare",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "before and after image comparison slider",
   "author": "wolfgang jungmayer",
   "license": "MIT",
@@ -63,21 +63,21 @@
   },
   "homepage": "https://lemon3.github.io/slick-image-compare",
   "devDependencies": {
-    "@babel/core": "^7.24.5",
-    "@babel/plugin-transform-class-properties": "^7.24.1",
-    "@babel/preset-env": "^7.24.5",
+    "@babel/core": "^7.24.7",
+    "@babel/plugin-transform-class-properties": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
     "@rollup/plugin-terser": "^0.4.4",
-    "@vitest/coverage-v8": "^1.5.3",
-    "eslint": "^9.1.1",
-    "globals": "^15.1.0",
-    "jsdom": "^24.0.0",
+    "@vitest/coverage-v8": "^1.6.0",
+    "eslint": "^9.5.0",
+    "globals": "^15.6.0",
+    "jsdom": "^24.1.0",
     "postcss": "^8.4.38",
     "postcss-nested": "^6.0.1",
-    "postcss-preset-env": "^9.5.9",
-    "prettier": "^3.2.5",
-    "vite": "^5.2.10",
+    "postcss-preset-env": "^9.5.14",
+    "prettier": "^3.3.2",
+    "vite": "^5.3.1",
     "vite-plugin-babel": "^1.2.0",
     "vite-plugin-banner": "^0.7.1",
-    "vitest": "^1.5.3"
+    "vitest": "^1.6.0"
   }
 }
