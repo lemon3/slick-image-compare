@@ -1,6 +1,8 @@
 import { easing } from '@/js/easing';
 
 export const defaults = {
+  combineDataset: true,
+
   autoInit: true,
 
   startPos: 50, // % from left

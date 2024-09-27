@@ -2,7 +2,7 @@ import {
   passiveIfSupported,
   restrict,
   restrictFast,
-  docReady,
+  // docReady,
   imageDimensions,
   getJSONData,
   createEl,
@@ -40,7 +40,36 @@ let initialized = false;
 const getArrow = (right = true, color = '#ffffff') =>
   `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="arcs"><path d="${right ? 'm12 24 8-8-8-8' : 'm20 8-8 8 8 8'}"/></svg>`;
 
-class BeforeAfter extends Emitter {
+class BeforeAfter {
+  constructor(element, options) {
+    if (!element) {
+      return { error: true };
+    }
+
+    element =
+      'string' === typeof element
+        ? document.querySelectorAll(element)
+        : element;
+
+    if (null === element || 0 === element.length) {
+      return { error: true };
+    }
+
+    if (element.length > 1) {
+      const multiple = [];
+      console.log(element);
+      element.forEach((item) => {
+        const tmp = new BeAf(item, options);
+        multiple.push(tmp);
+      });
+      return multiple;
+    }
+
+    element = element.length ? element[0] : element;
+    return new BeAf(element, options);
+  }
+}
+class BeAf extends Emitter {
   constructor(element, options) {
     if (!element) {
       return { error: true };
@@ -75,13 +104,16 @@ class BeforeAfter extends Emitter {
     dataStorage.put(element, 'instance', this);
 
     this.element = element;
+    this.options = options || {}; // user options
 
     // from data api
-    const data = getJSONData(element, PLUGINNAME);
-    // console.log(data);
-
-    this.options = options || {}; // user options
-    this.settings = Object.assign({}, BeforeAfter.defaults, data, options);
+    const combinedOptions = Object.assign({}, BeforeAfter.defaults, options);
+    if (combinedOptions.combineDataset) {
+      let data = getJSONData(element, PLUGINNAME);
+      this.settings = Object.assign({}, BeforeAfter.defaults, data, options);
+    } else {
+      this.settings = combinedOptions;
+    }
 
     // no images are given
     this.images = this.element.querySelectorAll('img');
@@ -242,10 +274,10 @@ class BeforeAfter extends Emitter {
     // create labels
     let info1, info2;
     const beforeLabel = decodeURIComponent(
-      this._ltr ? s.afterLabel : s.beforeLabel
+      this._ltr ? s.beforeLabel : s.afterLabel
     );
     const afterLabel = decodeURIComponent(
-      this._ltr ? s.beforeLabel : s.afterLabel
+      this._ltr ? s.afterLabel : s.beforeLabel
     );
     if ('' !== s.beforeLabel) {
       info1 = createEl(div, { class: 'sic-label sic-label-one' });
@@ -641,15 +673,15 @@ class BeforeAfter extends Emitter {
   _getClipPolygon(pos) {
     if (this._horizontal) {
       if (this._ltr) {
-        return `polygon(0 0, ${pos + this._angleOffset}px 0, ${pos - this._angleOffset}px 100%, 0 100%)`;
+        return `polygon(${pos + this._angleOffset}px 0, 100% 0, 100% 100%, ${pos - this._angleOffset}px 100%)`;
       }
-      return `polygon(${pos + this._angleOffset}px 0, 100% 0, 100% 100%, ${pos - this._angleOffset}px 100%)`;
+      return `polygon(0 0, ${pos + this._angleOffset}px 0, ${pos - this._angleOffset}px 100%, 0 100%)`;
     }
 
     if (this._ltr) {
-      return `polygon(0 0, 100% 0, 100% ${pos + this._angleOffset}px, 0 ${pos - this._angleOffset}px)`;
+      return `polygon(0 ${pos - this._angleOffset}px, 100% ${pos + this._angleOffset}px, 100% 100%, 0 100%)`;
     }
-    return `polygon(0 ${pos - this._angleOffset}px, 100% ${pos + this._angleOffset}px, 100% 100%, 0 100%)`;
+    return `polygon(0 0, 100% 0, 100% ${pos + this._angleOffset}px, 0 ${pos - this._angleOffset}px)`;
   }
 
   /**
@@ -660,20 +692,20 @@ class BeforeAfter extends Emitter {
   _getClipRect(pos) {
     if (this._horizontal) {
       if (this._ltr) {
-        // return `rect(0 ${pos}px ${this.height}px 0)`;
-        return `rect(0 ${pos}px 100% 0)`;
+        // return `rect(0 ${this.width}px ${this.height}px ${pos}px)`;
+        return `rect(0 ${this.width}px 100% ${pos}px)`;
       }
-      // return `rect(0 ${this.width}px ${this.height}px ${pos}px)`;
-      return `rect(0 ${this.width}px 100% ${pos}px)`;
+      // return `rect(0 ${pos}px ${this.height}px 0)`;
+      return `rect(0 ${pos}px 100% 0)`;
     }
 
     // vertical
     if (this._ltr) {
-      // return `rect(0 ${this.width}px ${pos}px 0)`;
-      return `rect(0 100% ${pos}px 0)`;
+      // return `rect(${pos}px ${this.width}px ${this.height}px 0)`;
+      return `rect(${pos}px 100% 100% 0)`;
     }
-    // return `rect(${pos}px ${this.width}px ${this.height}px 0)`;
-    return `rect(${pos}px 100% 100% 0)`;
+    // return `rect(0 ${this.width}px ${pos}px 0)`;
+    return `rect(0 100% ${pos}px 0)`;
   }
 
   _changeStatus(status) {
@@ -707,11 +739,11 @@ class BeforeAfter extends Emitter {
       this.info2.style.opacity = percent > 50 ? 1 : percent / 50;
     }
 
-    let test = this._ltr ? this._afterShown : !this._afterShown;
+    let test = this._ltr ? !this._afterShown : this._afterShown;
     if (percent > 70 && (this._oneTime || !test)) {
-      this._changeStatus(this._ltr);
-    } else if (percent < 30 && (this._oneTime || test)) {
       this._changeStatus(!this._ltr);
+    } else if (percent < 30 && (this._oneTime || test)) {
+      this._changeStatus(this._ltr);
     }
 
     this._triggerEvent(UPDATE);
@@ -988,11 +1020,11 @@ class BeforeAfter extends Emitter {
   }
 
   showAfter() {
-    this._setPosition(this._ltr ? 100 : 0);
+    this._setPosition(this._ltr ? 0 : 100);
   }
 
   showBefore() {
-    this._setPosition(this._ltr ? 0 : 100);
+    this._setPosition(this._ltr ? 100 : 0);
   }
 
   get elem() {
@@ -1033,7 +1065,7 @@ BeforeAfter.init = () => {
   }
 
   element.forEach((el) => {
-    new BeforeAfter(el);
+    new BeAf(el);
   });
 
   return instances;
@@ -1057,6 +1089,6 @@ BeforeAfter.getInstance = (el) => dataStorage.get(el, 'instance');
 
 BeforeAfter.defaults = defaults;
 
-docReady(BeforeAfter.init);
+// docReady(BeforeAfter.init);
 
 export default BeforeAfter;

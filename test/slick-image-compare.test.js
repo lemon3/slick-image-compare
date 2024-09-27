@@ -25,8 +25,12 @@ describe('test static methods', () => {
       expect(typeof SlickImageCompare.init).toBe('function');
     });
 
+    // initialize it
+    SlickImageCompare.init();
+
     test('should return true', () => {
       const init = SlickImageCompare.init();
+      console.log(init);
       expect(init).toBeTruthy();
       expect(init).toBe(true);
     });
@@ -70,10 +74,10 @@ describe('test initialization', () => {
 
     const sic = new SlickImageCompare(div);
     expect(typeof sic).toBe('object');
-    expect(sic instanceof SlickImageCompare).toBe(true);
+    expect(sic instanceof SlickImageCompare).toBe(false);
 
     const sic2 = new SlickImageCompare(div);
-    expect(sic2 instanceof SlickImageCompare).toBe(true);
+    expect(sic2 instanceof SlickImageCompare).toBe(false);
   });
 });
 

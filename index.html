@@ -362,7 +362,7 @@
         text-align: center;
         text-transform: uppercase;
         font-weight: 100;
-        font-size: 0.75em;
+        font-size: 0.65em;
       }
 
       div[data-sic],
@@ -576,6 +576,7 @@
   &lt;img src=&quot;04_before.jpg&quot; alt=&quot;before&quot; /&gt;
   &lt;img src=&quot;04_after.jpg&quot; alt=&quot;after&quot; /&gt;
 &lt;/div&gt;</code></pre>
+<pre><code class="language-javascript">SlickImageCompare.init();</code></pre>
         </div>
         <div class="switch-content" data-content="js">
           <pre><code class="language-xml">&lt;div id=&quot;my-div&quot;&gt;
@@ -619,6 +620,7 @@
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
+<pre><code class="language-javascript">SlickImageCompare.init();</code></pre>
         </div>
         <div class="switch-content" data-content="js">
           <pre><code class="language-xml">&lt;div id=&quot;my-div&quot;&gt;
@@ -660,6 +662,7 @@
   &lt;img src=&quot;08_before.jpg&quot; alt=&quot;before&quot; /&gt;
   &lt;img src=&quot;08_after.jpg&quot; alt=&quot;after&quot; /&gt;
 &lt;/div&gt;</code></pre>
+<pre><code class="language-javascript">SlickImageCompare.init();</code></pre>
         </div>
         <div class="switch-content" data-content="js">
           <pre><code class="language-xml">&lt;div id=&quot;my-div&quot;&gt;
@@ -708,6 +711,7 @@
     alt=&quot;deer&quot;
   /&gt;
 &lt;/div&gt;</code></pre>
+<pre><code class="language-javascript">SlickImageCompare.init();</code></pre>
         </div>
         <div class="switch-content" data-content="js">
           <pre><code class="language-xml">&lt;div id=&quot;my-div&quot;&gt;
@@ -764,6 +768,7 @@
     &lt;img src=&quot;07_after_md.jpg&quot; alt=&quot;&quot; /&gt;
   &lt;/picture&gt;
 &lt;/div&gt;</code></pre>
+<pre><code class="language-javascript">SlickImageCompare.init();</code></pre>
         </div>
         <div class="switch-content" data-content="js">
           <pre><code class="language-xml">&lt;div id=&quot;my-div&quot;&gt;
@@ -824,6 +829,7 @@
   &lt;img src=&quot;01_after.png&quot; alt=&quot;after&quot; /&gt;
 &lt;/div&gt;
 </code></pre>
+<pre><code class="language-javascript">SlickImageCompare.init();</code></pre>
         </div>
         <div class="switch-content" data-content="js">
           <pre><code class="language-xml">&lt;div id=&quot;my-div&quot;&gt;&lt;/div&gt;
@@ -852,34 +858,33 @@
           Replacing colors in an image (Transparent PNG)
         </div>
       </section>
-      <!--
-      <section class="section">
+
+      <!-- <section class="section">
         <h2>demo 3</h2>
-      <pre><code class="language-xml">&lt;div data-sic=&quot;{
-    onlyHandleDraggable: true,
-    clickable: true,
-    beforeLabel: 'before',
-    afterLabel: 'after',
-    snapToStart: true,
-  }&quot;&gt;
+<pre><code class="language-xml">&lt;div data-sic=&quot;{
+  onlyHandleDraggable: true,
+  clickable: true,
+  beforeLabel: 'before',
+  afterLabel: 'after',
+  snapToStart: true,
+}&quot;&gt;
   &lt;img src=&quot;02_after.png&quot; alt=&quot;&quot; /&gt;
   &lt;img src=&quot;02_before.png&quot; alt=&quot;&quot; /&gt;
-&lt;/div&gt;
-</code></pre>
-      <div style="margin: 0 auto 1em">
-        <div data-sic="{
-            onlyHandleDraggable: true,
-            clickable: true,
-            beforeLabel: 'before',
-            afterLabel: 'after',
-            snapToStart: true,
-          }"
-        >
-          <img src="02_after.png" alt="" />
-          <img src="02_before.png" alt="" />
+&lt;/div&gt;</code></pre>
+        <div style="margin: 0 auto 1em">
+          <div data-sic="{
+              onlyHandleDraggable: true,
+              clickable: true,
+              beforeLabel: 'before',
+              afterLabel: 'after',
+              snapToStart: true,
+            }"
+          >
+            <img src="02_after.png" alt="" />
+            <img src="02_before.png" alt="" />
+          </div>
         </div>
-      </div>
-    </section>-->
+      </section> -->
 
       <section class="section">
         <h2>Snap to Start</h2>
@@ -901,6 +906,7 @@
   &lt;img src=&quot;02_before.png&quot; alt=&quot;&quot; /&gt;
 &lt;/div&gt;
 </code></pre>
+<pre><code class="language-javascript">SlickImageCompare.init();</code></pre>
         </div>
         <div class="switch-content" data-content="js">
           <pre><code class="language-xml">&lt;div id=&quot;my-div&quot;&gt;
@@ -930,6 +936,119 @@
         <div class="caption">
           Replacing colors in an image (Transparent PNG)
         </div>
+      </section>
+
+      <section class="section"></section>
+        <h2>Multiple slider (class)</h2>
+        <p>
+          Use multiple slider with the same settings (option object)
+        </p>
+        <div class="switchButtons">
+          <div class="switch" data-name="js">javascript</div>
+          <div class="switch" data-name="data">data api</div>
+        </div>
+        <div class="switch-content" data-content="data">
+          <pre><code class="language-xml">&lt;div data-sic=&quot;{
+    snapToStart: true,
+    beforeLabel: 'pink 1',
+    afterLabel: 'turquoise 1',
+  }&quot;
+  class=&quot;my-class&quot;&gt;
+  &lt;img src=&quot;02_before.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;02_after.png&quot; alt=&quot;&quot; /&gt;
+&lt;/div&gt;
+
+&lt;div data-sic=&quot;{
+    snapToStart: true,
+    beforeLabel: 'pink 2',
+    afterLabel: 'turquoise 2',
+  }&quot;
+  class=&quot;my-class&quot;&gt;
+  &lt;img src=&quot;02_before.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;02_after.png&quot; alt=&quot;&quot; /&gt;
+&lt;/div&gt;
+</code></pre>
+
+<pre><code class="language-javascript">SlickImageCompare.init();</code></pre>
+        </div>
+        <div class="switch-content" data-content="js">
+          <pre><code class="language-xml">&lt;div data-sic=&quot;{
+    beforeLabel: 'pink 1',
+    afterLabel: 'turquoise 1',
+  }&quot;
+  class=&quot;my-class&quot;&gt;
+  &lt;img src=&quot;02_before.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;02_after.png&quot; alt=&quot;&quot; /&gt;
+&lt;/div&gt;
+
+&lt;div data-sic=&quot;{
+    beforeLabel: 'pink 2',
+    afterLabel: 'turquoise 2',
+  }&quot;
+  class=&quot;my-class&quot;&gt;
+  &lt;img src=&quot;02_before.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;02_after.png&quot; alt=&quot;&quot; /&gt;
+&lt;/div&gt;
+</code></pre>
+
+          <pre><code class="language-javascript">new SlickImageCompare('.my-class', {
+  snapToStart: true,
+});</code></pre>
+        </div>
+
+        <div class="row">
+          <div class="col col50">
+            <div
+              data-sic="{
+                beforeLabel: 'pink 1',
+                afterLabel: 'turquoise 1',
+              }"
+              class="my-class"
+            >
+              <img src="02_before.png" alt="" />
+              <img src="02_after.png" alt="" />
+            </div>
+            <div class="caption">
+              Replacing colors in an image (Transparent PNG)
+            </div>
+          </div>
+
+          <div class="col col50">
+            <div
+              data-sic="{
+                beforeLabel: 'pink 2',
+                afterLabel: 'turquoise 2',
+              }"
+              class="my-class"
+            >
+              <img src="02_before.png" alt="" />
+              <img src="02_after.png" alt="" />
+            </div>
+            <div class="caption">
+              Replacing colors in an image (Transparent PNG)
+            </div>
+          </div>
+        </div>
+
+        <script type="module">
+          import SlickImageCompare from './src/index.js';
+          window.SlickImageCompare = SlickImageCompare;
+
+          let multipleInit = () => {
+            document.removeEventListener('DOMContentLoaded', multipleInit);
+            // SlickImageCompare.init();
+
+            new SlickImageCompare('.my-class', {
+              snapToStart: true,
+            });
+          };
+
+          if ('complete' === document.readyState) {
+            multipleInit();
+          } else {
+            document.addEventListener('DOMContentLoaded', multipleInit, false);
+          }
+        </script>
       </section>
 
       <section class="section">
@@ -1233,6 +1352,9 @@ const ba = new sic('#adv', options);</code></pre>
       </svg>
     </a>
     <script>
+
+
+
       const switchButtons = document.querySelectorAll('.switch');
       let current = 'js';
       let currentElements = document.querySelectorAll(
@@ -1327,6 +1449,8 @@ const ba = new sic('#adv', options);</code></pre>
           change(modes[++currentIndex % 3]);
         });
         modeSwitch.style.display = 'block';
+
+        window.SlickImageCompare.init();
       };
 
       if (

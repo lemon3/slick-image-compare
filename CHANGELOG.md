@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.4.3
+### Added
+- combineDataset option added, available values: true, false, default value: true. Combines dataset values with the values given in the options object (js overrides existing dataset values)
+- added style to package.json exports
+### Changed
+- autoInit for the (data api) has been removed, you have to manually call the static class method: **SlickImageCompare.init()**;
+- Positioning of the before and after images changed. Now, by default, the first element in the DOM tree is the left one in the slider, and the second image element is the right one. (you can change this behavior by setting the option 'ltr' to false)
+
 ## v0.4.2
 ### Added or Changed
 - small css bugfix (vertical view)

@@ -1,68 +1,65 @@
 /*!
-* SlickImageCompare v0.4.1
+* SlickImageCompare v0.4.3
 * https://lemon3.github.io/slick-image-compare
 */
-var Y = Object.defineProperty;
-var z = Object.getOwnPropertySymbols;
-var Q = Object.prototype.hasOwnProperty, J = Object.prototype.propertyIsEnumerable;
-var D = (s, i, t) => i in s ? Y(s, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[i] = t, k = (s, i) => {
-  for (var t in i || (i = {}))
-    Q.call(i, t) && D(s, t, i[t]);
-  if (z)
-    for (var t of z(i))
-      J.call(i, t) && D(s, t, i[t]);
-  return s;
+var Q = Object.defineProperty;
+var k = Object.getOwnPropertySymbols;
+var J = Object.prototype.hasOwnProperty, Z = Object.prototype.propertyIsEnumerable;
+var D = (i, s, t) => s in i ? Q(i, s, { enumerable: !0, configurable: !0, writable: !0, value: t }) : i[s] = t, x = (i, s) => {
+  for (var t in s || (s = {}))
+    J.call(s, t) && D(i, t, s[t]);
+  if (k)
+    for (var t of k(s))
+      Z.call(s, t) && D(i, t, s[t]);
+  return i;
 };
-var _ = (s, i, t) => D(s, typeof i != "symbol" ? i + "" : i, t);
+var _ = (i, s, t) => D(i, typeof s != "symbol" ? s + "" : s, t);
 const G = {
   // storage
   _s: /* @__PURE__ */ new WeakMap(),
-  put(s, ...i) {
-    this._s.has(s) || this._s.set(s, /* @__PURE__ */ new Map());
-    let t = this._s.get(s);
-    if (i.length > 1)
-      return t.set(i[0], i[1]), this;
-    if (typeof i[0] == "object")
-      for (const e in i[0])
-        t.set(e, i[0][e]);
+  put(i, ...s) {
+    this._s.has(i) || this._s.set(i, /* @__PURE__ */ new Map());
+    let t = this._s.get(i);
+    if (s.length > 1)
+      return t.set(s[0], s[1]), this;
+    if (typeof s[0] == "object")
+      for (const e in s[0])
+        t.set(e, s[0][e]);
     else
-      t.set(i[0]);
+      t.set(s[0]);
     return this;
   },
-  get(s, i) {
-    return this._s.has(s) ? i ? this._s.get(s).get(i) : this._s.get(s) : !1;
+  get(i, s) {
+    return this._s.has(i) ? s ? this._s.get(i).get(s) : this._s.get(i) : !1;
   },
-  has(s, i) {
-    return this._s.has(s) && this._s.get(s).has(i);
+  has(i, s) {
+    return this._s.has(i) && this._s.get(i).has(s);
   },
   // todo if no key given: remove all
-  remove(s, i) {
-    if (!this._s.has(s))
+  remove(i, s) {
+    if (!this._s.has(i))
       return !1;
-    let t = this._s.get(s).delete(i);
-    return this._s.get(s).size === 0 && this._s.delete(s), t;
+    let t = this._s.get(i).delete(s);
+    return this._s.get(i).size === 0 && this._s.delete(i), t;
   }
-}, x = (s) => s === !0 || s === "true" || s === 1 || s === "1", Z = (s) => {
-  const i = "DOMContentLoaded";
-  document.readyState === "complete" || document.readyState === "interactive" ? (s(), document.removeEventListener(i, s)) : document.addEventListener(i, s, !1);
-}, K = (s) => new Promise((i, t) => {
+}, H = (i) => i === !0 || i === "true" || i === 1 || i === "1", K = (i) => new Promise((s, t) => {
   const e = new Image();
   e.onload = () => {
     const { naturalWidth: n, naturalHeight: a } = e, r = n / a;
-    i({ width: n, height: a, ratio: r });
+    s({ width: n, height: a, ratio: r });
   }, e.onerror = () => {
     t("error");
-  }, e.src = s;
-}), V = (s) => {
-  if (!s.match(/[^\w]+/i)) return s;
-  const i = {};
-  return s = s.replace("{", "").replace("}", "").trim(), s.split(",").forEach((e) => {
+  }, e.src = i;
+}), V = (i) => {
+  if (!i.match(/[^\w]+/i)) return i;
+  const s = {};
+  return i = i.replace("{", "").replace("}", "").trim(), i.split(",").forEach((e) => {
     if (e === "")
       return;
     let [n, a] = e.split(":");
-    n = n.trim().replaceAll("'", ""), a = a.trim().replaceAll("'", ""), i[n] = a;
-  }), i;
-}, tt = (s, i) => s ? i === void 0 || typeof i == "undefined" ? s.dataset : s.dataset[i] === void 0 ? s.dataset[i] : V(s.dataset[i]) : !1;
+    n = n.trim().replaceAll("'", ""), a = a.trim().replaceAll("'", ""), s[n] = a;
+  }), s;
+}, tt = (i, s) => i ? i.dataset[s] === void 0 ? i.dataset[s] : V(i.dataset[s]) : !1;
 let v = !1;
 try {
   window.addEventListener(
@@ -74,45 +71,46 @@ try {
       }
     })
   );
-} catch (s) {
+} catch (i) {
   v = !1;
 }
-const H = (s, i, t) => Math.max(i, Math.min(s, t)), E = (s, i, t) => {
-  if (s = parseFloat(s, 10), i = parseFloat(i, 10), t = parseFloat(t, 10), t < i) {
+const $ = (i, s, t) => Math.max(s, Math.min(i, t)), E = (i, s, t) => {
+  if (i = parseFloat(i, 10), s = parseFloat(s, 10), t = parseFloat(t, 10), t < s) {
     let e = t;
-    t = i, i = e;
+    t = s, s = e;
   }
-  return !isNaN(i) && s < i ? i : !isNaN(t) && s > t ? t : s;
-}, et = (s, i, t, e) => {
-  if (i)
-    for (let n in i)
-      Object.prototype.hasOwnProperty.call(i, n) && s.setAttribute(n, i[n]);
+  return !isNaN(s) && i < s ? s : !isNaN(t) && i > t ? t : i;
+}, et = (i, s, t, e) => {
+  if (s)
+    for (let n in s)
+      Object.prototype.hasOwnProperty.call(s, n) && i.setAttribute(n, s[n]);
   if (t)
     for (let n in t)
-      Object.prototype.hasOwnProperty.call(t, n) && (s.style[n] = t[n]);
-  return e && (s.innerHTML = e), s;
-}, c = (s, i, t, e) => et(document.createElement(s), i, t, e), b = {
-  Linear: (s) => s,
+      Object.prototype.hasOwnProperty.call(t, n) && (i.style[n] = t[n]);
+  return i;
+}, c = (i, s, t, e) => et(document.createElement(i), s, t), T = {
+  Linear: (i) => i,
   // Pow: {},
   Quad: {
-    easeIn: (s) => Math.pow(s, 2),
-    easeOut: (s) => 1 - Math.pow(1 - s, 2)
+    easeIn: (i) => Math.pow(i, 2),
+    easeOut: (i) => 1 - Math.pow(1 - i, 2)
   },
   Cubic: {
-    easeIn: (s) => Math.pow(s, 3),
-    easeOut: (s) => 1 - Math.pow(1 - s, 3)
+    easeIn: (i) => Math.pow(i, 3),
+    easeOut: (i) => 1 - Math.pow(1 - i, 3)
   },
   Sine: {
-    easeIn: (s) => 1 - Math.cos(s * Math.PI / 2),
-    easeOut: (s) => Math.sin(s * Math.PI / 2)
+    easeIn: (i) => 1 - Math.cos(i * Math.PI / 2),
+    easeOut: (i) => Math.sin(i * Math.PI / 2)
   },
   Elastic: {
-    easeOut: (s) => {
-      const i = 2 * Math.PI / 3;
-      return s === 0 || s === 1 ? s : Math.pow(2, -10 * s) * Math.sin((s * 10 - 0.75) * i) + 1;
+    easeOut: (i) => {
+      const s = 2 * Math.PI / 3;
+      return i === 0 || i === 1 ? i : Math.pow(2, -10 * i) * Math.sin((i * 10 - 0.75) * s) + 1;
     }
   }
 }, st = {
+  combineDataset: !0,
   autoInit: !0,
   startPos: 50,
   // % from left
@@ -134,7 +132,7 @@ const H = (s, i, t) => Math.max(i, Math.min(s, t)), E = (s, i, t) => {
   snapToStartDelay: 1e3,
   snapToStartDuration: 1250,
   // ms TODO: implement
-  snapToStartEasing: b.Elastic.easeOut,
+  snapToStartEasing: T.Elastic.easeOut,
   // TODO: implement
   handleMinDistance: 0,
   // min distance to left and right border in px TODO: also %
@@ -144,14 +142,14 @@ const H = (s, i, t) => Math.max(i, Math.min(s, t)), E = (s, i, t) => {
   animateIn: !1,
   animateInDuration: 1250,
   // ms
-  animateInEasing: b.Elastic.easeOut,
+  animateInEasing: T.Elastic.easeOut,
   animateInDelay: 100,
   // in ms
   animateInStartPos: 40,
   // % from left
   animateDuration: 250,
   // ms
-  animateEasing: b.Cubic.easeOut,
+  animateEasing: T.Cubic.easeOut,
   // showLabels: false,
   beforeLabel: "",
   // before Image
@@ -171,9 +169,9 @@ class it {
    * @param {string} eventName the name of the event to be triggered
    * @param {Object} detail additional event data
    */
-  emit(i, t) {
-    let e = this._eventCallbacks[i];
-    const n = { bubbles: !1, cancelable: !1, detail: t }, a = new CustomEvent(i, n);
+  emit(s, t) {
+    let e = this._eventCallbacks[s];
+    const n = { bubbles: !1, cancelable: !1, detail: t }, a = new CustomEvent(s, n);
     e && e.forEach((r) => r.call(this, a)), this.element.dispatchEvent(a);
   }
   /**
@@ -183,8 +181,8 @@ class it {
    * @param {function} listener the handler function to be called if the event triggers
    * @returns
    */
-  addEventListener(i, t) {
-    return this.allowedEvents && this.allowedEvents.indexOf(i) < 0 || typeof t != "function" ? !1 : (this._eventCallbacks[i] || (this._eventCallbacks[i] = []), this._eventCallbacks[i].push(t), this);
+  addEventListener(s, t) {
+    return this.allowedEvents && this.allowedEvents.indexOf(s) < 0 || typeof t != "function" ? !1 : (this._eventCallbacks[s] || (this._eventCallbacks[s] = []), this._eventCallbacks[s].push(t), this);
   }
   /**
    * Remove previously register event handler
@@ -194,19 +192,35 @@ class it {
    * @param {[function]} listener the handler function
    * @returns
    */
-  removeEventListener(i, t) {
+  removeEventListener(s, t) {
     if (!this._eventCallbacks || arguments.length === 0)
       return this._eventCallbacks = {}, this;
-    let e = this._eventCallbacks[i];
-    return e ? arguments.length === 1 ? (delete this._eventCallbacks[i], this) : (this._eventCallbacks[i] = e.filter(
+    let e = this._eventCallbacks[s];
+    return e ? arguments.length === 1 ? (delete this._eventCallbacks[s], this) : (this._eventCallbacks[s] = e.filter(
       (n) => n !== t
     ), this) : this;
   }
 }
-const L = "sic", nt = "data-" + L, w = "interacting", R = "init", $ = "drag", N = "update", M = "viewchange", F = "beforeshown", W = "aftershown", j = "interactionstart", q = "interactionend", y = "mousedown", S = "mouseup", at = "resize";
+const L = "sic", nt = "data-" + L, w = "interacting", R = "init", N = "drag", F = "update", M = "viewchange", W = "beforeshown", j = "aftershown", q = "interactionstart", B = "interactionend", y = "mousedown", S = "mouseup", at = "resize";
 let I = [], O = !1;
-const U = (s = !0, i = "#ffffff") => `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="${i}" stroke-width="2" stroke-linecap="round" stroke-linejoin="arcs"><path d="${s ? "m12 24 8-8-8-8" : "m20 8-8 8 8 8"}"/></svg>`;
-class d extends it {
+const U = (i = !0, s = "#ffffff") => `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2" stroke-linecap="round" stroke-linejoin="arcs"><path d="${i ? "m12 24 8-8-8-8" : "m20 8-8 8 8 8"}"/></svg>`;
+class d {
+  constructor(s, t) {
+    if (!s)
+      return { error: !0 };
+    if (s = typeof s == "string" ? document.querySelectorAll(s) : s, s === null || s.length === 0)
+      return { error: !0 };
+    if (s.length > 1) {
+      const e = [];
+      return console.log(s), s.forEach((n) => {
+        const a = new A(n, t);
+        e.push(a);
+      }), e;
+    }
+    return s = s.length ? s[0] : s, new A(s, t);
+  }
+}
+class A extends it {
   constructor(t, e) {
     if (!t)
       return { error: !0 };
@@ -237,7 +251,7 @@ class d extends it {
     });
     // if tapped on canvas
     _(this, "_tapstart", (t) => {
-      t.stopPropagation(), this._endInteraction = !1, this.stop(), clearTimeout(this._snapTimeout), this._triggerEvent(j), t.type === "touchstart" ? (this.isTouch = !0, this._mouseStartEvents(!1)) : y === t.type && (this.isTouch = !1, this._touchStartEvent(!1));
+      t.stopPropagation(), this._endInteraction = !1, this.stop(), clearTimeout(this._snapTimeout), this._triggerEvent(q), t.type === "touchstart" ? (this.isTouch = !0, this._mouseStartEvents(!1)) : y === t.type && (this.isTouch = !1, this._touchStartEvent(!1));
       const e = this._calcPercent(this._getPos(t));
       this.settings.animateOnClick ? this._animateTo(e, this.settings.animateDuration) : this._setPosition(e);
     });
@@ -263,7 +277,7 @@ class d extends it {
           this.element.classList.add(w), this._dirDetected = !0;
         }
       }
-      this._setPosition(n), this._triggerEvent($);
+      this._setPosition(n), this._triggerEvent(N);
     });
     _(this, "_dragEnd", (t) => {
       this._endInteraction = !0, t.type === "touchend" ? (this.isTouch = !0, window.removeEventListener("touchmove", this._drag, v), window.removeEventListener("touchend", this._dragEnd)) : S === t.type && (this.isTouch = !1, this.settings.followMouse || (window.removeEventListener("mousemove", this._drag, !1), window.removeEventListener(S, this._dragEnd, !1))), this._testInteractionEnd(), this._dirDetected = !1;
@@ -272,23 +286,28 @@ class d extends it {
       return d.getInstance(t);
     t.dataset.sicinitialized = !0, this.allowedEvents = [
       R,
-      $,
       N,
       F,
       W,
       j,
       q,
+      B,
       M
-    ], I.push(this), G.put(t, "instance", this), this.element = t;
-    const n = tt(t, L);
-    if (this.options = e || {}, this.settings = Object.assign({}, d.defaults, n, e), this.images = this.element.querySelectorAll("img"), this.picture = this.element.querySelectorAll("picture"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || !this.images.length) && (!this.picture || !this.picture.length))
+    ], I.push(this), G.put(t, "instance", this), this.element = t, this.options = e || {};
+    const n = Object.assign({}, d.defaults, e);
+    if (n.combineDataset) {
+      let a = tt(t, L);
+      this.settings = Object.assign({}, d.defaults, a, e);
+    } else
+      this.settings = n;
+    if (this.images = this.element.querySelectorAll("img"), this.picture = this.element.querySelectorAll("picture"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || !this.images.length) && (!this.picture || !this.picture.length))
       return {
         error: !0
       };
     this.element.classList.contains(L + "-main") || this.element.classList.add(L + "-main"), this._snapTimeout = null, this._dirDetected = !1, this.settings.autoInit && this.init();
   }
   _triggerEvent(t, e) {
-    e = k({
+    e = x({
       instance: this,
       horizontal: this._horizontal,
       ltr: this._ltr,
@@ -361,15 +380,15 @@ class d extends it {
       transform: `rotate(${this._angle}deg)`,
       transformOrigin: "top center"
     }), this.line1 = c(e, { class: "sic-line sic-line-1" }, f), this.line2 = c(e, { class: "sic-line sic-line-2" }, h);
-    const o = c(e, { class: "sic-arrows" }), T = c(e, { class: "sic-arrow sic-arrow-1" }), u = c(e, { class: "sic-arrow sic-arrow-2" }), A = c(e, { class: "sic-circle" });
-    T.innerHTML = U(!1), u.innerHTML = U(), o.append(T, u), A.append(o), l.append(this.line1, this.line2, A), this.element.append(l), this._createdEl.push(l);
+    const o = c(e, { class: "sic-arrows" }), b = c(e, { class: "sic-arrow sic-arrow-1" }), u = c(e, { class: "sic-arrow sic-arrow-2" }), z = c(e, { class: "sic-circle" });
+    b.innerHTML = U(!1), u.innerHTML = U(), o.append(b, u), z.append(o), l.append(this.line1, this.line2, z), this.element.append(l), this._createdEl.push(l);
     let g, m;
-    const B = decodeURIComponent(
-      this._ltr ? t.afterLabel : t.beforeLabel
-    ), X = decodeURIComponent(
+    const X = decodeURIComponent(
       this._ltr ? t.beforeLabel : t.afterLabel
+    ), Y = decodeURIComponent(
+      this._ltr ? t.afterLabel : t.beforeLabel
     );
-    t.beforeLabel !== "" && (g = c(e, { class: "sic-label sic-label-one" }), g.innerHTML = B, this.element.append(g), this._createdEl.push(g)), t.afterLabel !== "" && (m = c(e, { class: "sic-label sic-label-two" }), m.innerHTML = X, this.element.append(m), this._createdEl.push(m)), this.info1 = this._ltr ? m : g, this.info2 = this._ltr ? g : m, this.element.classList.add(
+    t.beforeLabel !== "" && (g = c(e, { class: "sic-label sic-label-one" }), g.innerHTML = X, this.element.append(g), this._createdEl.push(g)), t.afterLabel !== "" && (m = c(e, { class: "sic-label sic-label-two" }), m.innerHTML = Y, this.element.append(m), this._createdEl.push(m)), this.info1 = this._ltr ? m : g, this.info2 = this._ltr ? g : m, this.element.classList.add(
       this._horizontal ? "sic-horizontal" : "sic-vertical"
     ), this.element.style.position = "relative", this.element.style.overflow = "hidden", this.element.style.visibility = "visible", this._dragHandle = l, this._clipEl = r;
   }
@@ -422,7 +441,7 @@ class d extends it {
     this._renderId && (cancelAnimationFrame(this._renderId), this.element.classList.contains("playing") && this.element.classList.remove("playing"), this._renderId = void 0);
   }
   _testInteractionEnd() {
-    this._endInteraction && this._renderId === void 0 && (this._endInteraction = !1, this._interactionEnd(), this._triggerEvent(q));
+    this._endInteraction && this._renderId === void 0 && (this._endInteraction = !1, this._interactionEnd(), this._triggerEvent(B));
   }
   /**
    *
@@ -455,7 +474,7 @@ class d extends it {
    * @returns
    */
   _animateTo(t, e, n) {
-    if (t = H(+t, 0, 100), !e) {
+    if (t = $(+t, 0, 100), !e) {
       this._setPosition(t);
       return;
     }
@@ -485,7 +504,7 @@ class d extends it {
     }, 250);
   }
   _getClipPolygon(t) {
-    return this._horizontal ? this._ltr ? `polygon(0 0, ${t + this._angleOffset}px 0, ${t - this._angleOffset}px 100%, 0 100%)` : `polygon(${t + this._angleOffset}px 0, 100% 0, 100% 100%, ${t - this._angleOffset}px 100%)` : this._ltr ? `polygon(0 0, 100% 0, 100% ${t + this._angleOffset}px, 0 ${t - this._angleOffset}px)` : `polygon(0 ${t - this._angleOffset}px, 100% ${t + this._angleOffset}px, 100% 100%, 0 100%)`;
+    return this._horizontal ? this._ltr ? `polygon(${t + this._angleOffset}px 0, 100% 0, 100% 100%, ${t - this._angleOffset}px 100%)` : `polygon(0 0, ${t + this._angleOffset}px 0, ${t - this._angleOffset}px 100%, 0 100%)` : this._ltr ? `polygon(0 ${t - this._angleOffset}px, 100% ${t + this._angleOffset}px, 100% 100%, 0 100%)` : `polygon(0 0, 100% 0, 100% ${t + this._angleOffset}px, 0 ${t - this._angleOffset}px)`;
   }
   /**
    *
@@ -493,11 +512,11 @@ class d extends it {
    * @returns
    */
   _getClipRect(t) {
-    return this._horizontal ? this._ltr ? `rect(0 ${t}px 100% 0)` : `rect(0 ${this.width}px 100% ${t}px)` : this._ltr ? `rect(0 100% ${t}px 0)` : `rect(${t}px 100% 100% 0)`;
+    return this._horizontal ? this._ltr ? `rect(0 ${this.width}px 100% ${t}px)` : `rect(0 ${t}px 100% 0)` : this._ltr ? `rect(${t}px 100% 100% 0)` : `rect(0 100% ${t}px 0)`;
   }
   _changeStatus(t) {
     this._afterShown = t;
-    let e = this._afterShown ? W : F;
+    let e = this._afterShown ? j : W;
     this._triggerEvent(e), this._triggerEvent(M), this._oneTime = !1;
   }
   /**
@@ -510,8 +529,8 @@ class d extends it {
     this._percent = t;
     const n = this._dim * 0.01 * t;
     this._clipEl.style.clipPath = this._getClip(n), this._dragHandle.style.transform = this._horizontal ? `translate(${n}px, 0)` : `translate(0, ${n}px)`, this.info1 && (this.info1.style.opacity = t < 50 ? 1 : (100 - t) / 50), this.info2 && (this.info2.style.opacity = t > 50 ? 1 : t / 50);
-    let a = this._ltr ? this._afterShown : !this._afterShown;
-    t > 70 && (this._oneTime || !a) ? this._changeStatus(this._ltr) : t < 30 && (this._oneTime || a) && this._changeStatus(!this._ltr), this._triggerEvent(N);
+    let a = this._ltr ? !this._afterShown : this._afterShown;
+    t > 70 && (this._oneTime || !a) ? this._changeStatus(!this._ltr) : t < 30 && (this._oneTime || a) && this._changeStatus(this._ltr), this._triggerEvent(F);
   }
   /**
    * convert pixel position to percent from left
@@ -520,7 +539,7 @@ class d extends it {
    */
   _calcPercent(t) {
     let e = this._horizontal ? t.x : t.y;
-    return e = H(e, this._minPos, this._maxPos), (e + this._offset) * 100 / this._dim;
+    return e = $(e, this._minPos, this._maxPos), (e + this._offset) * 100 / this._dim;
   }
   // /**
   //  * convert percent to left pixel value
@@ -541,7 +560,7 @@ class d extends it {
     if (this._initialized)
       return this;
     const t = this.settings;
-    this._initialized = !0, this._oneTime = !0, this._afterShown = !1, this._ltr = x(t.ltr), this._horizontal = x(t.horizontal), this._usePicture = this.picture && this.picture.length === 2, this._angle = E(t.handleAngle, -30, 30), this._getClip = this._getClipRect, this._angle && (this._radians = this._angle * Math.PI / 180, this._getClip = this._getClipPolygon), this._createGui(), this._dragEl = t.onlyHandleDraggable ? this._dragHandle : this.element, this._animationDuration = t.animateInDuration || 0, t.startPos = E(t.startPos, 0, 100), t.animateInStartPos = E(t.animateInStartPos, 0, 100), t.startPos || (t.startPos = 50), t.animateInStartPos || (t.animateInStartPos = 0), t.animateIn ? this._percent = this._animationDuration > 0 ? t.animateInStartPos : t.startPos : this._percent = t.startPos, this.element.style.opacity = 0, this.isTouch = "ontouchstart" in window || window.DocumentTouch && document instanceof window.DocumentTouch || navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0, this.allowedEvents.forEach((e) => {
+    this._initialized = !0, this._oneTime = !0, this._afterShown = !1, this._ltr = H(t.ltr), this._horizontal = H(t.horizontal), this._usePicture = this.picture && this.picture.length === 2, this._angle = E(t.handleAngle, -30, 30), this._getClip = this._getClipRect, this._angle && (this._radians = this._angle * Math.PI / 180, this._getClip = this._getClipPolygon), this._createGui(), this._dragEl = t.onlyHandleDraggable ? this._dragHandle : this.element, this._animationDuration = t.animateInDuration || 0, t.startPos = E(t.startPos, 0, 100), t.animateInStartPos = E(t.animateInStartPos, 0, 100), t.startPos || (t.startPos = 50), t.animateInStartPos || (t.animateInStartPos = 0), t.animateIn ? this._percent = this._animationDuration > 0 ? t.animateInStartPos : t.startPos : this._percent = t.startPos, this.element.style.opacity = 0, this.isTouch = "ontouchstart" in window || window.DocumentTouch && document instanceof window.DocumentTouch || navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0, this.allowedEvents.forEach((e) => {
       t[e] && this.addEventListener(e, t[e]);
     }), this._firstImage = this._usePicture ? this.picture[0].querySelector("img") : this.images[0], this._firstImageSrc = this._firstImage.currentSrc || this._firstImage.src, K(this._firstImageSrc).then(() => {
       this._dimensions(), this._setPosition(this._percent), this.element.style.opacity = 1, t.animateIn && this._animationDuration > 0 && this.settings.animateInStartPos !== this.settings.startPos && setTimeout(
@@ -564,8 +583,8 @@ class d extends it {
   play(t = this._percent, e = 2, n = 2e3, a) {
     this.stop(), clearTimeout(this._snapTimeout), n = E(n, 250, 1e4), t = E(t, 0, 100);
     let r = this._percent, l = 100 - r, f = n / 100 * Math.abs(l), h = !0, o = 0;
-    e <= 0 && (e = -1), this.progress = this._timingCurTime = this._timingThen = 0, this.easing = a || b.Quad.easeOut;
-    const T = () => {
+    e <= 0 && (e = -1), this.progress = this._timingCurTime = this._timingThen = 0, this.easing = a || T.Quad.easeOut;
+    const b = () => {
       let u = Date.now();
       if (this._timingCurTime += u - (this._timingThen || u), this.progress = this._timingCurTime / f, this.progress >= 1) {
         if (o === e) {
@@ -575,12 +594,12 @@ class d extends it {
         f = n, h ? (r = 100, l = -100) : (r = 0, l = 100), h = !h, o++, o === e && (l = h ? t : t - 100, f = n / 100 * Math.abs(l)), this._setPosition(r), u = Date.now(), this._timingCurTime = 0;
       } else
         this._setPosition(r + l * this.easing(this.progress));
-      this._timingThen = u, this._renderId = requestAnimationFrame(T);
+      this._timingThen = u, this._renderId = requestAnimationFrame(b);
     };
-    this.element.classList.add("playing"), T();
+    this.element.classList.add("playing"), b();
   }
   animateTo(t, e = this.settings.animateDuration) {
-    return this.goto(t, e, b);
+    return this.goto(t, e, T);
   }
   goto(t, e, n) {
     return isNaN(t) || (t = E(+t, 0, 100), t === this._percent) ? !1 : (this.stop(), this._animateTo(t, e, n), this);
@@ -607,10 +626,10 @@ class d extends it {
     ), this.setAngle(this._angle);
   }
   showAfter() {
-    this._setPosition(this._ltr ? 100 : 0);
+    this._setPosition(this._ltr ? 0 : 100);
   }
   showBefore() {
-    this._setPosition(this._ltr ? 0 : 100);
+    this._setPosition(this._ltr ? 100 : 0);
   }
   get elem() {
     return this.element;
@@ -626,17 +645,16 @@ d.init = () => {
   if (O)
     return !0;
   O = !0;
-  let s = document.querySelectorAll("[" + nt + "]");
-  return s.length === 0 ? !1 : (s.forEach((i) => {
-    new d(i);
+  let i = document.querySelectorAll("[" + nt + "]");
+  return i.length === 0 ? !1 : (i.forEach((s) => {
+    new A(s);
   }), I);
 };
-d.destroyAll = () => I.length ? (I.forEach((s) => {
-  s.destroy();
+d.destroyAll = () => I.length ? (I.forEach((i) => {
+  i.destroy();
 }), O = !1, I = [], !0) : !1;
-d.getInstance = (s) => G.get(s, "instance");
+d.getInstance = (i) => G.get(i, "instance");
 d.defaults = st;
-Z(d.init);
 export {
   d as default
 };
