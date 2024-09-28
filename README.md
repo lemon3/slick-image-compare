@@ -47,7 +47,8 @@ const sic = new SlickImageCompare('#my-div', options);
 </script>
 ```
 
-## Default Settings
+## Examples
+### 1) Example with default settings
 use it with the default settings
 #### javascript
 ```html
@@ -68,10 +69,15 @@ Btw.: The preferred method is the javascript approach!
   <img src="01_after.jpg" alt="after" />
 </div>
 ```
+```js
+// important: the init function has to be called
+SlickImageCompare.init();
+```
 
-## Start Position and Labels
+### 2) Example with start position and labels
 we use a custom start position and labels here.
 #### javascript
+html setup
 ```html
 <div id="my-div">
   <img src="01_before.jpg" alt="before" />
@@ -99,23 +105,130 @@ the same using the **data-sic** attribute
   <img src="01_after.jpg" alt="after" />
 </div>
 ```
+```js
+// call the init function
+SlickImageCompare.init();
+```
+### 3) Complete Example for Beginners
+here is a complete html structure for you to get started.
+
+#### html file with modern js approach
+first download the files to your project, usually via npm, pnpm, yarn, bun.
+Here we use pnpm ;)
+```Bash
+pnpm install slick-image-compare
+```
+For the sake of simplicity, here is a complete HTML code.
+You only need to change the path to your image files.
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>slick-image-compare demo</title>
+  </head>
+  <style>
+    @import url("./node_modules/slick-image-compare/dist/style.css");
+    .my-div {
+      max-width: 600px;
+      margin-bottom: 1em;
+    }
+  </style>
+  <body>
+    <div class="my-div">
+      <img src="path-to-image/img01-before.jpg" alt="" />
+      <img src="path-to-image/img01-after.jpg" alt="" />
+    </div>
+
+    <div class="my-div">
+      <img src="path-to-image/img02-before.jpg" alt="" />
+      <img src="path-to-image/img02-after.jpg" alt="" />
+    </div>
+
+    <script type="module" defer>
+      // note: when not using a framework (vue, react, svelte, ...) with a bundler,
+      // you have to specify the correct path for the js file.
+      // Which usually includes the 'node_modules' folder
+      // otherwise just use:
+      // import SlickImageCompare from '@/slick-image-compare';
+      import SlickImageCompare from "./node_modules/slick-image-compare/index.js";
+
+      const options = {
+        animateIn: true,
+        beforeLabel: "before",
+        afterLabel: "after",
+      };
+
+      // note: the same options apply to all elements
+      // (in this case the two div's with the class name 'my-div')
+      new SlickImageCompare(".my-div", options);
+    </script>
+  </body>
+</html>
+```
+
+#### html file with classic js approach
+just set the path to your image files
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>slick-image-compare demo</title>
+    <link rel="stylesheet" href="https://unpkg.com/slick-image-compare/dist/style.css" />
+  </head>
+  <style>
+    .my-div {
+      max-width: 600px;
+      margin-bottom: 1em;
+    }
+  </style>
+  <body>
+    <div class="my-div">
+      <img src="path-to-image/img01-before.jpg" alt="" />
+      <img src="path-to-image/img01-after.jpg" alt="" />
+    </div>
+
+    <div class="my-div">
+      <img src="path-to-image/img02-before.jpg" alt="" />
+      <img src="path-to-image/img02-after.jpg" alt="" />
+    </div>
+
+    <script src="https://unpkg.com/slick-image-compare"></script>
+    <script>
+      const options = {
+        animateIn: true,
+        beforeLabel: "before",
+        afterLabel: "after",
+      };
+
+      // SlickImageCompare is in the window-space
+      // note: the same options apply to all elements
+      // (in this case the two div's with the class name 'my-div')
+      new SlickImageCompare(".my-div", options);
+    </script>
+  </body>
+</html>
+```
 
 ## Events
 you can listen to all kind of events, to extend the functionality of the image compare slider.
-List of available events
+List of available events and when they are triggered
 
-| name             | called ...                                                                    |
+| name             | called / triggered ...                                                                    |
 | ---------------- | ----------------------------------------------------------------------------- |
 | init             | after **initialization**                                                      |
 | drag             | on **interaction** (drag, mousemove)                                          |
 | update           | on every handle position change                                               |
-| beforeshown      | if the **before** image is shown (70% or more)                                |
-| aftershown       | if the **after** image is shown (70% or more)                                 |
+| beforeshown      | if the **before** image is shown
+| aftershown       | if the **after** image is shown                                 |
 | interactionstart | user begins interaction                                                       |
 | interactionend   | user ends interaction                                                         |
 | viewchange       | changed form **before** image shown to **after** image shown (and vice versa) |
 
-#### example
+### Example
 using **viewchange** event
 ```html
 <div id="my-div">
@@ -139,10 +252,17 @@ sic.addEventListener('viewchange', changeText);
 ```
 
 ## Options
-list of the available options:
+list of the available options (to control the behavior of your slider):
 
 ```js
 options = {
+  // if the the values from the dataset attribute should be combined with
+  // the other values in this option object.
+  // note: js object entries override existing dataset values!
+  // possible values: true, false
+  // default: true
+  combineDataset: true,
+
   // if the app should automatically initialize
   // possible values: true, false
   // default: true
@@ -173,11 +293,11 @@ options = {
 
   // defines the direction of the slider
   // ltr: true,
-  // means the "after" images is shown, when the slider is on
-  // the right side (100%)
-  // ltr: false,
-  // means the "after" images is shown, when the slider is on
+  // means the "after" images is shown, when the slider-handle is on
   // the left side (0%)
+  // ltr: false,
+  // means the "after" images is shown, when the slider-handle is on
+  // the right side (100%)
   // possible values: true, false
   // default: true
   ltr: true,
@@ -240,7 +360,6 @@ options = {
   // min distance to left and right border
   handleMinDistance: 0,
 
-
   // animate in
   animateIn: false,
   animateInDuration: 1250, // ms
@@ -263,6 +382,9 @@ options = {
   afterLabel: '',
 };
 ```
+
+## Static methods
+- autoInit for the (data api) has been removed, you have to manually call the static class method: **SlickImageCompare.init()**;
 
 ## todo's
 - add more test
