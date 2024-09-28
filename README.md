@@ -136,18 +136,13 @@ You only need to change the path to your image files.
     }
   </style>
   <body>
-    <div class="my-div">
+    <div class="my-div" id="my-div">
       <img src="path-to-image/img01-before.jpg" alt="" />
       <img src="path-to-image/img01-after.jpg" alt="" />
     </div>
 
-    <div class="my-div">
-      <img src="path-to-image/img02-before.jpg" alt="" />
-      <img src="path-to-image/img02-after.jpg" alt="" />
-    </div>
-
     <script type="module" defer>
-      // note: when not using a framework (vue, react, svelte, ...) with a bundler,
+      // note: when NOT using a framework (vue, react, svelte, ...) with a bundler,
       // you have to specify the correct path for the js file.
       // Which usually includes the 'node_modules' folder
       // otherwise just use:
@@ -160,9 +155,7 @@ You only need to change the path to your image files.
         afterLabel: "after",
       };
 
-      // note: the same options apply to all elements
-      // (in this case the two div's with the class name 'my-div')
-      new SlickImageCompare(".my-div", options);
+      new SlickImageCompare("#my-div", options);
     </script>
   </body>
 </html>
@@ -186,14 +179,9 @@ just set the path to your image files
     }
   </style>
   <body>
-    <div class="my-div">
+    <div class="my-div" id="my-div">
       <img src="path-to-image/img01-before.jpg" alt="" />
       <img src="path-to-image/img01-after.jpg" alt="" />
-    </div>
-
-    <div class="my-div">
-      <img src="path-to-image/img02-before.jpg" alt="" />
-      <img src="path-to-image/img02-after.jpg" alt="" />
     </div>
 
     <script src="https://unpkg.com/slick-image-compare"></script>
@@ -205,9 +193,7 @@ just set the path to your image files
       };
 
       // SlickImageCompare is in the window-space
-      // note: the same options apply to all elements
-      // (in this case the two div's with the class name 'my-div')
-      new SlickImageCompare(".my-div", options);
+      new SlickImageCompare("#my-div", options);
     </script>
   </body>
 </html>
@@ -228,7 +214,7 @@ List of available events and when they are triggered
 | interactionend   | user ends interaction                                                         |
 | viewchange       | changed form **before** image shown to **after** image shown (and vice versa) |
 
-### Example
+### Example 1
 using **viewchange** event
 ```html
 <div id="my-div">
@@ -250,6 +236,8 @@ const changeText = (evt) => {
 // listen for events
 sic.addEventListener('viewchange', changeText);
 ```
+### Example 2
+
 
 ## Options
 list of the available options (to control the behavior of your slider):
