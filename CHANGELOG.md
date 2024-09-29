@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.4.4
+### Added
+- SlickImageCompare.**getDefaults()** static function added, returns the object with the default values.
+- SlickImageCompare.**getInstances()** static function added, returns array with all instances, or false.
+### Changed
+- optimization
+- update README doc
+
 ## v0.4.3
 ### Added
 - combineDataset option added, available values: true, false, default value: true. Combines dataset values with the values given in the options object (js overrides existing dataset values)

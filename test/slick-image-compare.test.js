@@ -28,11 +28,10 @@ describe('test static methods', () => {
     // initialize it
     SlickImageCompare.init();
 
-    test('should return true', () => {
+    test('should return false', () => {
       const init = SlickImageCompare.init();
       console.log(init);
-      expect(init).toBeTruthy();
-      expect(init).toBe(true);
+      expect(init).toBe(false);
     });
   });
 

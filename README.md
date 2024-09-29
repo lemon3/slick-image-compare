@@ -199,46 +199,6 @@ just set the path to your image files
 </html>
 ```
 
-## Events
-you can listen to all kind of events, to extend the functionality of the image compare slider.
-List of available events and when they are triggered
-
-| name             | called / triggered ...                                                                    |
-| ---------------- | ----------------------------------------------------------------------------- |
-| init             | after **initialization**                                                      |
-| drag             | on **interaction** (drag, mousemove)                                          |
-| update           | on every handle position change                                               |
-| beforeshown      | if the **before** image is shown
-| aftershown       | if the **after** image is shown                                 |
-| interactionstart | user begins interaction                                                       |
-| interactionend   | user ends interaction                                                         |
-| viewchange       | changed form **before** image shown to **after** image shown (and vice versa) |
-
-### Example 1
-using **viewchange** event
-```html
-<div id="my-div">
-  <img src="01_before.jpg" alt="before" />
-  <img src="01_after.jpg" alt="after" />
-</div>
-<div id="my-text-box"></div>
-```
-```js
-// create an instance
-const sic = new SlickImageCompare('#my-div');
-
-const myTextBox = document.getElementById('my-text-box');
-const changeText = (evt) => {
-  const afterShown = evt.detail.afterShown;
-  myTextBox.innerHTML = afterShown ? 'After' : 'Before';
-}
-
-// listen for events
-sic.addEventListener('viewchange', changeText);
-```
-### Example 2
-
-
 ## Options
 list of the available options (to control the behavior of your slider):
 
@@ -371,8 +331,159 @@ options = {
 };
 ```
 
-## Static methods
-- autoInit for the (data api) has been removed, you have to manually call the static class method: **SlickImageCompare.init()**;
+## Methods
+Methods available after initialization(!)
+```js
+const sic = new SlickImageCompare('#my-div');
+```
+### init
+```js
+sic.init();
+```
+
+### stop
+Stops all animations, the handle immediately stops at the current position (if it is moving).
+```js
+sic.stop();
+```
+
+### play
+tbd.
+```js
+sic.play(stopAt, repetitions, duration, easingFun);
+```
+
+### animateTo
+Animates the slider (handle) to a specific position (percentage from left or top), with the defined duration (in ms) and easing function.
+
+**percent** type: number
+possible values for **percent**: 0 - 100
+to which position the slider should slide.
+
+**duration** type: number *(optional)*
+the duration is in ms(!)
+if not set, it uses the standard duration defined via option object.
+
+**easing** type: function *(optional)*
+possible values for **easing**: see easing functions
+if not set, it uses the standard easing function defined via option object.
+```js
+sic.animateTo(percent, duration, easing);
+```
+
+### goto
+Slider (handle) jumps to a given position (percentage from left or top)
+
+**percent** type: number
+possible values for **percent**: 0 - 100
+to which position the slider should jump.
+```js
+sic.goto(percent);
+```
+
+### setAngle
+sets the angle of the handle (parting line).
+
+**angle** type: number
+possible values for **angle**: -30 - 30
+```js
+sic.setAngle(angle);
+```
+
+### changeDirection
+Changes the direction of the slider (**ltr** value). So if **ltr** is set to true (the default value), it is set to false and the slider logic is updated.
+```js
+sic.changeDirection();
+```
+
+### changeOrientation
+Changes the orientation of the slider (**horizontal** value). So if **horizontal** is set to true (the default value), it is set to false, and the slider logic is updated.
+```js
+sic.changeOrientation();
+```
+
+### showAfter
+When the method is called, the slider immediately shows the 'after' image.
+```js
+sic.showAfter();
+```
+
+### showBefore
+When the method is called, the slider immediately shows the 'before' image.
+```js
+sic.showBefore();
+```
+
+### toggleView
+When the method is called, the slider immediately shows the 'after' or 'before' image, depending on what is currently visible.
+```js
+sic.toggleView();
+```
+
+### destroy
+tbd.
+```js
+sic.destroy();
+```
+
+## Events
+you can listen to all kind of events, to extend the functionality of the image compare slider.
+List of available events and when they are triggered
+
+| name             | called / triggered ...                                                        |
+| ---------------- | ----------------------------------------------------------------------------- |
+| init             | after **initialization**                                                      |
+| drag             | on **interaction** (drag, mousemove)                                          |
+| update           | on every handle position change                                               |
+| beforeshown      | if the **before** image is shown                                              |
+| aftershown       | if the **after** image is shown                                               |
+| interactionstart | user begins interaction                                                       |
+| interactionend   | user ends interaction                                                         |
+| viewchange       | changed form **before** image shown to **after** image shown (and vice versa) |
+
+### Example 1
+using **viewchange** event
+```html
+<div id="my-div">
+  <img src="01_before.jpg" alt="before" />
+  <img src="01_after.jpg" alt="after" />
+</div>
+<div id="my-text-box"></div>
+```
+```js
+// create an instance
+const sic = new SlickImageCompare('#my-div');
+
+const myTextBox = document.getElementById('my-text-box');
+const changeText = (evt) => {
+  const afterShown = evt.detail.afterShown;
+  myTextBox.innerHTML = afterShown ? 'After' : 'Before';
+}
+
+// listen for events
+sic.addEventListener('viewchange', changeText);
+```
+
+## Static functions
+```js
+// call this to init all data-sic elements
+// returns all instances as array, or false if already initialized
+SlickImageCompare.init();
+
+// get the instance for a given element
+// returns false if no element is given, the element doesn't exist, or there is no SlickImageCompare instance connected to the element.
+SlickImageCompare.getInstance(element);
+
+// returns an array off all defined instances
+SlickImageCompare.getInstances();
+
+// returns the object with the default values
+SlickImageCompare.getDefaults();
+
+// destroys all previously created instances
+SlickImageCompare.destroyAll();
+
+```
 
 ## todo's
 - add more test

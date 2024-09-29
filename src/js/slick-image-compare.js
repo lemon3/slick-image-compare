@@ -57,31 +57,19 @@ class BeforeAfter {
 
     if (element.length > 1) {
       const multiple = [];
-      console.log(element);
       element.forEach((item) => {
-        const tmp = new BeAf(item, options);
+        const tmp = new SlickImageCompare(item, options);
         multiple.push(tmp);
       });
       return multiple;
     }
 
     element = element.length ? element[0] : element;
-    return new BeAf(element, options);
+    return new SlickImageCompare(element, options);
   }
 }
-class BeAf extends Emitter {
+class SlickImageCompare extends Emitter {
   constructor(element, options) {
-    if (!element) {
-      return { error: true };
-    }
-
-    element =
-      'string' === typeof element ? document.querySelector(element) : element;
-
-    if (null === element || 0 === element.length) {
-      return { error: true };
-    }
-
     super();
 
     if (element.dataset.sicinitialized) {
@@ -937,16 +925,18 @@ class BeAf extends Emitter {
     render();
   }
 
-  animateTo(percent, duration = this.settings.animateDuration) {
-    return this.goto(percent, duration, easing);
-  }
-
-  goto(percent, duration, easing) {
+  animateTo(
+    percent,
+    duration = this.settings.animateDuration,
+    easing = this.settings.animateEasing
+  ) {
     if (isNaN(percent)) {
       return !1;
     }
     // restrict and cast possible string to number
     percent = restrict(+percent, 0, 100);
+
+    // TODO: test user values for this.settings.animateDuration, easing
 
     // early exit (same delta)
     if (percent === this._percent) {
@@ -954,7 +944,17 @@ class BeAf extends Emitter {
     }
     this.stop();
     this._animateTo(percent, duration, easing);
+    return this;
+  }
 
+  goto(percent) {
+    if (isNaN(percent)) {
+      return !1;
+    }
+    // restrict and cast possible string to number
+    percent = restrict(+percent, 0, 100);
+    this.stop();
+    this._setPosition(percent);
     return this;
   }
 
@@ -1051,23 +1051,19 @@ class BeAf extends Emitter {
     this._percent = this.startPos;
     this._appEvents(false);
     this._initialized = false;
+
+    // TODO: remove from dataStorage
   }
 }
 
+BeforeAfter.defaults = defaults;
+
 BeforeAfter.init = () => {
   if (initialized) {
-    return true;
-  }
-  initialized = true;
-  let element = document.querySelectorAll('[' + DATANAME + ']');
-  if (0 === element.length) {
     return false;
   }
-
-  element.forEach((el) => {
-    new BeAf(el);
-  });
-
+  initialized = true;
+  new BeforeAfter('[' + DATANAME + ']');
   return instances;
 };
 
@@ -1085,10 +1081,19 @@ BeforeAfter.destroyAll = () => {
   return true;
 };
 
-BeforeAfter.getInstance = (el) => dataStorage.get(el, 'instance');
+// window.dataStorage = dataStorage;
+BeforeAfter.getInstances = () => {
+  if (!instances.length) {
+    return false;
+  }
+  return instances;
+};
 
-BeforeAfter.defaults = defaults;
+BeforeAfter.getInstance = (el) => {
+  // TODO: if el is a string ...
+  dataStorage.get(el, 'instance');
+};
+BeforeAfter.getDefaults = () => BeforeAfter.defaults;
 
 // docReady(BeforeAfter.init);
-
 export default BeforeAfter;
