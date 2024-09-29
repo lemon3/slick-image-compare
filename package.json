@@ -61,7 +61,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/lemon3/slick-image-compare.git"
+    "url": "git+https://github.com/lemon3/slick-image-compare.git"
   },
   "homepage": "https://lemon3.github.io/slick-image-compare",
   "devDependencies": {
