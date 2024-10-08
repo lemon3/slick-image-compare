@@ -260,28 +260,23 @@ class SlickImageCompare extends Emitter {
     this._createdEl.push(drag);
 
     // create labels
-    let info1, info2;
-    const beforeLabel = decodeURIComponent(
-      this._ltr ? s.beforeLabel : s.afterLabel
-    );
-    const afterLabel = decodeURIComponent(
-      this._ltr ? s.afterLabel : s.beforeLabel
-    );
     if ('' !== s.beforeLabel) {
-      info1 = createEl(div, { class: 'sic-label sic-label-one' });
-      info1.innerHTML = beforeLabel;
-      this.element.append(info1);
-      this._createdEl.push(info1);
+      this.info1 = createEl(div, { class: 'sic-label sic-label-one' });
+      this.info1.innerHTML = decodeURIComponent(
+        this._ltr ? s.beforeLabel : s.afterLabel
+      );
+      this.element.append(this.info1);
+      this._createdEl.push(this.info1);
     }
 
     if ('' !== s.afterLabel) {
-      info2 = createEl(div, { class: 'sic-label sic-label-two' });
-      info2.innerHTML = afterLabel;
-      this.element.append(info2);
-      this._createdEl.push(info2);
+      this.info2 = createEl(div, { class: 'sic-label sic-label-two' });
+      this.info2.innerHTML = decodeURIComponent(
+        this._ltr ? s.afterLabel : s.beforeLabel
+      );
+      this.element.append(this.info2);
+      this._createdEl.push(this.info2);
     }
-    this.info1 = this._ltr ? info2 : info1;
-    this.info2 = this._ltr ? info1 : info2;
 
     this.element.classList.add(
       this._horizontal ? 'sic-horizontal' : 'sic-vertical'
@@ -720,11 +715,11 @@ class SlickImageCompare extends Emitter {
       ? `translate(${pos}px, 0)`
       : `translate(0, ${pos}px)`;
 
-    if (this.info1) {
-      this.info1.style.opacity = percent < 50 ? 1 : (100 - percent) / 50;
-    }
     if (this.info2) {
-      this.info2.style.opacity = percent > 50 ? 1 : percent / 50;
+      this.info2.style.opacity = percent < 50 ? 1 : (100 - percent) / 50;
+    }
+    if (this.info1) {
+      this.info1.style.opacity = percent > 50 ? 1 : percent / 50;
     }
 
     let test = this._ltr ? !this._afterShown : this._afterShown;
@@ -991,13 +986,8 @@ class SlickImageCompare extends Emitter {
    */
   changeDirection() {
     this._ltr = !this._ltr;
-    // let tmp;
-    // tmp = this.info1;
-    // this.info1 = this.info2;
-    // this.info2 = tmp;
+    let tmp = this.info1.innerHTML;
 
-    let tmp;
-    tmp = this.info1.innerHTML;
     this.info1.innerHTML = this.info2.innerHTML;
     this.info2.innerHTML = tmp;
 

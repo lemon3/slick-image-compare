@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.5
+### Changed
+- bugfix: fixed a bug with the 'before' and 'after' label if 'ltr' (left-to-right direction) was set to 'false' in the option object.
+
 ## v0.4.4
 ### Added
 - SlickImageCompare.**getDefaults()** static function added, returns the object with the default values.
