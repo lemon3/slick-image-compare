@@ -241,8 +241,8 @@ class SlickImageCompare extends Emitter {
         transformOrigin: 'top center',
       };
     }
-    this.line1 = createEl(div, { class: 'sic-line sic-line-1' }, line1Style);
-    this.line2 = createEl(div, { class: 'sic-line sic-line-2' }, line2Style);
+    this._line1 = createEl(div, { class: 'sic-line sic-line-1' }, line1Style);
+    this._line2 = createEl(div, { class: 'sic-line sic-line-2' }, line2Style);
 
     const arrows = createEl(div, { class: 'sic-arrows' });
     const arrow1 = createEl(div, { class: 'sic-arrow sic-arrow-1' });
@@ -254,7 +254,7 @@ class SlickImageCompare extends Emitter {
 
     arrows.append(arrow1, arrow2);
     dragHandle.append(arrows);
-    drag.append(this.line1, this.line2, dragHandle);
+    drag.append(this._line1, this._line2, dragHandle);
 
     this.element.append(drag);
     this._createdEl.push(drag);
@@ -368,6 +368,9 @@ class SlickImageCompare extends Emitter {
     }
   }
 
+  /**
+   * test if an interaction is ended
+   */
   _testInteractionEnd() {
     if (this._endInteraction && undefined === this._renderId) {
       this._endInteraction = false;
@@ -396,6 +399,7 @@ class SlickImageCompare extends Emitter {
           this._setPosition(to);
           this.stop();
           this._testInteractionEnd();
+          console.log('RENDER END');
           return;
         }
 
@@ -476,8 +480,8 @@ class SlickImageCompare extends Emitter {
    * @param {string} element the first image element
    */
   _checkCurrentImageSource(element) {
-    clearTimeout(this._checkTo);
-    this._checkTo = setTimeout(() => {
+    let timeOut = setTimeout(() => {
+      clearTimeout(timeOut);
       const currentSrc = element.currentSrc;
       if (this._firstImageSrc !== currentSrc) {
         // console.log('image source changed', currentSrc);
@@ -959,21 +963,21 @@ class SlickImageCompare extends Emitter {
 
     if (0 === this._angle) {
       this._getClip = this._getClipRect;
-      this.line1.removeAttribute('style');
-      this.line2.removeAttribute('style');
+      this._line1.removeAttribute('style');
+      this._line2.removeAttribute('style');
       this._radians = null;
     } else {
       this._getClip = this._getClipPolygon;
       this._radians = (this._angle * Math.PI) / 180;
-      this.line1.style.transform = `rotate(${this._angle}deg)`;
-      this.line2.style.transform = `rotate(${this._angle}deg)`;
+      this._line1.style.transform = `rotate(${this._angle}deg)`;
+      this._line2.style.transform = `rotate(${this._angle}deg)`;
 
       if (this._horizontal) {
-        this.line1.style.transformOrigin = 'bottom center';
-        this.line2.style.transformOrigin = 'top center';
+        this._line1.style.transformOrigin = 'bottom center';
+        this._line2.style.transformOrigin = 'top center';
       } else {
-        this.line1.style.transformOrigin = 'right bottom';
-        this.line2.style.transformOrigin = 'left bottom';
+        this._line1.style.transformOrigin = 'right bottom';
+        this._line2.style.transformOrigin = 'left bottom';
       }
     }
 
