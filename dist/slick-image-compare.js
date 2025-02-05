@@ -1,5 +1,5 @@
 /*!
-* SlickImageCompare v0.4.5
+* SlickImageCompare v0.4.7
 * https://lemon3.github.io/slick-image-compare
 */
 var q = Object.defineProperty;
@@ -289,7 +289,7 @@ class B extends V {
       this.settings = Object.assign({}, _.defaults, a, s);
     } else
       this.settings = n;
-    if (this.images = this.element.querySelectorAll("img"), this.picture = this.element.querySelectorAll("picture"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || !this.images.length) && (!this.picture || !this.picture.length))
+    if (this.images = this.element.querySelectorAll("img"), this.picture = this.element.querySelectorAll("picture"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || this.images.length !== 2) && (!this.picture || this.picture.length !== 2))
       return {
         error: !0
       };

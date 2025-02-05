@@ -108,8 +108,8 @@ class SlickImageCompare extends Emitter {
     this.picture = this.element.querySelectorAll('picture');
     if (
       (!this.settings.beforeImage || !this.settings.afterImage) &&
-      (!this.images || !this.images.length) &&
-      (!this.picture || !this.picture.length)
+      (!this.images || 2 !== this.images.length) &&
+      (!this.picture || 2 !== this.picture.length)
     ) {
       return {
         error: true,

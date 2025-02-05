@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.4.7
+### Changed
+- bugfix: error when only one DOM image was given (<img src="" />) fixed.
+
+## v0.4.6
+### Changed
+- bugfix
+
 ## v0.4.5
 ### Changed
 - bugfix: fixed a bug with the 'before' and 'after' label if 'ltr' (left-to-right direction) was set to 'false' in the option object.
