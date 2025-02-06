@@ -46,7 +46,7 @@ jobs:
           NPM_VERSION=$(npm show $PKG_NAME version || echo "0.0.0")
 
           if [ "$PKG_VERSION" != "$NPM_VERSION" ]; then
-            pnpm publish --access public
+            pnpm publish --access public --no-git-checks
           else
             echo "⚠️ Version $PKG_VERSION already exists. Skipping publish."
           fi
