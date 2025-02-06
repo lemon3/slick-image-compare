@@ -9,34 +9,34 @@ on:
 
 jobs:
   publish:
-    name: Publish Core Packages
+    name: Publish Core & React Packages
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: 📥 Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Install Node.js
+      - name: 📦 Set Up Node.js & pnpm
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'pnpm'
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org/"
 
-      - name: Install dependencies
-        run: pnpm install
+      - name: 🛠 Install pnpm
+        run: npm install -g pnpm
 
-      - name: Build
+      - name: 📦 Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 🏗 Build All Packages
         run: pnpm run build
 
-      - name: Run Tests for Core Package
+      - name: ✅ Run Tests for Core
         working-directory: packages/core
         run: pnpm run test
 
-      - name: Publish Core Package
+      - name: 🚀 Publish Core Package
         working-directory: packages/core
         run: |
           PKG_NAME=$(node -p "require('./package.json').name")
