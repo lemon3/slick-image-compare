@@ -16,15 +16,15 @@ jobs:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
 
+      - name: 🛠 Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: 📦 Set Up Node.js & pnpm
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org/"
-
-      - name: 🛠 Install pnpm
-        run: npm install -g pnpm
 
       - name: 📦 Install Dependencies
         run: pnpm install --frozen-lockfile
