@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.8
+### Changed
+- changed to a core package
+
 ## v0.4.7
 ### Changed
 - bugfix: error when only one DOM image was given (<img src="" />) fixed.

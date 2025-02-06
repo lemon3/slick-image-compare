@@ -6,7 +6,8 @@ export default defineConfig({
   base: '/slick-image-compare/',
   build: {
     target: 'es2015', // esnext
-    outDir: 'docs',
+    outDir: resolve(__dirname, '../../docs'),
+    emptyOutDir: true,
   },
   resolve: {
     alias: [

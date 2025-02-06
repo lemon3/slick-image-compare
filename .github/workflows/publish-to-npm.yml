@@ -9,6 +9,7 @@ on:
 
 jobs:
   publish:
+    name: Publish Core Packages
     runs-on: ubuntu-latest
 
     steps:
@@ -28,18 +29,24 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run tests
-        run: pnpm run test
-
       - name: Build
         run: pnpm run build
 
-      - name: Publish to NPM
-        run: npm publish
+      - name: Run Tests for Core Package
+        working-directory: packages/core
+        run: pnpm run test
+
+      - name: Publish Core Package
+        working-directory: packages/core
+        run: |
+          PKG_NAME=$(node -p "require('./package.json').name")
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          NPM_VERSION=$(npm show $PKG_NAME version || echo "0.0.0")
+
+          if [ "$PKG_VERSION" != "$NPM_VERSION" ]; then
+            pnpm publish --access public
+          else
+            echo "⚠️ Version $PKG_VERSION already exists. Skipping publish."
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      # - uses: JS-DevTools/npm-publish@v3
-      #   with:
-      #     # dry-run: true
-      #     token: ${{ secrets.NPM_TOKEN }}
