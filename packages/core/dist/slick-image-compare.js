@@ -1,5 +1,5 @@
 /*!
-* SlickImageCompare v0.4.7
+* SlickImageCompare v0.4.8
 * https://lemon3.github.io/slick-image-compare
 */
 var q = Object.defineProperty;

@@ -9,10 +9,15 @@
   "type": "module",
   "main": "dist/slick-image-compare.umd.js",
   "module": "./dist/slick-image-compare.js",
+  "style": "./dist/slick-image-compare.css",
   "exports": {
     ".": {
       "import": "./dist/slick-image-compare.js",
       "require": "./dist/slick-image-compare.umd.js"
+    },
+    "./react": {
+      "import": "./../react/dist/index.js",
+      "require": "./../react/dist/index.umd.js"
     },
     "./dist/*.css": "./dist/*.css"
   },
