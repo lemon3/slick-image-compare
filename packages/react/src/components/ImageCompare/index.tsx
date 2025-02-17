@@ -1,57 +1,103 @@
 import { useEffect, useRef, useState } from 'react';
 import SlickImageCompare from 'slick-image-compare';
-import 'slick-image-compare/dist/slick-image-compare.css'; // Import core package CSS
-
+import 'slick-image-compare/dist/slick-image-compare.css';
 interface ImageCompareProps extends React.ComponentProps<'div'> {
   options?: object;
-  init?: (obj: object) => object;
+  animateTo?: string | number;
+  onViewchange?: (evt: CustomEvent) => void;
+  onUpdate?: (evt: CustomEvent) => void;
+  init?: (obj: SlickImageCompare) => void;
 }
 
-function ImageCompare({ options, init, ...props }: ImageCompareProps) {
-  // check props here
+const isEqual = (
+  obj1: object | null | undefined,
+  obj2: object | null | undefined
+): boolean => {
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
+};
 
+// const ImageCompare = ({ options, init, ...props }: ImageCompareProps) => {
+const ImageCompare: React.FC<ImageCompareProps> = ({
+  options,
+  init,
+  ...props
+}) => {
   const el = useRef<HTMLDivElement>(null);
-  const [sic, setSic] = useState<null | {
-    error: boolean;
-    addEventListener: (eventName: string, callback: () => void) => void;
-  }>(null);
+  const prevOptionsRef = useRef<SlickImageCompare['options'] | null>(null);
+  const sicInit = useRef<boolean>(false);
+  const updated = useRef<number>(0);
+  const [sic, setSic] = useState<SlickImageCompare | null>(null);
 
-  // const { options, init, ...other } = props
-  const inlineEvents = Object.entries(props).filter((prop) => {
-    const [key] = prop;
-    if ('on' === key.substring(0, 2).toLowerCase()) {
-      return prop;
-    }
-  });
-  const allDom = Object.entries(props).filter((prop) => {
-    const [key] = prop;
-    if ('on' !== key.substring(0, 2).toLowerCase()) {
-      return prop;
-    }
-  });
+  // const inlineEvents = Object.entries(props).filter((prop) => {
+  //   const [key] = prop;
+  //   if ('on' === key.substring(0, 2).toLowerCase()) {
+  //     return prop;
+  //   }
+  // });
 
-  const sicInit = useRef(false);
+  const inlineEvents = Object.entries(props).reduce(
+    (acc, [key, value]) => {
+      if (key.startsWith('on')) acc.push([key, value]);
+      return acc;
+    },
+    [] as [string, () => CustomEvent][]
+  );
+
+  const allDom = Object.entries(props).reduce(
+    (acc, [key, value]) => {
+      if (!key.startsWith('on')) acc.push([key, value]);
+      return acc;
+    },
+    [] as [string, string][]
+  );
 
   useEffect(() => {
-    if (sicInit.current) return;
-    sicInit.current = true;
-    const obj = new SlickImageCompare(el.current, options);
-    setSic(obj);
-  }, [options]);
+    if (!sicInit.current) {
+      // console.log('init');
+      sicInit.current = true;
+      const opt = Array.isArray(options) ? options[0] : options;
+      if (!el.current) return;
+      const obj: SlickImageCompare = new SlickImageCompare(el.current, opt);
+      setSic(obj);
+
+      if (init && typeof init === 'function') {
+        // console.log('call init fun');
+        init(obj);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
-    if (!sic || sic.error) return;
+    if (sic) {
+      // Register inline events
+      // if (inlineEvents && !eventsRegistered.current) {
+      //   console.log('register events');
+      //   inlineEvents.forEach((inlineEvent) => {
+      //     const [eventName, fun] = inlineEvent;
+      //     sic.addEventListener(eventName.substring(2).toLocaleLowerCase(), fun);
+      //   });
+      //   eventsRegistered.current = true;
+      // }
+      inlineEvents.forEach(([eventName, fun]) => {
+        sic.addEventListener(eventName.substring(2).toLowerCase(), fun);
+      });
 
-    // register inline events
-    inlineEvents.forEach((inlineEvent) => {
-      const [eventName, fun] = inlineEvent;
-      sic.addEventListener(eventName.substring(2).toLocaleLowerCase(), fun);
-    });
+      if (!isEqual(prevOptionsRef.current, options)) {
+        if (updated.current > 0) {
+          // console.log('Options have changed:', options);
 
-    if (init && 'function' === typeof init) {
-      init(sic);
+          sic.destroy();
+          const opt = Array.isArray(options) ? options[0] : options;
+          sic.init(opt);
+          // Store a COPY of the object to track changes properly
+          prevOptionsRef.current = { ...options };
+        }
+        updated.current += 1;
+      }
     }
-  }, [sic, init, inlineEvents]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sic, options]);
 
   return (
     <div
@@ -59,6 +105,7 @@ function ImageCompare({ options, init, ...props }: ImageCompareProps) {
       ref={el}
     ></div>
   );
-}
+};
 
 export { ImageCompare };
+// export default MyComponent;

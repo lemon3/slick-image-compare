@@ -24,12 +24,21 @@ export default defineConfig({
     },
     copyPublicDir: false,
     rollupOptions: {
+      output: {
+        globals: {
+          'react/jsx-runtime': 'jsxRuntime', // Set the global name
+          react: 'React', // Optional: Set the global name for 'react'
+          'react-dom': 'ReactDOM', // Optional: Set the global name for 'react-dom'
+          'slick-image-compare': 'SlickImageCompare', // class for the react component
+        },
+        // other output options
+      },
       external: [
         'slick-image-compare',
         'react',
         'react-dom',
         'react/jsx-runtime',
-        /node_modules/,
+        // /node_modules/,
       ],
     },
   },
