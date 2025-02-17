@@ -72,7 +72,7 @@ function App() {
         </div>
 
         <button onClick={() => animateToPercent(10)}>goto 10</button>
-        <button onClick={() => animateToPercent(10)}>goto 90</button>
+        <button onClick={() => animateToPercent(90)}>goto 90</button>
 
         <div>
           <button

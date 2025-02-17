@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.3
+### Changed
+- update the tests for the component
+
 ## v0.0.2
 ### Changed
 - build demo for the component

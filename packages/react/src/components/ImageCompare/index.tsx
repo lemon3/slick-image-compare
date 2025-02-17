@@ -69,6 +69,13 @@ const ImageCompare: React.FC<ImageCompareProps> = ({
   }, []);
 
   useEffect(() => {
+    if (el && el.current) {
+      inlineEvents.forEach(([eventName, fun]) => {
+        // sic.addEventListener(eventName.substring(2).toLowerCase(), fun);
+        el.current?.addEventListener(eventName.substring(2).toLowerCase(), fun);
+      });
+    }
+
     if (sic) {
       // Register inline events
       // if (inlineEvents && !eventsRegistered.current) {
@@ -79,9 +86,6 @@ const ImageCompare: React.FC<ImageCompareProps> = ({
       //   });
       //   eventsRegistered.current = true;
       // }
-      inlineEvents.forEach(([eventName, fun]) => {
-        sic.addEventListener(eventName.substring(2).toLowerCase(), fun);
-      });
 
       if (!isEqual(prevOptionsRef.current, options)) {
         if (updated.current > 0) {
@@ -97,12 +101,13 @@ const ImageCompare: React.FC<ImageCompareProps> = ({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sic, options]);
+  }, [el, sic, options]);
 
   return (
     <div
       {...Object.fromEntries(allDom)}
       ref={el}
+      role='presentation'
     ></div>
   );
 };
