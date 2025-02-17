@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.9
+### Changed
+- changed the behavior of the label visibility (opacity settings)
+
 ## v0.4.8
 ### Changed
 - changed to a core package
