@@ -92,7 +92,7 @@ class SlickImageCompare extends Emitter {
     this.settings = this._createSettings(element, options);
 
     if (this.settings.autoInit) {
-      this.init();
+      return this.init();
     }
   }
 
@@ -756,9 +756,6 @@ class SlickImageCompare extends Emitter {
       return this;
     }
 
-    instances.push(this);
-    dataStorage.put(this.element, 'instance', this);
-
     if (options) {
       this.settings = this._createSettings(this.element, options);
     }
@@ -770,7 +767,7 @@ class SlickImageCompare extends Emitter {
     this.images = this.element.querySelectorAll('img');
     this.picture = this.element.querySelectorAll('picture');
     if (
-      (!this.settings.beforeImage || !this.settings.afterImage) &&
+      (!s.beforeImage || !s.afterImage) &&
       (!this.images || 2 !== this.images.length) &&
       (!this.picture || 2 !== this.picture.length)
     ) {
@@ -778,6 +775,9 @@ class SlickImageCompare extends Emitter {
         error: true,
       };
     }
+
+    instances.push(this);
+    dataStorage.put(this.element, 'instance', this);
 
     if (!this.element.classList.contains(PLUGINNAME + '-main')) {
       this.element.classList.add(PLUGINNAME + '-main');
@@ -856,16 +856,16 @@ class SlickImageCompare extends Emitter {
       if (
         s.animateIn &&
         this._animationDuration > 0 &&
-        this.settings.animateInStartPos !== this.settings.startPos
+        s.animateInStartPos !== s.startPos
       ) {
         this._snapTimeout = setTimeout(
           () =>
             this._animateTo(
-              this.settings.startPos,
+              s.startPos,
               this._animationDuration,
-              this.settings.animateInEasing
+              s.animateInEasing
             ),
-          this.settings.animateInDelay
+          s.animateInDelay
         );
       }
 
