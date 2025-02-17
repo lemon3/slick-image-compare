@@ -88,40 +88,8 @@ class SlickImageCompare extends Emitter {
       VIEWCHANGE,
     ];
 
-    instances.push(this);
-    dataStorage.put(element, 'instance', this);
-
     this.element = element;
-    this.options = options || {}; // user options
-
-    // from data api
-    const combinedOptions = Object.assign({}, BeforeAfter.defaults, options);
-    if (combinedOptions.combineDataset) {
-      let data = getJSONData(element, PLUGINNAME);
-      this.settings = Object.assign({}, BeforeAfter.defaults, data, options);
-    } else {
-      this.settings = combinedOptions;
-    }
-
-    // no images are given
-    this.images = this.element.querySelectorAll('img');
-    this.picture = this.element.querySelectorAll('picture');
-    if (
-      (!this.settings.beforeImage || !this.settings.afterImage) &&
-      (!this.images || 2 !== this.images.length) &&
-      (!this.picture || 2 !== this.picture.length)
-    ) {
-      return {
-        error: true,
-      };
-    }
-
-    if (!this.element.classList.contains(PLUGINNAME + '-main')) {
-      this.element.classList.add(PLUGINNAME + '-main');
-    }
-
-    this._snapTimeout = null;
-    this._dirDetected = false;
+    this.settings = this._createSettings(element, options);
 
     if (this.settings.autoInit) {
       this.init();
@@ -399,7 +367,7 @@ class SlickImageCompare extends Emitter {
           this._setPosition(to);
           this.stop();
           this._testInteractionEnd();
-          console.log('RENDER END');
+          // console.log('RENDER END');
           return;
         }
 
@@ -711,6 +679,7 @@ class SlickImageCompare extends Emitter {
     if (percent === this._percent && !resize) {
       return false;
     }
+
     this._percent = percent;
 
     const pos = this._dim * 0.01 * percent; // this.width * percent * 0.01;
@@ -720,16 +689,20 @@ class SlickImageCompare extends Emitter {
       : `translate(0, ${pos}px)`;
 
     if (this.info2) {
-      this.info2.style.opacity = percent < 50 ? 1 : (100 - percent) / 50;
+      this.info2.style.opacity =
+        // percent < 50 ? 1 : Math.max(0, (95 - percent) / 50);
+        Math.min(1, Math.max(0, (95 - percent) / 45));
     }
     if (this.info1) {
-      this.info1.style.opacity = percent > 50 ? 1 : percent / 50;
+      this.info1.style.opacity =
+        // this.info1.style.opacity = percent > 50 ? 1 : percent / 50;
+        Math.min(1, Math.max(0, (percent - 5) / 45));
     }
 
     let test = this._ltr ? !this._afterShown : this._afterShown;
-    if (percent > 70 && (this._oneTime || !test)) {
+    if (percent > 55 && (this._oneTime || !test)) {
       this._changeStatus(!this._ltr);
-    } else if (percent < 30 && (this._oneTime || test)) {
+    } else if (percent < 45 && (this._oneTime || test)) {
       this._changeStatus(this._ltr);
     }
 
@@ -763,12 +736,55 @@ class SlickImageCompare extends Emitter {
     this._animateTo(percent, this.settings.smoothAmount);
   }
 
+  _createSettings(element, options = {}) {
+    let settings;
+    // from data api
+    const combinedOptions = Object.assign({}, BeforeAfter.defaults, options);
+    if (combinedOptions.combineDataset) {
+      let data = getJSONData(this.element, PLUGINNAME);
+      settings = Object.assign({}, BeforeAfter.defaults, data, options);
+    } else {
+      settings = combinedOptions;
+    }
+
+    return settings;
+  }
+
   // public user function
-  init() {
+  init(options = null) {
     if (this._initialized) {
       return this;
     }
+
+    instances.push(this);
+    dataStorage.put(this.element, 'instance', this);
+
+    if (options) {
+      this.settings = this._createSettings(this.element, options);
+    }
+    this.options = options; // user options
+
     const s = this.settings;
+
+    // no images are given
+    this.images = this.element.querySelectorAll('img');
+    this.picture = this.element.querySelectorAll('picture');
+    if (
+      (!this.settings.beforeImage || !this.settings.afterImage) &&
+      (!this.images || 2 !== this.images.length) &&
+      (!this.picture || 2 !== this.picture.length)
+    ) {
+      return {
+        error: true,
+      };
+    }
+
+    if (!this.element.classList.contains(PLUGINNAME + '-main')) {
+      this.element.classList.add(PLUGINNAME + '-main');
+    }
+
+    this._snapTimeout = null;
+    this._dirDetected = false;
 
     this._initialized = true;
     this._oneTime = true;
@@ -833,8 +849,8 @@ class SlickImageCompare extends Emitter {
     imageDimensions(this._firstImageSrc).then(() => {
       // this.image = dimensions;
       // console.log(dimensions);
-      this._dimensions();
-      this._setPosition(this._percent);
+      this._dimensions(null, true);
+      // this._setPosition(this._percent);
       this.element.style.opacity = 1;
 
       if (
@@ -842,7 +858,7 @@ class SlickImageCompare extends Emitter {
         this._animationDuration > 0 &&
         this.settings.animateInStartPos !== this.settings.startPos
       ) {
-        setTimeout(
+        this._snapTimeout = setTimeout(
           () =>
             this._animateTo(
               this.settings.startPos,
@@ -1038,11 +1054,15 @@ class SlickImageCompare extends Emitter {
     this.element.removeAttribute('data-sicinitialized');
     this._createdEl.forEach((el) => this.element.removeChild(el));
     this._originalEl.forEach((el) => this.element.appendChild(el));
-    this._createdEl = [];
-    this._originalEl = [];
+    this._createdEl = this._originalEl = [];
+
+    // this._percent = this.settings.startPos;
+    this.stop();
+    this.progress = this._timingCurTime = this._timingThen = 0;
+    this._snapTimeout = null;
+    this._oneTime = false;
 
     // remove all eventlistener
-    this._percent = this.startPos;
     this._appEvents(false);
     this._initialized = false;
 
