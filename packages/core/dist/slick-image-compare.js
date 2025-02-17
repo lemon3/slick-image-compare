@@ -74,7 +74,7 @@ try {
 } catch (i) {
   w = !1;
 }
-const x = (i, s, t) => Math.max(s, Math.min(i, t)), d = (i, s, t) => {
+const x = (i, s, t) => Math.max(s, Math.min(i, t)), g = (i, s, t) => {
   if (i = parseFloat(i, 10), s = parseFloat(s, 10), t = parseFloat(t, 10), t < s) {
     let e = t;
     t = s, s = e;
@@ -273,7 +273,7 @@ class B extends V {
     });
     if (t.dataset.sicinitialized)
       return _.getInstance(t);
-    t.dataset.sicinitialized = !0, this.allowedEvents = [
+    if (t.dataset.sicinitialized = !0, this.allowedEvents = [
       H,
       k,
       $,
@@ -282,7 +282,8 @@ class B extends V {
       F,
       W,
       D
-    ], this.element = t, this.settings = this._createSettings(t, e), this.settings.autoInit && this.init();
+    ], this.element = t, this.settings = this._createSettings(t, e), this.settings.autoInit)
+      return this.init();
   }
   _triggerEvent(t, e) {
     e = A({
@@ -358,8 +359,8 @@ class B extends V {
       transform: `rotate(${this._angle}deg)`,
       transformOrigin: "top center"
     }), this._line1 = c(e, { class: "sic-line sic-line-1" }, u), this._line2 = c(e, { class: "sic-line sic-line-2" }, h);
-    const o = c(e, { class: "sic-arrows" }), v = c(e, { class: "sic-arrow sic-arrow-1" }), g = c(e, { class: "sic-arrow sic-arrow-2" }), O = c(e, { class: "sic-circle" });
-    v.innerHTML = j(!1), g.innerHTML = j(), o.append(v, g), O.append(o), l.append(this._line1, this._line2, O), this.element.append(l), this._createdEl.push(l), t.beforeLabel !== "" && (this.info1 = c(e, { class: "sic-label sic-label-one" }), this.info1.innerHTML = decodeURIComponent(
+    const o = c(e, { class: "sic-arrows" }), v = c(e, { class: "sic-arrow sic-arrow-1" }), d = c(e, { class: "sic-arrow sic-arrow-2" }), O = c(e, { class: "sic-circle" });
+    v.innerHTML = j(!1), d.innerHTML = j(), o.append(v, d), O.append(o), l.append(this._line1, this._line2, O), this.element.append(l), this._createdEl.push(l), t.beforeLabel !== "" && (this.info1 = c(e, { class: "sic-label sic-label-one" }), this.info1.innerHTML = decodeURIComponent(
       this._ltr ? t.beforeLabel : t.afterLabel
     ), this.element.append(this.info1), this._createdEl.push(this.info1)), t.afterLabel !== "" && (this.info2 = c(e, { class: "sic-label sic-label-two" }), this.info2.innerHTML = decodeURIComponent(
       this._ltr ? t.afterLabel : t.beforeLabel
@@ -550,22 +551,22 @@ class B extends V {
   init(t = null) {
     if (this._initialized)
       return this;
-    m.push(this), U.put(this.element, "instance", this), t && (this.settings = this._createSettings(this.element, t)), this.options = t;
+    t && (this.settings = this._createSettings(this.element, t)), this.options = t;
     const e = this.settings;
-    if (this.images = this.element.querySelectorAll("img"), this.picture = this.element.querySelectorAll("picture"), (!this.settings.beforeImage || !this.settings.afterImage) && (!this.images || this.images.length !== 2) && (!this.picture || this.picture.length !== 2))
+    if (this.images = this.element.querySelectorAll("img"), this.picture = this.element.querySelectorAll("picture"), (!e.beforeImage || !e.afterImage) && (!this.images || this.images.length !== 2) && (!this.picture || this.picture.length !== 2))
       return {
         error: !0
       };
-    this.element.classList.contains(y + "-main") || this.element.classList.add(y + "-main"), this._snapTimeout = null, this._dirDetected = !1, this._initialized = !0, this._oneTime = !0, this._afterShown = !1, this._ltr = z(e.ltr), this._horizontal = z(e.horizontal), this._usePicture = this.picture && this.picture.length === 2, this._angle = d(e.handleAngle, -30, 30), this._getClip = this._getClipRect, this._angle && (this._radians = this._angle * Math.PI / 180, this._getClip = this._getClipPolygon), this._createGui(), this._dragEl = e.onlyHandleDraggable ? this._dragHandle : this.element, this._animationDuration = e.animateInDuration || 0, e.startPos = d(e.startPos, 0, 100), e.animateInStartPos = d(e.animateInStartPos, 0, 100), e.startPos || (e.startPos = 50), e.animateInStartPos || (e.animateInStartPos = 0), e.animateIn ? this._percent = this._animationDuration > 0 ? e.animateInStartPos : e.startPos : this._percent = e.startPos, this.element.style.opacity = 0, this.isTouch = "ontouchstart" in window || window.DocumentTouch && document instanceof window.DocumentTouch || navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0, this.allowedEvents.forEach((n) => {
+    m.push(this), U.put(this.element, "instance", this), this.element.classList.contains(y + "-main") || this.element.classList.add(y + "-main"), this._snapTimeout = null, this._dirDetected = !1, this._initialized = !0, this._oneTime = !0, this._afterShown = !1, this._ltr = z(e.ltr), this._horizontal = z(e.horizontal), this._usePicture = this.picture && this.picture.length === 2, this._angle = g(e.handleAngle, -30, 30), this._getClip = this._getClipRect, this._angle && (this._radians = this._angle * Math.PI / 180, this._getClip = this._getClipPolygon), this._createGui(), this._dragEl = e.onlyHandleDraggable ? this._dragHandle : this.element, this._animationDuration = e.animateInDuration || 0, e.startPos = g(e.startPos, 0, 100), e.animateInStartPos = g(e.animateInStartPos, 0, 100), e.startPos || (e.startPos = 50), e.animateInStartPos || (e.animateInStartPos = 0), e.animateIn ? this._percent = this._animationDuration > 0 ? e.animateInStartPos : e.startPos : this._percent = e.startPos, this.element.style.opacity = 0, this.isTouch = "ontouchstart" in window || window.DocumentTouch && document instanceof window.DocumentTouch || navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0, this.allowedEvents.forEach((n) => {
       e[n] && this.addEventListener(n, e[n]);
     }), this._firstImage = this._usePicture ? this.picture[0].querySelector("img") : this.images[0], this._firstImageSrc = this._firstImage.currentSrc || this._firstImage.src, Y(this._firstImageSrc).then(() => {
-      this._dimensions(null, !0), this.element.style.opacity = 1, e.animateIn && this._animationDuration > 0 && this.settings.animateInStartPos !== this.settings.startPos && (this._snapTimeout = setTimeout(
+      this._dimensions(null, !0), this.element.style.opacity = 1, e.animateIn && this._animationDuration > 0 && e.animateInStartPos !== e.startPos && (this._snapTimeout = setTimeout(
         () => this._animateTo(
-          this.settings.startPos,
+          e.startPos,
           this._animationDuration,
-          this.settings.animateInEasing
+          e.animateInEasing
         ),
-        this.settings.animateInDelay
+        e.animateInDelay
       )), this._appEvents(), this._triggerEvent(H), this._triggerEvent(D);
     });
   }
@@ -577,28 +578,28 @@ class B extends V {
    * @param {Function} easingFun An easing-function eg.: (p) => p (for linear);
    */
   play(t = this._percent, e = 2, n = 2e3, a) {
-    this.stop(), clearTimeout(this._snapTimeout), n = d(n, 250, 1e4), t = d(t, 0, 100);
+    this.stop(), clearTimeout(this._snapTimeout), n = g(n, 250, 1e4), t = g(t, 0, 100);
     let r = this._percent, l = 100 - r, u = n / 100 * Math.abs(l), h = !0, o = 0;
     e <= 0 && (e = -1), this.progress = this._timingCurTime = this._timingThen = 0, this.easing = a || P.Quad.easeOut;
     const v = () => {
-      let g = Date.now();
-      if (this._timingCurTime += g - (this._timingThen || g), this.progress = this._timingCurTime / u, this.progress >= 1) {
+      let d = Date.now();
+      if (this._timingCurTime += d - (this._timingThen || d), this.progress = this._timingCurTime / u, this.progress >= 1) {
         if (o === e) {
           this.element.classList.remove("playing");
           return;
         }
-        u = n, h ? (r = 100, l = -100) : (r = 0, l = 100), h = !h, o++, o === e && (l = h ? t : t - 100, u = n / 100 * Math.abs(l)), this._setPosition(r), g = Date.now(), this._timingCurTime = 0;
+        u = n, h ? (r = 100, l = -100) : (r = 0, l = 100), h = !h, o++, o === e && (l = h ? t : t - 100, u = n / 100 * Math.abs(l)), this._setPosition(r), d = Date.now(), this._timingCurTime = 0;
       } else
         this._setPosition(r + l * this.easing(this.progress));
-      this._timingThen = g, this._renderId = requestAnimationFrame(v);
+      this._timingThen = d, this._renderId = requestAnimationFrame(v);
     };
     this.element.classList.add("playing"), v();
   }
   animateTo(t, e = this.settings.animateDuration, n = this.settings.animateEasing) {
-    return isNaN(t) || (t = d(+t, 0, 100), t === this._percent) ? !1 : (this.stop(), this._animateTo(t, e, n), this);
+    return isNaN(t) || (t = g(+t, 0, 100), t === this._percent) ? !1 : (this.stop(), this._animateTo(t, e, n), this);
   }
   goto(t) {
-    return isNaN(t) ? !1 : (t = d(+t, 0, 100), this.stop(), this._setPosition(t), this);
+    return isNaN(t) ? !1 : (t = g(+t, 0, 100), this.stop(), this._setPosition(t), this);
   }
   setAngle(t) {
     t = +t, this._angle = t, this._angle === 0 ? (this._getClip = this._getClipRect, this._line1.removeAttribute("style"), this._line2.removeAttribute("style"), this._radians = null) : (this._getClip = this._getClipPolygon, this._radians = this._angle * Math.PI / 180, this._line1.style.transform = `rotate(${this._angle}deg)`, this._line2.style.transform = `rotate(${this._angle}deg)`, this._horizontal ? (this._line1.style.transformOrigin = "bottom center", this._line2.style.transformOrigin = "top center") : (this._line1.style.transformOrigin = "right bottom", this._line2.style.transformOrigin = "left bottom")), this._dimensions(null, !0);
