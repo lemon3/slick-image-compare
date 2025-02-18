@@ -4,6 +4,14 @@
 # slick image compare
 Is a modern image comparison slider written in vanilla JavaScript and has no dependencies on other libraries. Best for comparing images, image retouching, color adjustments, renderings, etc...
 
+## Use it with a framework
+<p align="center" width="100%">
+    <img src="./_assets/react.svg" alt="react logo" width="80">
+    <div style="text-align: center;">go to the <a href="https://github.com/lemon3/slick-image-compare/edit/main/packages/react/README.md" target="_self">react component README.md</a></div>
+    <p align="center">[more to come ...]</p>
+</p>
+
+## Preview
 [![demo](https://raw.githubusercontent.com/lemon3/slick-image-compare/main/_assets/image-compare.gif)](https://lemon3.github.io/slick-image-compare/)
 
 **[DOCUMENTARY (API) AND DEMOS >>](https://lemon3.github.io/slick-image-compare/)**
