@@ -7,7 +7,7 @@ Is a modern image comparison slider written in vanilla JavaScript and has no dep
 ## Use it with a framework
 <p align="center" width="100%">
     <img src="./_assets/react.svg" alt="react logo" width="80">
-    <p align="center">go to the <a href="https://github.com/lemon3/slick-image-compare/edit/main/packages/react/README.md" target="_self">react component README.md</a>
+    <p align="center">go to the <a href="https://github.com/lemon3/slick-image-compare/tree/main/packages/react" target="_self">react component README.md</a>
     <br>
     <span>[more to come ...]</span>
     </p>
