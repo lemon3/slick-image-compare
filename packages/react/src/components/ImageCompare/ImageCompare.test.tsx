@@ -5,7 +5,18 @@ import { ImageCompare } from '.';
 import SlickImageCompare from 'slick-image-compare';
 
 // Mock SlickImageCompare class using Vitest
-vi.mock('slick-image-compare');
+const mockSlickInstance = {
+  animateTo: vi.fn(),
+  addEventListener: vi.fn(),
+  destroy: vi.fn(),
+  init: vi.fn(),
+  art: vi.fn(),
+};
+vi.mock('slick-image-compare', () => {
+  return {
+    default: vi.fn().mockImplementation(() => mockSlickInstance),
+  };
+});
 
 describe('ImageCompare Component', () => {
   const mockInit = vi.fn();
@@ -21,13 +32,16 @@ describe('ImageCompare Component', () => {
 
   test('should render ImageCompare and initialize SlickImageCompare', async () => {
     // Mock SlickImageCompare constructor
-    const mockSlickInstance = {
-      animateTo: vi.fn(),
-      addEventListener: vi.fn(),
-      destroy: vi.fn(),
-      init: vi.fn(),
-    };
-    (SlickImageCompare as vi.Mock).mockImplementation(() => mockSlickInstance);
+    // const mockSlickInstance = {
+    //   animateTo: vi.fn(),
+    //   addEventListener: vi.fn(),
+    //   destroy: vi.fn(),
+    //   init: vi.fn(),
+    // };
+    // const sic = new SlickImageCompare();
+    // vi.spyOn(sic, 'animateTo').mockImplementation(
+    //   () => {}
+    // );
 
     const options = {
       beforeImage: '01_before.png',
@@ -108,14 +122,12 @@ describe('ImageCompare Component', () => {
   });
 
   test('should call animateTo when button is clicked', () => {
-    const mockSlickInstance = { animateTo: vi.fn() };
-    (SlickImageCompare as vi.Mock).mockImplementation(() => mockSlickInstance);
-
     const options = {
       beforeImage: '01_before.png',
       afterImage: '01_after.png',
     };
     const sic = new SlickImageCompare(document.createElement('div'), options);
+    const animateToSpy = vi.spyOn(sic, 'animateTo');
 
     render(
       <>
@@ -139,10 +151,10 @@ describe('ImageCompare Component', () => {
     fireEvent.click(screen.getByTestId('click1'));
     fireEvent.click(screen.getByTestId('click2'));
 
-    expect(mockSlickInstance.animateTo).toHaveBeenCalledWith(10);
-    expect(mockSlickInstance.animateTo).toHaveBeenCalledWith(90);
+    expect(animateToSpy).toHaveBeenCalledWith(10);
+    expect(animateToSpy).toHaveBeenCalledWith(90);
 
-    expect(mockSlickInstance.animateTo).toHaveBeenLastCalledWith(90);
-    expect(mockSlickInstance.animateTo).toHaveBeenCalledTimes(2);
+    expect(animateToSpy).toHaveBeenLastCalledWith(90);
+    expect(animateToSpy).toHaveBeenCalledTimes(2);
   });
 });
