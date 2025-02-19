@@ -5,46 +5,41 @@
 # slick image compare react
 
 <p align="center" width="100%">
-    <img src="../../_assets/react.svg" alt="react logo" width="80">
-    <div style="text-align: center;">this is the react component of the <strong>slick image compare</strong> plugin.</div>
+    <img src="../../_assets/react.svg" alt="react logo">
+    <br>
+    this is the <strong>react component</strong><br>of the <a href="https://github.com/lemon3/slick-image-compare/tree/main/packages/react" target="_blank">slick image compare</a> plugin.</p>
 </p>
 
-## tl;dr
+## Getting started
 
+install the package
 ```Bash
 pnpm install slick-image-compare-react
 ```
 
+use it in your code
 ```jsx
-import ImageCompare from 'slick-image-compare-react';
+import React from "react";
+import SlickImageCompare from "slick-image-compare-react";
 
-// ...
+function App() {
+  const options = {
+    beforeImage: "01_before.png",
+    afterImage: "01_before.png",
+  };
 
-const options = {
-  beforeImage: 'path-to/before-image.jpg',
-  afterImage: 'path-to/after-image.jpg',
-};
+  return (
+    <>
+      <SlickImageCompare options={options} />
+      <SlickImageCompare>
+        <img src="01_before.png" alt="before" />
+        <img src="01_after.png" alt="after" />
+      </SlickImageCompare>
+    </>
+  );
+}
 
-// ...
-
-// jsx inside your render function
-return (
-  <>
-    // 1) use with the defined option object
-    <ImageCompare options={options} />
-    // 2) use with img child nodes, it uses the default setting!
-    <ImageCompare>
-      <img
-        src='path-to/before-image.jpg'
-        alt=''
-      />
-      <img
-        src='path-to/after-image.jpg'
-        alt=''
-      />
-    </ImageCompare>
-  </>
-);
+export default App;
 ```
 
 <!-- MARKDOWN LINKS & IMAGES -->

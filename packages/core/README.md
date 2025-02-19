@@ -8,9 +8,6 @@ Is a modern image comparison slider written in vanilla JavaScript and has no dep
 
 **[DOCUMENTARY (API) AND DEMOS >>](https://lemon3.github.io/slick-image-compare/)**
 
-*(Started as a jQuery-Plugin back in the days (2013) and was used for a custom WordPress-Plugin)*
-For best performance it uses the requestAnimationFrame api for rendering.
-
 ## tl;dr
 
 **module:**

@@ -2,26 +2,26 @@
 [![MIT License][license-shield]][license-url]
 
 # slick image compare
-Is a modern image comparison slider written in vanilla JavaScript and has no dependencies on other libraries. Best for comparing images, image retouching, color adjustments, renderings, etc...
+Is a modern image comparison slider written in vanilla JavaScript and has no dependencies on other libraries. Best for comparing images, image retouching, color adjustments, renderings, etc... It uses the requestAnimationFrame api for rendering.
 
-## Use it with a framework
-<p align="center" width="100%">
-    <img src="./_assets/react.svg" alt="react logo" width="80">
-    <p align="center">go to the <a href="https://github.com/lemon3/slick-image-compare/tree/main/packages/react" target="_self">react component README.md</a>
-    <br>
-    <span>[more to come ...]</span>
-    </p>
-</p>
+_(Started as a jQuery-Plugin back in the days (2013) and was used for a custom WordPress-Plugin)_
+
+## Use it with
+
+|                 Vanilla JS                  |               React                |
+| :-----------------------------------------: | :--------------------------------: |
+| [![vanilla js][logo-vanilla]][link-vanilla] | [![react][logo-react]][link-react] |
+|         [vanilla JS][link-vanilla]          |   [react component][link-react]    |
+| Core JS library | React wrapper for easy integration|
+
+**[DOCUMENTARY (API) AND DEMOS >>](https://lemon3.github.io/slick-image-compare/)**
 
 ## Preview
 [![demo](https://raw.githubusercontent.com/lemon3/slick-image-compare/main/_assets/image-compare.gif)](https://lemon3.github.io/slick-image-compare/)
 
-**[DOCUMENTARY (API) AND DEMOS >>](https://lemon3.github.io/slick-image-compare/)**
-
-*(Started as a jQuery-Plugin back in the days (2013) and was used for a custom WordPress-Plugin)*
-For best performance it uses the requestAnimationFrame api for rendering.
-
-## tl;dr
+## Example
+### Vanilla js
+![vanilla js][logo-vanilla]
 
 **module:**
 ```Bash
@@ -33,8 +33,7 @@ npm install slick-image-compare
 ```
 
 ```js
-import SlickImageCompare from '@/slick-image-compare';
-// import SlickImageCompare from "./node_modules/slick-image-compare/index.js";
+import SlickImageCompare from 'slick-image-compare';
 const options = {
   beforeImage: 'before.jpg',
   afterImage: 'after.jpg',
@@ -57,157 +56,40 @@ const sic = new SlickImageCompare('#my-div', options);
 </script>
 ```
 
-## Examples
-### 1) Example with default settings
-use it with the default settings
-#### javascript
-```html
-<div id="my-div">
-  <img src="01_before.jpg" alt="before" />
-  <img src="01_after.jpg" alt="after" />
-</div>
-```
-```js
-const sic = new SlickImageCompare('#my-div');
-```
-you can also use the data-api (**data-sic** must be used) like so.
-Btw.: The preferred method is the javascript approach!
-#### data api
-```html
-<div data-sic>
-  <img src="01_before.jpg" alt="before" />
-  <img src="01_after.jpg" alt="after" />
-</div>
-```
-```js
-// important: the init function has to be called
-SlickImageCompare.init();
-```
+more info goto [core package (vanilla js)][link-vanilla]!
 
-### 2) Example with start position and labels
-we use a custom start position and labels here.
-#### javascript
-html setup
-```html
-<div id="my-div">
-  <img src="01_before.jpg" alt="before" />
-  <img src="01_after.jpg" alt="after" />
-</div>
-```
-```js
-// for more options see Options section below.
-const options = {
-  startPos: 20,
-  afterLabel: 'after',
-  beforeLabel: 'before'
-};
-const sic = new SlickImageCompare('#my-div', options);
-```
-the same using the **data-sic** attribute
-#### data api
-```html
-<div data-sic="{
-  startPos: 20,
-  afterLabel: 'after',
-  beforeLabel: 'before'
-}">
-  <img src="01_before.jpg" alt="before" />
-  <img src="01_after.jpg" alt="after" />
-</div>
-```
-```js
-// call the init function
-SlickImageCompare.init();
-```
-### 3) Complete Example for Beginners
-here is a complete html structure for you to get started.
+### React
+![react js][logo-react]
 
-#### html file with modern js approach
-first download the files to your project, usually via npm, pnpm, yarn, bun.
-Here we use pnpm ;)
 ```Bash
-pnpm install slick-image-compare
-```
-For the sake of simplicity, here is a complete HTML code.
-You only need to change the path to your image files.
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>slick-image-compare demo</title>
-  </head>
-  <style>
-    @import url("./node_modules/slick-image-compare/dist/style.css");
-    .my-div {
-      max-width: 600px;
-      margin-bottom: 1em;
-    }
-  </style>
-  <body>
-    <div class="my-div" id="my-div">
-      <img src="path-to-image/img01-before.jpg" alt="" />
-      <img src="path-to-image/img01-after.jpg" alt="" />
-    </div>
-
-    <script type="module" defer>
-      // note: when NOT using a framework (vue, react, svelte, ...) with a bundler,
-      // you have to specify the correct path for the js file.
-      // Which usually includes the 'node_modules' folder
-      // otherwise just use:
-      // import SlickImageCompare from '@/slick-image-compare';
-      import SlickImageCompare from "./node_modules/slick-image-compare/index.js";
-
-      const options = {
-        animateIn: true,
-        beforeLabel: "before",
-        afterLabel: "after",
-      };
-
-      new SlickImageCompare("#my-div", options);
-    </script>
-  </body>
-</html>
+pnpm install slick-image-compare-react
 ```
 
-#### html file with classic js approach
-just set the path to your image files
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>slick-image-compare demo</title>
-    <link rel="stylesheet" href="https://unpkg.com/slick-image-compare/dist/style.css" />
-  </head>
-  <style>
-    .my-div {
-      max-width: 600px;
-      margin-bottom: 1em;
-    }
-  </style>
-  <body>
-    <div class="my-div" id="my-div">
-      <img src="path-to-image/img01-before.jpg" alt="" />
-      <img src="path-to-image/img01-after.jpg" alt="" />
-    </div>
+```jsx
+import React from "react";
+import SlickImageCompare from "slick-image-compare-react";
 
-    <script src="https://unpkg.com/slick-image-compare"></script>
-    <script>
-      const options = {
-        animateIn: true,
-        beforeLabel: "before",
-        afterLabel: "after",
-      };
+function App() {
+  const options = {
+    beforeImage: "01_before.png",
+    afterImage: "01_before.png",
+  };
 
-      // SlickImageCompare is in the window-space
-      new SlickImageCompare("#my-div", options);
-    </script>
-  </body>
-</html>
+  return (
+    <>
+      <SlickImageCompare options={options} />
+      <SlickImageCompare>
+        <img src="01_before.png" alt="before" />
+        <img src="01_after.png" alt="after" />
+      </SlickImageCompare>
+    </>
+  );
+}
+
+export default App;
 ```
+
+more info goto [the react component package][link-react]!
 
 ## Options
 list of the available options (to control the behavior of your slider):
@@ -341,164 +223,16 @@ options = {
 };
 ```
 
-## Methods
-Methods available after initialization(!)
-```js
-const sic = new SlickImageCompare('#my-div');
-```
-### init
-```js
-sic.init();
-```
-
-### stop
-Stops all animations, the handle immediately stops at the current position (if it is moving).
-```js
-sic.stop();
-```
-
-### play
-tbd.
-```js
-sic.play(stopAt, repetitions, duration, easingFun);
-```
-
-### animateTo
-Animates the slider (handle) to a specific position (percentage from left or top), with the defined duration (in ms) and easing function.
-
-**percent** type: number
-possible values for **percent**: 0 - 100
-to which position the slider should slide.
-
-**duration** type: number *(optional)*
-the duration is in ms(!)
-if not set, it uses the standard duration defined via option object.
-
-**easing** type: function *(optional)*
-possible values for **easing**: see easing functions
-if not set, it uses the standard easing function defined via option object.
-```js
-sic.animateTo(percent, duration, easing);
-```
-
-### goto
-Slider (handle) jumps to a given position (percentage from left or top)
-
-**percent** type: number
-possible values for **percent**: 0 - 100
-to which position the slider should jump.
-```js
-sic.goto(percent);
-```
-
-### setAngle
-sets the angle of the handle (parting line).
-
-**angle** type: number
-possible values for **angle**: -30 - 30
-```js
-sic.setAngle(angle);
-```
-
-### changeDirection
-Changes the direction of the slider (**ltr** value). So if **ltr** is set to true (the default value), it is set to false and the slider logic is updated.
-```js
-sic.changeDirection();
-```
-
-### changeOrientation
-Changes the orientation of the slider (**horizontal** value). So if **horizontal** is set to true (the default value), it is set to false, and the slider logic is updated.
-```js
-sic.changeOrientation();
-```
-
-### showAfter
-When the method is called, the slider immediately shows the 'after' image.
-```js
-sic.showAfter();
-```
-
-### showBefore
-When the method is called, the slider immediately shows the 'before' image.
-```js
-sic.showBefore();
-```
-
-### toggleView
-When the method is called, the slider immediately shows the 'after' or 'before' image, depending on what is currently visible.
-```js
-sic.toggleView();
-```
-
-### destroy
-tbd.
-```js
-sic.destroy();
-```
-
-## Events
-you can listen to all kind of events, to extend the functionality of the image compare slider.
-List of available events and when they are triggered
-
-| name             | called / triggered ...                                                        |
-| ---------------- | ----------------------------------------------------------------------------- |
-| init             | after **initialization**                                                      |
-| drag             | on **interaction** (drag, mousemove)                                          |
-| update           | on every handle position change                                               |
-| beforeshown      | if the **before** image is shown                                              |
-| aftershown       | if the **after** image is shown                                               |
-| interactionstart | user begins interaction                                                       |
-| interactionend   | user ends interaction                                                         |
-| viewchange       | changed form **before** image shown to **after** image shown (and vice versa) |
-
-### Example 1
-using **viewchange** event
-```html
-<div id="my-div">
-  <img src="01_before.jpg" alt="before" />
-  <img src="01_after.jpg" alt="after" />
-</div>
-<div id="my-text-box"></div>
-```
-```js
-// create an instance
-const sic = new SlickImageCompare('#my-div');
-
-const myTextBox = document.getElementById('my-text-box');
-const changeText = (evt) => {
-  const afterShown = evt.detail.afterShown;
-  myTextBox.innerHTML = afterShown ? 'After' : 'Before';
-}
-
-// listen for events
-sic.addEventListener('viewchange', changeText);
-```
-
-## Static functions
-```js
-// call this to init all data-sic elements
-// returns all instances as array, or false if already initialized
-SlickImageCompare.init();
-
-// get the instance for a given element
-// returns false if no element is given, the element doesn't exist, or there is no SlickImageCompare instance connected to the element.
-SlickImageCompare.getInstance(element);
-
-// returns an array off all defined instances
-SlickImageCompare.getInstances();
-
-// returns the object with the default values
-SlickImageCompare.getDefaults();
-
-// destroys all previously created instances
-SlickImageCompare.destroyAll();
-
-```
-
 ## todo's
 - add more test
-- update this document ...
+- update this document ... ;)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [license-shield]: https://img.shields.io/github/license/lemon3/slick-image-compare?style=for-the-badge
 [license-url]: https://github.com/lemon3/slick-image-compare/blob/main/LICENSE
+
+[logo-vanilla]: ./_assets/vanilla-js.svg
+[logo-react]: ./_assets/react.svg
+
+[link-vanilla]: https://github.com/lemon3/slick-image-compare/tree/main/packages/core
+[link-react]: https://github.com/lemon3/slick-image-compare/tree/main/packages/react
