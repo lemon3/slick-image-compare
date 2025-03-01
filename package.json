@@ -2,9 +2,11 @@
   "private": true,
   "scripts": {
     "docs": "pnpm --filter slick-image-compare build --config vite.config.pages.js",
+    "test:core": "pnpm --filter ./packages/core test",
+    "test:react": "pnpm --filter ./packages/react test",
     "build": "pnpm --recursive run build",
-    "build:core": "pnpm --filter slick-image-compare build",
-    "build:react": "pnpm --filter slick-image-compare/react build"
+    "build:core": "pnpm --filter ./packages/core build",
+    "build:react": "pnpm --filter ./packages/react build"
   },
   "devDependencies": {
     "slick-image-compare": "workspace:*"
