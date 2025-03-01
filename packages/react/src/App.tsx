@@ -15,8 +15,8 @@ function App() {
       afterImage: '01_after.png',
     },
     {
-      beforeImage: '02_before.png',
-      afterImage: '02_after.png',
+      beforeImage: '03_before.png',
+      afterImage: '03_after.png',
     },
   ];
 
@@ -57,7 +57,7 @@ function App() {
           onUpdate={updatePercent}
           onViewchange={viewchange}
           options={options}
-          style={{ maxWidth: '640px' }}
+          style={{ maxWidth: '640px', maxHeight: '640px' }}
         />
         <div>
           <h2>{message}</h2>
