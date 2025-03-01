@@ -7,7 +7,7 @@
 <p align="center" width="100%">
     <img src="../../_assets/react.svg" alt="react logo">
     <br>
-    this is the <strong>react component</strong><br>of the <a href="https://github.com/lemon3/slick-image-compare/tree/main/packages/react" target="_blank">slick image compare</a> plugin.</p>
+    this is the <strong>react component</strong><br>of the <a href="https://github.com/lemon3/slick-image-compare/" target="_blank">slick image compare</a> plugin.</p>
 </p>
 
 ## Getting started
