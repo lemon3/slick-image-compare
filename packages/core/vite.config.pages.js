@@ -8,7 +8,13 @@ export default defineConfig({
     target: 'es2015', // esnext
     outDir: resolve(__dirname, '../../docs'),
     emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, './docs.html'),
+      },
+    },
   },
+
   resolve: {
     alias: [
       {

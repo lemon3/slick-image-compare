@@ -24,7 +24,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "docs": "vite build --config vite.config.pages.js",
+    "docs": "vite build --config vite.config.pages.js && mv ../../docs/docs.html ../../docs/index.html",
     "preview": "vite preview",
     "lint": "eslint 'src/**/*.js'",
     "format": "prettier --write 'src/**/*.js'",
