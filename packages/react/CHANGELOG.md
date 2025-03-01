@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.4
+### Changed
+- code optimizations
+
 ## v0.0.3
 ### Changed
 - update the tests for the component

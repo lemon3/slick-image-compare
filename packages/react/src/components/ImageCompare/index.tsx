@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import SlickImageCompare from 'slick-image-compare';
 import 'slick-image-compare/dist/slick-image-compare.css';
+
 interface ImageCompareProps extends React.ComponentProps<'div'> {
   options?: object;
   animateTo?: string | number;
@@ -28,13 +29,6 @@ const ImageCompare: React.FC<ImageCompareProps> = ({
   const updated = useRef<number>(0);
   const [sic, setSic] = useState<SlickImageCompare | null>(null);
 
-  // const inlineEvents = Object.entries(props).filter((prop) => {
-  //   const [key] = prop;
-  //   if ('on' === key.substring(0, 2).toLowerCase()) {
-  //     return prop;
-  //   }
-  // });
-
   const inlineEvents = Object.entries(props).reduce(
     (acc, [key, value]) => {
       if (key.startsWith('on')) acc.push([key, value]);
@@ -53,17 +47,13 @@ const ImageCompare: React.FC<ImageCompareProps> = ({
 
   useEffect(() => {
     if (!sicInit.current) {
-      // console.log('init');
       sicInit.current = true;
       const opt = Array.isArray(options) ? options[0] : options;
       if (!el.current) return;
       const obj: SlickImageCompare = new SlickImageCompare(el.current, opt);
       setSic(obj);
 
-      if (init && typeof init === 'function') {
-        // console.log('call init fun');
-        init(obj);
-      }
+      if (init && typeof init === 'function') init(obj);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -77,23 +67,12 @@ const ImageCompare: React.FC<ImageCompareProps> = ({
     }
 
     if (sic) {
-      // Register inline events
-      // if (inlineEvents && !eventsRegistered.current) {
-      //   console.log('register events');
-      //   inlineEvents.forEach((inlineEvent) => {
-      //     const [eventName, fun] = inlineEvent;
-      //     sic.addEventListener(eventName.substring(2).toLocaleLowerCase(), fun);
-      //   });
-      //   eventsRegistered.current = true;
-      // }
-
       if (!isEqual(prevOptionsRef.current, options)) {
         if (updated.current > 0) {
-          // console.log('Options have changed:', options);
-
           sic.destroy();
           const opt = Array.isArray(options) ? options[0] : options;
           sic.init(opt);
+
           // Store a COPY of the object to track changes properly
           prevOptionsRef.current = { ...options };
         }
@@ -113,4 +92,3 @@ const ImageCompare: React.FC<ImageCompareProps> = ({
 };
 
 export { ImageCompare };
-// export default MyComponent;

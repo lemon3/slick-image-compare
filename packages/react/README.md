@@ -5,7 +5,7 @@
 # slick image compare react
 
 <p align="center" width="100%">
-    <img src="../../_assets/react.svg" alt="react logo">
+    <img src="https://raw.githubusercontent.com/lemon3/slick-image-compare/main/_assets/react.svg" alt="react logo">
     <br>
     this is the <strong>react component</strong><br>of the <a href="https://github.com/lemon3/slick-image-compare/" target="_blank">slick image compare</a> plugin.</p>
 </p>
@@ -30,7 +30,10 @@ function App() {
 
   return (
     <>
+      {/* 1) use with the defined option object */}
       <SlickImageCompare options={options} />
+
+      {/* 2) use with img child nodes and default settings */}
       <SlickImageCompare>
         <img src="01_before.png" alt="before" />
         <img src="01_after.png" alt="after" />

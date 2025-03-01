@@ -50,15 +50,7 @@ function App() {
     <>
       <div className='card'>
         <h1>React Component Test</h1>
-        <input
-          readOnly
-          type='text'
-          onInput={(evt) =>
-            setCurrentPercent(evt.currentTarget.value.toString())
-          }
-          value={currentPercent}
-          id=''
-        />
+        <div style={{ marginBottom: '1em' }}>{currentPercent}</div>
 
         <ImageCompare
           init={setCompare}
