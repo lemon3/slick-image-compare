@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.10
+### Changed
+Improved error handling if the specified image source was not found.
+
 ## v0.4.9
 ### Changed
 - changed the behavior of the label visibility (opacity settings)

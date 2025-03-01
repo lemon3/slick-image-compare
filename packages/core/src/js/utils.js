@@ -97,7 +97,7 @@ export const imageDimensions = (source) =>
     };
 
     img.onerror = () => {
-      reject('error');
+      reject(`The image source (${source}) was not found!`);
     };
 
     img.src = source;

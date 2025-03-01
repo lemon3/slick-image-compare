@@ -152,16 +152,17 @@ class SlickImageCompare extends Emitter {
       this.images = [firstImg, secondImg] = [
         s.beforeImage,
         s.afterImage,
-      ].reduce((arr, src) => {
-        arr.push(
+      ].reduce(
+        (arr, src) => [
+          ...arr,
           createEl(
             'img',
             { draggable: false, src },
             { width: '100%', display: 'block' }
-          )
-        );
-        return arr;
-      }, []);
+          ),
+        ],
+        []
+      );
 
       this.element.appendChild(firstImg);
       clipEl.appendChild(secondImg);
@@ -290,9 +291,7 @@ class SlickImageCompare extends Emitter {
    *                      false for removeEventListener
    * @returns String addEventListener or removeEventListener
    */
-  _addRemove(add = true) {
-    return (add ? 'add' : 'remove') + 'EventListener';
-  }
+  _addRemove = (add = true) => (add ? 'add' : 'remove') + 'EventListener';
 
   /**
    * Method to add or remove touch events
@@ -461,19 +460,18 @@ class SlickImageCompare extends Emitter {
   }
 
   _dimensions = (evt, force = false, check = !this._horizontal) => {
-    const bounding = this.element.getBoundingClientRect();
+    const { width, height, x } = this.element.getBoundingClientRect();
     const cs = getComputedStyle(this.element);
     const borderX =
       parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth);
     const borderY =
       parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth);
 
-    this.width = bounding.width - borderX;
-    this.height = bounding.height - borderY;
+    this.width = width - borderX;
+    this.height = height - borderY;
 
     let dragHandleDim;
     if (this._horizontal) {
-      const x = bounding.x;
       dragHandleDim = this._dragHandle.offsetWidth * 0.5;
 
       this._dim = this.width;
@@ -846,33 +844,34 @@ class SlickImageCompare extends Emitter {
 
     this._firstImageSrc = this._firstImage.currentSrc || this._firstImage.src;
 
-    imageDimensions(this._firstImageSrc).then(() => {
-      // this.image = dimensions;
-      // console.log(dimensions);
-      this._dimensions(null, true);
-      // this._setPosition(this._percent);
-      this.element.style.opacity = 1;
+    imageDimensions(this._firstImageSrc)
+      .then(() => {
+        this._dimensions(null, true);
+        this.element.style.opacity = 1;
 
-      if (
-        s.animateIn &&
-        this._animationDuration > 0 &&
-        s.animateInStartPos !== s.startPos
-      ) {
-        this._snapTimeout = setTimeout(
-          () =>
-            this._animateTo(
-              s.startPos,
-              this._animationDuration,
-              s.animateInEasing
-            ),
-          s.animateInDelay
-        );
-      }
+        if (
+          s.animateIn &&
+          this._animationDuration > 0 &&
+          s.animateInStartPos !== s.startPos
+        ) {
+          this._snapTimeout = setTimeout(
+            () =>
+              this._animateTo(
+                s.startPos,
+                this._animationDuration,
+                s.animateInEasing
+              ),
+            s.animateInDelay
+          );
+        }
 
-      this._appEvents();
-      this._triggerEvent(INIT);
-      this._triggerEvent(VIEWCHANGE);
-    });
+        this._appEvents();
+        this._triggerEvent(INIT);
+        this._triggerEvent(VIEWCHANGE);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   /**

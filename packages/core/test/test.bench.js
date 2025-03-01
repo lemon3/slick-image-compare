@@ -112,7 +112,6 @@ describe('render loop', () => {
 });
 
 describe.only('parseData bench', () => {
-
   const parseData2 = (string) => {
     if (!string.match(/[^\w]+/i)) return string;
     string = string.replace(/[\\ \t\n\r'"]/gm, '').replace(/(\w+)/gi, '"$1"');
@@ -141,5 +140,4 @@ describe.only('parseData bench', () => {
   bench('version 1', () => {
     parseData2(data);
   });
-
 });
