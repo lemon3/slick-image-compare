@@ -17,7 +17,7 @@
 
 install the package
 ```Bash
-pnpm install slick-image-compare-react
+pnpm add slick-image-compare-react
 ```
 
 use it in your code

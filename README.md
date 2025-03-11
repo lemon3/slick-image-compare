@@ -26,7 +26,7 @@ _(Started as a jQuery-Plugin back in the days (2013) and was used for a custom W
 
 **module:**
 ```Bash
-npm install slick-image-compare
+pnpm add slick-image-compare
 ```
 
 ```html
@@ -66,7 +66,7 @@ more info goto [core package (vanilla js)][link-vanilla]!
 ![react js][logo-react]
 
 ```Bash
-pnpm install slick-image-compare-react
+pnpm add slick-image-compare-react
 ```
 
 ```jsx

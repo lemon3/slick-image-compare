@@ -13,7 +13,7 @@ Is a modern image comparison slider written in vanilla JavaScript and has no dep
 ### Module
 install the package
 ```Bash
-npm install slick-image-compare
+pnpm add slick-image-compare
 ```
 html code
 ```html
