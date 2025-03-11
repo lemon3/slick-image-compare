@@ -1,7 +1,7 @@
 import SlickImageCompare from '@/js/main.js';
-import '@/styles/main.css';
+import '@/_preview.css';
 
-import '@/preview.css';
+import '@/styles/main.css';
 
 const sets = [
   {

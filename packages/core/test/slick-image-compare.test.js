@@ -89,7 +89,7 @@ describe('test app', () => {
     </div>
     `;
     const el = document.querySelectorAll('#test')[0];
-    const sic = new SlickImageCompare(el);
+    new SlickImageCompare(el);
     expect(el.dataset).toBeTruthy();
     expect(el.dataset.sicinitialized).toBeTruthy();
   });

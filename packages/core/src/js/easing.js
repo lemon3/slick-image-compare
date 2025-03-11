@@ -1,5 +1,5 @@
 /**
- * An Object with defined easing funtions
+ * An Object with defined easing functions
  * https://easings.net/#easeOutSine
  *
  * @type {Object}

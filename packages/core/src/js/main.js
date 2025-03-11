@@ -2,7 +2,6 @@ import {
   passiveIfSupported,
   restrict,
   restrictFast,
-  // docReady,
   imageDimensions,
   getJSONData,
   createEl,

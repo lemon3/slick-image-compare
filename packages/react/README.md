@@ -10,7 +10,10 @@
     this is the <strong>react component</strong><br>of the <a href="https://github.com/lemon3/slick-image-compare/" target="_blank">slick image compare</a> plugin.</p>
 </p>
 
-## Getting started
+## Docs
+**[Read the documentary >>](https://slick-image-compare-docs.onrender.com/)**
+
+## tl;dr
 
 install the package
 ```Bash
@@ -19,13 +22,14 @@ pnpm install slick-image-compare-react
 
 use it in your code
 ```jsx
-import React from "react";
-import SlickImageCompare from "slick-image-compare-react";
+import React from 'react';
+import SlickImageCompare from 'slick-image-compare-react';
+import 'slick-image-compare/dist/slick-image-compare.css';
 
 function App() {
   const options = {
-    beforeImage: "01_before.png",
-    afterImage: "01_before.png",
+    beforeImage: '01_before.png',
+    afterImage: '01_before.png',
   };
 
   return (

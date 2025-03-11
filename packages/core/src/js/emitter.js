@@ -1,7 +1,6 @@
 /**
  * helper to trigger inline events
  * e.g.:
- * <div ondatechange="foo()">bar</bla>
  * @param {Object} elem the html element
  * @param {String} name the event name
  * @param {Object} data event data
