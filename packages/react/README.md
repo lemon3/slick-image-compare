@@ -11,7 +11,7 @@
 </p>
 
 ## Docs
-**[Read the documentary >>](https://slick-image-compare-docs.onrender.com/)**
+**[Read the documentation >>](https://slick-image-compare-docs.onrender.com/)**
 
 ## tl;dr
 

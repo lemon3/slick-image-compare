@@ -7,7 +7,7 @@ Is a modern image comparison slider written in vanilla JavaScript and has no dep
 [![demo](https://raw.githubusercontent.com/lemon3/slick-image-compare/main/_assets/image-compare.gif)](https://lemon3.github.io/slick-image-compare/)
 
 ## Docs
-**[Read the documentary >>](https://slick-image-compare-docs.onrender.com/)**
+**[Read the documentation >>](https://slick-image-compare-docs.onrender.com/)**
 
 ## tl;dr
 ### Module

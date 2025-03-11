@@ -15,7 +15,7 @@ _(Started as a jQuery-Plugin back in the days (2013) and was used for a custom W
 |               Core JS library               | React wrapper for easy integration |
 
 ## Docs
-**[Read the documentary >>](https://slick-image-compare-docs.onrender.com/)**
+**[Read the documentation >>](https://slick-image-compare-docs.onrender.com/)**
 
 ## Preview
 [![demo](https://raw.githubusercontent.com/lemon3/slick-image-compare/main/_assets/image-compare.gif)](https://lemon3.github.io/slick-image-compare/)
