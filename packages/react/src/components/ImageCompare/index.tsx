@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import SlickImageCompare from 'slick-image-compare';
-import 'slick-image-compare/dist/slick-image-compare.css';
+import 'slick-image-compare/style';
 
 export interface ImageCompareProps extends React.ComponentProps<'div'> {
   options?: object;

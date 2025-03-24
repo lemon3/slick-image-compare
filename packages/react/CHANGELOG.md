@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.5
+### Changed
+- dependency update
+
 ## v0.0.4
 ### Changed
 - code optimizations

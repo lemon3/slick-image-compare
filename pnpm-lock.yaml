@@ -39,8 +39,8 @@ importers:
         specifier: ^4.0.0 || ^5.0.0
         version: 5.5.3(@types/node@22.13.10)(rollup@4.34.4)(terser@5.38.0)(typescript@5.8.2)
       slick-image-compare:
-        specifier: '>=0.4.10'
-        version: 0.4.10
+        specifier: '>=0.4.11'
+        version: 0.4.11
 
   packages/core:
     devDependencies:
@@ -102,8 +102,8 @@ importers:
         specifier: ^18.3.1 || ^19.0.0
         version: 18.3.1(react@18.3.1)
       slick-image-compare:
-        specifier: '>=0.4.10'
-        version: 0.4.10
+        specifier: '>=0.4.11'
+        version: 0.4.11
     devDependencies:
       '@eslint/js':
         specifier: ^9.22.0
@@ -3658,8 +3658,8 @@ packages:
     resolution: {integrity: sha512-qMCMfhY040cVHT43K9BFygqYbUPFZKHOg7K73mtTWJRb8pyP3fzf4Ixd5SzdEJQ6MRUg/WBnOLxghZtKKurENQ==}
     engines: {node: '>=10'}
 
-  slick-image-compare@0.4.10:
-    resolution: {integrity: sha512-VsPSBV3IiK9Z9RVR6m7qXflYHsDdiAQzc4tejQumjNqbnpfx0PL38UQze5/E8X1eaRMei5aVVx+XHQ+Efvuonw==}
+  slick-image-compare@0.4.11:
+    resolution: {integrity: sha512-vV+6Pk7pKKxYoi1hwB429aLrica37J3VJZl9dhU+uIVklHO/JYj6v2py4WyEaXe7M37rivW9P72wlUu/4AQDgA==}
 
   smob@1.5.0:
     resolution: {integrity: sha512-g6T+p7QO8npa+/hNx9ohv1E5pVCmWrVCUzUXJyLdMmftX6ER0oiWY/w9knEonLpnOp6b6FenKnMfR8gqwWdwig==}
@@ -8423,7 +8423,7 @@ snapshots:
       astral-regex: 2.0.0
       is-fullwidth-code-point: 3.0.0
 
-  slick-image-compare@0.4.10: {}
+  slick-image-compare@0.4.11: {}
 
   smob@1.5.0: {}
 
