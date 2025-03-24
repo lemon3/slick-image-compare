@@ -1,0 +1,19 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Image } from "astro:assets";
+
+import ImageCompare from "../../../packages/astro/";
+
+import before from "../images/01_before.png";
+import after from "../images/01_after.png";
+---
+
+<Layout>
+  <h1>demo</h1>
+  <ImageCompare
+    beforeImage={before}
+    afterImage={after}
+    beforeLabel="before"
+    afterLabel="after"
+  />
+</Layout>
