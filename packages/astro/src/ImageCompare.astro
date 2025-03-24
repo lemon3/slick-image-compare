@@ -1,0 +1,45 @@
+---
+import { Image } from "astro:assets";
+import "slick-image-compare/style";
+import { type Props } from "./types/index";
+
+const { beforeImage, afterImage, ...props } = Astro.props;
+let jsonOptions = JSON.stringify(props);
+jsonOptions = jsonOptions.replaceAll('"', "'");
+---
+
+<slick-image-compare data-options={jsonOptions}>
+  <div>
+    <Image src={beforeImage} alt="before" />
+    <Image src={afterImage} alt="after" />
+  </div>
+</slick-image-compare>
+
+<script>
+  import ImageCompare from "slick-image-compare";
+  import { type SlickImageCompareOptions } from "./types/index.d";
+
+  class SlickImageCompare extends HTMLElement {
+    connectedCallback(): void {
+      const optionsString = this.getAttribute("data-options");
+      if (!optionsString) return;
+
+      try {
+        const options: SlickImageCompareOptions = JSON.parse(
+          optionsString.replace(/'/g, '"')
+        );
+        this.createSlickImageCompare(options);
+      } catch (error) {
+        console.error("Error parsing options:", error);
+      }
+    }
+
+    createSlickImageCompare(options: SlickImageCompareOptions): void {
+      const element = this.querySelector("div");
+      if (!element) return;
+      const sic = new ImageCompare(element, options);
+    }
+  }
+
+  customElements.define("slick-image-compare", SlickImageCompare);
+</script>

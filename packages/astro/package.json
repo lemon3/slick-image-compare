@@ -1,0 +1,27 @@
+{
+  "name": "slick-image-compare-astro",
+  "description": "an astro component for the slick-image-compare library",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "src",
+    "index.js"
+  ],
+  "keywords": [
+    "astro-component",
+    "slick-image-compare",
+    "image-compare",
+    "image",
+    "compare"
+  ],
+  "scripts": {},
+  "peerDependencies": {
+    "astro": "^4.0.0 || ^5.0.0",
+    "slick-image-compare": "workspace:*"
+  }
+}
