@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import SlickImageCompare from 'slick-image-compare';
-import 'slick-image-compare/dist/slick-image-compare.css';
+import 'slick-image-compare/style';
 
-interface ImageCompareProps extends React.ComponentProps<'div'> {
+export interface ImageCompareProps extends React.ComponentProps<'div'> {
   options?: object;
   animateTo?: string | number;
   onViewchange?: (evt: CustomEvent) => void;

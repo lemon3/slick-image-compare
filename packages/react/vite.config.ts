@@ -9,6 +9,12 @@ import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
 import { libInjectCss } from 'vite-plugin-lib-inject-css';
 
+const lookupNames = {
+  es: 'index.js',
+  cjs: 'index.cjs.js',
+  umd: 'index.umd.js',
+};
+
 // https://vite.dev/config/
 export default defineConfig({
   build: {
@@ -16,11 +22,9 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'SlickImageCompare',
-      fileName: (format) => {
-        const formatName = 'es' === format ? '' : `.${format}`;
-        return `index${formatName}.js`;
-      },
-      // formats: ['es'],
+      formats: ['es', 'cjs', 'umd'],
+      // @ts-expect-error: i only need 'es', 'cjs', 'umd'
+      fileName: (format) => lookupNames[format],
     },
     copyPublicDir: false,
     rollupOptions: {
@@ -52,5 +56,20 @@ export default defineConfig({
     ],
   },
 
-  plugins: [react(), libInjectCss(), dts()],
+  plugins: [
+    react(),
+    libInjectCss(),
+    dts({
+      insertTypesEntry: true,
+      outDir: 'dist/types',
+      staticImport: true,
+      tsconfigPath: './tsconfig.app.json',
+      exclude: [
+        './src/App.tsx',
+        './src/main.tsx',
+        './src/components/ImageCompare/ImageCompare.test.tsx',
+        './src/test/**',
+      ],
+    }),
+  ],
 });

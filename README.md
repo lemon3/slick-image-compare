@@ -8,11 +8,12 @@ _(Started as a jQuery-Plugin back in the days (2013) and was used for a custom W
 
 ## Use it with
 
-|                 Vanilla JS                  |               React                |
-| :-----------------------------------------: | :--------------------------------: |
-| [![vanilla js][logo-vanilla]][link-vanilla] | [![react][logo-react]][link-react] |
-|         [vanilla JS][link-vanilla]          |   [react component][link-react]    |
-|               Core JS library               | React wrapper for easy integration |
+|                 Vanilla JS                  |               React                |               Astro                |
+| :-----------------------------------------: | :--------------------------------: | :--------------------------------: |
+| [![vanilla js][logo-vanilla]][link-vanilla] | [![react][logo-react]][link-react] | [![astro][logo-astro]][link-astro] |
+|         [vanilla JS][link-vanilla]          |   [react component][link-react]    |   [astro component][link-astro]    |
+|             The core JS library             |          A React wrapper           |          An Astro wrapper          |
+
 
 ## Docs
 **[Read the documentation >>](https://slick-image-compare-docs.onrender.com/)**
@@ -35,7 +36,7 @@ pnpm add slick-image-compare
 
 ```js
 import SlickImageCompare from 'slick-image-compare';
-import 'slick-image-compare/dist/slick-image-compare.css';
+import 'slick-image-compare/style';
 
 const options = {
   beforeImage: 'before.jpg',
@@ -72,7 +73,7 @@ pnpm add slick-image-compare-react
 ```jsx
 import React from 'react';
 import SlickImageCompare from 'slick-image-compare-react';
-import 'slick-image-compare/dist/slick-image-compare.css';
+import 'slick-image-compare/style';
 
 function App() {
   const options = {
@@ -104,7 +105,10 @@ more info goto [the react component package][link-react]!
 [license-url]: https://github.com/lemon3/slick-image-compare/blob/main/LICENSE
 
 [logo-vanilla]: https://raw.githubusercontent.com/lemon3/slick-image-compare/main/_assets/vanilla-js.svg
-[logo-react]: https://raw.githubusercontent.com/lemon3/slick-image-compare/main/_assets/react.svg
-
 [link-vanilla]: https://github.com/lemon3/slick-image-compare/tree/main/packages/core
+
+[logo-react]: https://raw.githubusercontent.com/lemon3/slick-image-compare/main/_assets/react.svg
 [link-react]: https://github.com/lemon3/slick-image-compare/tree/main/packages/react
+
+[logo-astro]: https://raw.githubusercontent.com/lemon3/slick-image-compare/main/_assets/astro.svg
+[link-astro]: https://github.com/lemon3/slick-image-compare/tree/main/packages/astro

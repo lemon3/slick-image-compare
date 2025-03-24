@@ -19,6 +19,7 @@
       "import": "./../react/dist/index.js",
       "require": "./../react/dist/index.umd.js"
     },
+    "./style": "./dist/slick-image-compare.css",
     "./dist/*.css": "./dist/*.css"
   },
   "scripts": {

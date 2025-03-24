@@ -10,12 +10,13 @@
     "types": ["vitest"],
 
     "declaration": true,
-    "declarationDir": "dist/types",
-    "emitDeclarationOnly": false,
-    "outDir": "dist",
+    "declarationMap": false,
+    "emitDeclarationOnly": true,
+    "outDir": "dist/types",
+    "allowJs": false,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
@@ -29,6 +30,6 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*", "vite.config.ts"],
+  "exclude": ["node_modules", "dist"]
 }

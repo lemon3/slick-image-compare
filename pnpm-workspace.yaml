@@ -1,2 +1,3 @@
 packages:
-  - "packages/*"  # Includes all subdirectories inside `packages/`
+  - "demo"
+  - "packages/*" # Includes all subdirectories inside `packages/`

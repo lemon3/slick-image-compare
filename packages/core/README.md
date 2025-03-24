@@ -22,7 +22,7 @@ html code
 use it in your code
 ```js
 import SlickImageCompare from 'slick-image-compare';
-import 'slick-image-compare/dist/slick-image-compare.css';
+import 'slick-image-compare/style';
 
 const options = {
   beforeImage: 'before.jpg',

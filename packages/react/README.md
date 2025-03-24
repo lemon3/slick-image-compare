@@ -11,20 +11,23 @@
 </p>
 
 ## Docs
+
 **[Read the documentation >>](https://slick-image-compare-docs.onrender.com/)**
 
 ## tl;dr
 
 install the package
+
 ```Bash
 pnpm add slick-image-compare-react
 ```
 
 use it in your code
+
 ```jsx
 import React from 'react';
 import SlickImageCompare from 'slick-image-compare-react';
-import 'slick-image-compare/dist/slick-image-compare.css';
+import 'slick-image-compare/style';
 
 function App() {
   const options = {
@@ -39,8 +42,14 @@ function App() {
 
       {/* 2) use with img child nodes and default settings */}
       <SlickImageCompare>
-        <img src="01_before.png" alt="before" />
-        <img src="01_after.png" alt="after" />
+        <img
+          src='01_before.png'
+          alt='before'
+        />
+        <img
+          src='01_after.png'
+          alt='after'
+        />
       </SlickImageCompare>
     </>
   );
