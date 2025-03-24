@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.11
+### Added
+"./style" specifier in "slick-image-compare" package
+
 ## v0.4.10
 ### Changed
 Improved error handling if the specified image source was not found.
