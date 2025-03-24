@@ -3,11 +3,11 @@
   "scripts": {
     "test:core": "pnpm --filter ./packages/core test",
     "test:react": "pnpm --filter ./packages/react test",
+    "test:astro": "echo 'No tests for Astro package'",
+
     "build": "pnpm --recursive run build",
     "build:core": "pnpm --filter ./packages/core build",
-    "build:react": "pnpm --filter ./packages/react build"
-  },
-  "devDependencies": {
-    "slick-image-compare": "workspace:*"
+    "build:react": "pnpm --filter ./packages/react build",
+    "build:astro": "echo 'No build needed for Astro package'"
   }
 }

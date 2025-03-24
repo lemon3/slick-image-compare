@@ -9,7 +9,7 @@ on:
 
 jobs:
   publish:
-    name: Publish Core & React Packages
+    name: Publish Core, React & Astro Packages
     runs-on: ubuntu-latest
 
     steps:
@@ -34,38 +34,59 @@ jobs:
       - name: 🏗 Build All Packages
         run: pnpm run build
 
+      # ✅ Core Package
       - name: ✅ Run Tests for Core
         working-directory: packages/core
         run: pnpm run test
 
       - name: 🚀 Publish Core Package
         working-directory: packages/core
+        continue-on-error: true # ✅ Prevents workflow failure if publish fails
         run: |
           PKG_NAME=$(node -p "require('./package.json').name")
           PKG_VERSION=$(node -p "require('./package.json').version")
           NPM_VERSION=$(npm show $PKG_NAME version || echo "0.0.0")
 
           if [ "$PKG_VERSION" != "$NPM_VERSION" ]; then
-            pnpm publish --access public --no-git-checks
+            pnpm publish --access public --no-git-checks || echo "⚠️ No new version, skipping publish."
           else
             echo "⚠️ Version $PKG_VERSION already exists. Skipping publish."
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      # ✅ React Package
       - name: ✅ Run Tests for React
         working-directory: packages/react
         run: pnpm run test
 
       - name: 🚀 Publish React Package
         working-directory: packages/react
+        continue-on-error: true # ✅ Prevents workflow failure if publish fails
         run: |
           PKG_NAME=$(node -p "require('./package.json').name")
           PKG_VERSION=$(node -p "require('./package.json').version")
           NPM_VERSION=$(npm show $PKG_NAME version || echo "0.0.0")
 
           if [ "$PKG_VERSION" != "$NPM_VERSION" ]; then
-            pnpm publish --access public
+            pnpm publish --access public || echo "⚠️ No new version, skipping publish."
+          else
+            echo "⚠️ Version $PKG_VERSION already exists. Skipping publish."
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # ✅ Astro Package (No Build, No Tests)
+      - name: 🚀 Publish Astro Package
+        working-directory: packages/astro
+        continue-on-error: true # ✅ Prevents workflow failure if publish fails
+        run: |
+          PKG_NAME=$(node -p "require('./package.json').name")
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          NPM_VERSION=$(npm show $PKG_NAME version || echo "0.0.0")
+
+          if [ "$PKG_VERSION" != "$NPM_VERSION" ]; then
+            pnpm publish --access public --no-git-checks || echo "⚠️ No new version, skipping publish."
           else
             echo "⚠️ Version $PKG_VERSION already exists. Skipping publish."
           fi

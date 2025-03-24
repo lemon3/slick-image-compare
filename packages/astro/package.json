@@ -22,6 +22,6 @@
   "scripts": {},
   "peerDependencies": {
     "astro": "^4.0.0 || ^5.0.0",
-    "slick-image-compare": "workspace:*"
+    "slick-image-compare": ">=0.4.10"
   }
 }
