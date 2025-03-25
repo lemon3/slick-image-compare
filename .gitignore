@@ -9,7 +9,6 @@ coverage
 docs
 
 npm-debug.log
-yarn-error.log
 .yarnclean
 .vscode
 .idea

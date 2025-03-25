@@ -36,5 +36,11 @@
     "VIEWCHANGED"
   ],
   "dictionaries": ["lorem-ipsum", "!typescript"],
-  "ignorePaths": ["node_modules", ".gitignore", "/test", "pnpm-lock.yaml"]
+  "ignorePaths": [
+    "node_modules",
+    ".gitignore",
+    "/test",
+    "pnpm-lock.yaml",
+    "packages/core/dist"
+  ]
 }

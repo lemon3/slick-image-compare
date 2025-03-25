@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.3
+### Changed
+- change index to a typescript file
+
 ## v0.0.2
 ### Changed
 - readme

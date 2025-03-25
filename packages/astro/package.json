@@ -1,18 +1,18 @@
 {
   "name": "slick-image-compare-astro",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "an astro component for the slick-image-compare library",
   "author": "wolfgang jungmayer",
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": "./index.js"
+    ".": "./index.ts"
   },
   "files": [
     "LICENSE",
     "README.md",
     "src",
-    "index.js"
+    "index.ts"
   ],
   "keywords": [
     "astro-component",
