@@ -1,6 +1,6 @@
 {
   "name": "slick-image-compare-astro",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "an astro component for the slick-image-compare library",
   "author": "wolfgang jungmayer",
   "license": "MIT",
@@ -23,8 +23,10 @@
   ],
   "scripts": {},
   "private": false,
+  "dependencies": {
+    "slick-image-compare": "^0.4.11"
+  },
   "peerDependencies": {
-    "astro": "^4.0.0 || ^5.0.0",
-    "slick-image-compare": ">=0.4.11"
+    "astro": "^4.0.0 || ^5.0.0"
   }
 }

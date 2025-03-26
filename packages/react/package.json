@@ -1,7 +1,7 @@
 {
   "name": "slick-image-compare-react",
   "description": "a react component for the slick-image-compare library",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
   "browser": "dist/index.umd.js",
@@ -26,8 +26,10 @@
     "dist",
     "index.js"
   ],
+  "dependencies": {
+    "slick-image-compare": "^0.4.11"
+  },
   "peerDependencies": {
-    "slick-image-compare": ">=0.4.11",
     "react": "^18.3.1 || ^19.0.0",
     "react-dom": "^18.3.1 || ^19.0.0"
   },
