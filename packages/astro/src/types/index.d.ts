@@ -23,7 +23,7 @@ export interface SlickImageCompareOptions {
   animateEasing?: string | Function;
 }
 
-export interface Props extends Temp {
+export interface Props {
   beforeImage: any;
   afterImage: any;
   [key: string]: any;
