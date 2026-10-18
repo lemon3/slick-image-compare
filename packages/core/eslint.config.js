@@ -1,37 +1,33 @@
-import globals from 'globals';
 import js from '@eslint/js';
+import globals from 'globals';
+import json from '@eslint/json';
+import markdown from '@eslint/markdown';
+import css from '@eslint/css';
+import { defineConfig } from 'eslint/config';
 
-export default [
-  js.configs.recommended,
+export default defineConfig([
   {
-    languageOptions: {
-      ecmaVersion: 2022,
-      sourceType: 'module',
-      globals: {
-        ...globals.browser,
-      },
-    },
-    rules: {
-      indent: [
-        'error',
-        2,
-        {
-          SwitchCase: 1,
-        },
-      ],
-      'linebreak-style': ['error', 'unix'],
-      quotes: ['error', 'single'],
-      semi: ['error', 'always'],
-    },
-    ignores: [
-      '!.*',
-      'dist',
-      'docs',
-      '_notes',
-      'node_modules',
-      'coverage/**/*.*',
-      '*.config.js',
-      '.github',
-    ],
+    files: ['**/*.{js,mjs,cjs}'],
+    plugins: { js },
+    extends: ['js/recommended'],
+    languageOptions: { globals: globals.browser },
   },
-];
+  {
+    files: ['**/*.json'],
+    plugins: { json },
+    language: 'json/json',
+    extends: ['json/recommended'],
+  },
+  {
+    files: ['**/*.md'],
+    plugins: { markdown },
+    language: 'markdown/gfm',
+    extends: ['markdown/recommended'],
+  },
+  {
+    files: ['**/*.css'],
+    plugins: { css },
+    language: 'css/css',
+    extends: ['css/recommended'],
+  },
+]);

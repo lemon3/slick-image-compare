@@ -1,4 +1,4 @@
-import { bench, describe } from 'vitest';
+import { test } from 'vitest';
 import SlickImageCompare from '../src/index';
 import { parseData, restrict } from '@/js/utils';
 
@@ -71,24 +71,24 @@ const sic = new SlickImageCompare(div, {
   afterImage: img02,
 });
 
-describe('calc', () => {
-  bench('calcPercent 1', () => {
+test('calc', async ({ bench }) => {
+  await bench('calcPercent 1', () => {
     sic._calcPercent(10);
-  });
+  }).run();
 
-  bench('calcPercent 2', () => {
+  await bench('calcPercent 2', () => {
     sic._calcPercent2(10);
-  });
+  }).run();
 });
 
-describe('get date', () => {
-  bench('new Date().getTime()', () => {
+test('get date', async ({ bench }) => {
+  await bench('new Date().getTime()', () => {
     new Date().getTime();
-  });
+  }).run();
 
-  bench('Date.now()', () => {
+  await bench('Date.now()', () => {
     Date.now();
-  });
+  }).run();
 });
 
 const setValues = () => {
@@ -99,19 +99,29 @@ const setValues = () => {
   sic.easing = sic.settings.animateEasing;
 };
 
-describe('render loop', () => {
-  bench('version 1', () => {
-    setValues();
-    sic._renderLoop1(10, 70, 60);
-  });
+test('get date', async ({ bench }) => {
+  await bench('new Date().getTime()', () => {
+    new Date().getTime();
+  }).run();
 
-  bench('version 2', () => {
-    setValues();
-    sic._renderLoop2(10, 70, 60);
-  });
+  await bench('Date.now()', () => {
+    Date.now();
+  }).run();
 });
 
-describe.only('parseData bench', () => {
+test('render loop', async ({ bench }) => {
+  await bench('version 1', () => {
+    setValues();
+    sic._renderLoop1(10, 70, 60);
+  }).run();
+
+  await bench('version 2', () => {
+    setValues();
+    sic._renderLoop2(10, 70, 60);
+  }).run();
+});
+
+test.only('parseData bench', async ({ bench }) => {
   const parseData2 = (string) => {
     if (!string.match(/[^\w]+/i)) return string;
     string = string.replace(/[\\ \t\n\r'"]/gm, '').replace(/(\w+)/gi, '"$1"');
@@ -133,11 +143,11 @@ describe.only('parseData bench', () => {
     afterLabel: 'after',
   }`;
 
-  bench('version 1', () => {
+  await bench('version 1', () => {
     parseData(data);
-  });
+  }).run();
 
-  bench('version 1', () => {
+  await bench('version 2', () => {
     parseData2(data);
-  });
+  }).run();
 });

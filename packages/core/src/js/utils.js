@@ -116,10 +116,10 @@ export const parseData = (string) => {
       return;
     }
     let [key, val] = keyVal.split(':');
-    // eslint-disable-next-line quotes
+
     key = key.trim().replaceAll("'", '');
     // val = encodeURIComponent(val.trim().replaceAll("'", ''));
-    // eslint-disable-next-line quotes
+
     val = val.trim().replaceAll("'", '');
     obj[key] = val;
   });

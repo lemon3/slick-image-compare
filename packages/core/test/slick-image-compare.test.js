@@ -30,7 +30,7 @@ describe('test static methods', () => {
 
     test('should return false', () => {
       const init = SlickImageCompare.init();
-      console.log(init);
+      //console.log(init);
       expect(init).toBe(false);
     });
   });

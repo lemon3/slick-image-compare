@@ -20,7 +20,7 @@ export default defineConfig({
   build: {
     target: 'es2015', // esnext
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: resolve(import.meta.dirname, 'src/index.ts'),
       name: 'SlickImageCompare',
       formats: ['es', 'cjs', 'umd'],
       // @ts-expect-error: i only need 'es', 'cjs', 'umd'
@@ -51,7 +51,7 @@ export default defineConfig({
     alias: [
       {
         find: '@',
-        replacement: resolve(__dirname, 'src'),
+        replacement: resolve(import.meta.dirname, 'src'),
       },
     ],
   },
@@ -61,7 +61,7 @@ export default defineConfig({
     libInjectCss(),
     dts({
       insertTypesEntry: true,
-      outDir: 'dist/types',
+      outDirs: 'dist/types',
       staticImport: true,
       tsconfigPath: './tsconfig.app.json',
       exclude: [

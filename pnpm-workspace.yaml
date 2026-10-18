@@ -1,3 +1,6 @@
 packages:
   - "demo"
   - "packages/*" # Includes all subdirectories inside `packages/`
+allowBuilds:
+  esbuild: true
+  sharp: false

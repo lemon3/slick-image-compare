@@ -1,11 +1,10 @@
-/* global __dirname */
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import { configDefaults } from 'vitest/config';
 // import babel from 'vite-plugin-babel';
 
 import banner from 'vite-plugin-banner';
-import pkg from './package.json';
+import pkg from './package.json' with { type: 'json' };
 
 const bannerText = `/*!
 * SlickImageCompare v${pkg.version}
@@ -16,7 +15,7 @@ export default defineConfig({
   build: {
     target: 'es2015', // esnext
     lib: {
-      entry: resolve(__dirname, 'src/index.js'),
+      entry: resolve(import.meta.dirname, 'src/index.js'),
       name: 'SlickImageCompare',
       fileName: (format) => {
         format = 'es' === format ? '' : `.${format}`;
@@ -47,7 +46,7 @@ export default defineConfig({
     alias: [
       {
         find: '@',
-        replacement: resolve(__dirname, 'src'),
+        replacement: resolve(import.meta.dirname, 'src'),
       },
     ],
   },

@@ -5,18 +5,21 @@ import { ImageCompare } from '.';
 import SlickImageCompare from 'slick-image-compare';
 
 // Mock SlickImageCompare class using Vitest
-const mockSlickInstance = {
-  animateTo: vi.fn(),
-  addEventListener: vi.fn(),
-  destroy: vi.fn(),
-  init: vi.fn(),
-  art: vi.fn(),
-};
-vi.mock('slick-image-compare', () => {
-  return {
-    default: vi.fn().mockImplementation(() => mockSlickInstance),
-  };
-});
+const { mockSlickInstance } = vi.hoisted(() => ({
+  mockSlickInstance: {
+    animateTo: vi.fn(),
+    addEventListener: vi.fn(),
+    destroy: vi.fn(),
+    init: vi.fn(),
+    art: vi.fn(),
+  },
+}));
+
+vi.mock('slick-image-compare', () => ({
+  default: vi.fn().mockImplementation(function () {
+    return mockSlickInstance;
+  }),
+}));
 
 describe('ImageCompare Component', () => {
   const mockInit = vi.fn();

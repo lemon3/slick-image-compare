@@ -7,33 +7,44 @@ function App() {
   const [compare, setCompare] = useState<SlickImageCompare | null>(null);
   const [message, setMessage] = useState<string>('');
   const [currentPercent, setCurrentPercent] = useState<string>('');
-  const [currentSetNumber, setCurrentSetNumber] = useState<number>(0);
+  const [currentSetId, setCurrentSetId] = useState<string>('set1');
 
-  const images = [
-    {
+  const imageSets: Record<
+    'set1' | 'set2',
+    { beforeImage: string; afterImage: string }
+  > = {
+    set1: {
       beforeImage: '01_before.png',
       afterImage: '01_after.png',
     },
-    {
+    set2: {
       beforeImage: '03_before.png',
       afterImage: '03_after.png',
     },
-  ];
+  };
 
   const defaultOptions = {
     beforeLabel: 'before',
     afterLabel: 'after',
   };
 
-  const [options, setOptions] = useState({ ...defaultOptions, ...images[0] });
+  const [options, setOptions] = useState<{
+    beforeLabel: string;
+    afterLabel: string;
+    beforeImage?: string;
+    afterImage?: string;
+  }>({
+    ...defaultOptions,
+    ...imageSets.set1,
+  });
 
   const animateToPercent = (percent: number) => {
     compare?.animateTo?.(percent);
   };
 
-  const update = (setNumber: number) => {
-    setCurrentSetNumber(setNumber);
-    const newOptions = images[setNumber];
+  const update = (setId: keyof typeof imageSets) => {
+    setCurrentSetId(setId);
+    const newOptions = imageSets[setId];
     setOptions({ ...defaultOptions, ...newOptions });
   };
 
@@ -48,7 +59,10 @@ function App() {
 
   return (
     <>
-      <div className='card'>
+      <div
+        className='card'
+        style={{ padding: '2em' }}
+      >
         <h1>React Component Test</h1>
         <div style={{ marginBottom: '1em' }}>{currentPercent}</div>
 
@@ -57,28 +71,31 @@ function App() {
           onUpdate={updatePercent}
           onViewchange={viewchange}
           options={options}
-          style={{ maxWidth: '640px', maxHeight: '640px' }}
+          style={{
+            maxWidth: '480px',
+            border: '2px solid black',
+            margin: '0 auto',
+          }}
         />
         <div>
           <h2>{message}</h2>
         </div>
 
-        <button onClick={() => animateToPercent(10)}>goto 10</button>
-        <button onClick={() => animateToPercent(90)}>goto 90</button>
+        <div style={{ paddingBottom: '20px' }}>
+          <button onClick={() => animateToPercent(10)}>goto 10</button>
+          <button onClick={() => animateToPercent(90)}>goto 90</button>
+        </div>
 
         <div>
-          <button
-            className={currentSetNumber == 0 ? 'active' : ''}
-            onClick={() => update(0)}
-          >
-            set 1
-          </button>
-          <button
-            className={currentSetNumber == 1 ? 'active' : ''}
-            onClick={() => update(1)}
-          >
-            set 2
-          </button>
+          {Object.keys(imageSets).map((key) => (
+            <button
+              key={`button-${key}`}
+              className={currentSetId === key ? 'active' : ''}
+              onClick={() => update(key as keyof typeof imageSets)}
+            >
+              {key}
+            </button>
+          ))}
         </div>
       </div>
     </>
