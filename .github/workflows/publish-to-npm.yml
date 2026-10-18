@@ -29,7 +29,6 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: "pnpm"
-          registry-url: https://registry.npmjs.org/
 
       - name: 📦 Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -55,8 +54,6 @@ jobs:
           else
             echo "⚠️ Version $PKG_VERSION already exists. Skipping publish."
           fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # ✅ React Package
       - name: ✅ Run Tests for React
@@ -76,8 +73,6 @@ jobs:
           else
             echo "⚠️ Version $PKG_VERSION already exists. Skipping publish."
           fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # ✅ Astro Package (No Build, No Tests)
       - name: 🚀 Publish Astro Package
@@ -93,5 +88,3 @@ jobs:
           else
             echo "⚠️ Version $PKG_VERSION already exists. Skipping publish."
           fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
