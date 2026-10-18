@@ -41,16 +41,16 @@ jobs:
         working-directory: packages/core
         run: pnpm run test
 
-      - name: 🚀 Publish Core Package
+      - name: 🚀 Publish Core Package (staged)
         working-directory: packages/core
-        continue-on-error: true # ✅ Prevents workflow failure if publish fails
+        # continue-on-error: true # ✅ Prevents workflow failure if publish fails
         run: |
           PKG_NAME=$(node -p "require('./package.json').name")
           PKG_VERSION=$(node -p "require('./package.json').version")
           NPM_VERSION=$(npm show $PKG_NAME version || echo "0.0.0")
 
           if [ "$PKG_VERSION" != "$NPM_VERSION" ]; then
-            pnpm publish --access public --no-git-checks || echo "⚠️ No new version, skipping publish."
+            pnpm stage publish --access public --no-git-checks || echo "⚠️ No new version, skipping publish."
           else
             echo "⚠️ Version $PKG_VERSION already exists. Skipping publish."
           fi
@@ -60,7 +60,7 @@ jobs:
         working-directory: packages/react
         run: pnpm run test
 
-      - name: 🚀 Publish React Package
+      - name: 🚀 Publish React Package (staged)
         working-directory: packages/react
         # continue-on-error: true # ✅ Prevents workflow failure if publish fails
         run: |
@@ -69,22 +69,22 @@ jobs:
           NPM_VERSION=$(npm show $PKG_NAME version || echo "0.0.0")
 
           if [ "$PKG_VERSION" != "$NPM_VERSION" ]; then
-            pnpm publish --access public || echo "⚠️ No new version, skipping publish."
+            pnpm stage publish --access public || echo "⚠️ No new version, skipping publish."
           else
             echo "⚠️ Version $PKG_VERSION already exists. Skipping publish."
           fi
 
       # ✅ Astro Package (No Build, No Tests)
-      - name: 🚀 Publish Astro Package
+      - name: 🚀 Publish Astro Package (staged)
         working-directory: packages/astro
-        continue-on-error: true # ✅ Prevents workflow failure if publish fails
+        # continue-on-error: true # ✅ Prevents workflow failure if publish fails
         run: |
           PKG_NAME=$(node -p "require('./package.json').name")
           PKG_VERSION=$(node -p "require('./package.json').version")
           NPM_VERSION=$(npm show $PKG_NAME version || echo "0.0.0")
 
           if [ "$PKG_VERSION" != "$NPM_VERSION" ]; then
-            pnpm publish --access public --no-git-checks || echo "⚠️ No new version, skipping publish."
+            pnpm stage publish --access public --no-git-checks || echo "⚠️ No new version, skipping publish."
           else
             echo "⚠️ Version $PKG_VERSION already exists. Skipping publish."
           fi
