@@ -26,8 +26,13 @@
     "dist",
     "index.js"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lemon3/slick-image-compare.git",
+    "directory": "packages/react"
+  },
   "dependencies": {
-    "slick-image-compare": "^0.4.11"
+    "slick-image-compare": "^0.4.12"
   },
   "peerDependencies": {
     "react": "^18.3.1 || ^19.0.0",
@@ -53,7 +58,7 @@
     "prettier": "^3.9.10",
     "stylelint": "^17.16.0",
     "stylelint-config-standard": "^40.0.0",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "typescript-eslint": "^8.71.2",
     "vite": "^8.3.4",
     "vite-plugin-dts": "^5.1.2",

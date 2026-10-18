@@ -4,3 +4,5 @@ packages:
 allowBuilds:
   esbuild: true
   sharp: false
+minimumReleaseAgeExclude:
+  - slick-image-compare@0.4.12

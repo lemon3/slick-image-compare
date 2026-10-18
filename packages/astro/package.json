@@ -14,6 +14,11 @@
     "src",
     "index.ts"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lemon3/slick-image-compare.git",
+    "directory": "packages/astro"
+  },
   "keywords": [
     "astro-component",
     "slick-image-compare",
