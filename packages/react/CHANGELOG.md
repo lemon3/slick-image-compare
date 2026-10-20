@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.0.10
+
+### Changed
+
+- small bug (warning) fix for the component
+
 ## v0.0.9
 
 ### Changed

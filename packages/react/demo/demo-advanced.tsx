@@ -25,7 +25,8 @@ const simpleStyle = {
 
 export function DemoAdvanced({ ...props }) {
   const sic = useRef<SlickImageCompare | null>(null);
-  const currentSetId = useRef<string>('set1');
+  const [currentSetId, setCurrentSetId] =
+    useState<keyof typeof imageSets>('set1');
   const [message, setMessage] = useState<string>('');
   const [currentPercent, setCurrentPercent] = useState<string>('');
 
@@ -54,7 +55,7 @@ export function DemoAdvanced({ ...props }) {
   };
 
   const update = (setId: keyof typeof imageSets) => {
-    currentSetId.current = setId;
+    setCurrentSetId(setId);
     setOptions({ ...defaultOptions, ...imageSets[setId] });
   };
 
@@ -101,7 +102,7 @@ export function DemoAdvanced({ ...props }) {
         {Object.keys(imageSets).map((key) => (
           <button
             key={`button-${key}`}
-            className={currentSetId.current === key ? 'active' : ''}
+            className={currentSetId === key ? 'active' : ''}
             onClick={() => update(key as keyof typeof imageSets)}
           >
             {key}

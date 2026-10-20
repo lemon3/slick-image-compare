@@ -8,6 +8,7 @@ const { mockSlickInstance } = vi.hoisted(() => ({
   mockSlickInstance: {
     animateTo: vi.fn(),
     addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
     destroy: vi.fn(),
     init: vi.fn(),
   },

@@ -68,22 +68,24 @@ const ImageCompare = ({
   const callbacks = Object.fromEntries(domEvents);
 
   useEffect(() => {
-    if (!el.current || isMounted.current) return;
+    const element = el.current;
+    if (!element || isMounted.current) return;
     isMounted.current = true;
     let finalOptions = Array.isArray(options) ? options[0] : options;
 
     if (!useDomEvents) {
       finalOptions = { ...finalOptions, ...callbacks };
     }
-    sicRef.current = new SlickImageCompare(el.current, finalOptions);
+    sicRef.current = new SlickImageCompare(element, finalOptions);
     if (mounted && typeof mounted === 'function') mounted(sicRef.current);
     prevOptions.current = { ...finalOptions };
-  }, [el, options]);
+  }, [el, options, isMounted, useDomEvents, callbacks, mounted]);
 
   useEffect(() => {
-    if (el && el.current && useDomEvents && !eventsSet.current) {
+    const element = el.current;
+    if (element && useDomEvents && !eventsSet.current) {
       domEvents.forEach(([key, value]) => {
-        el.current?.addEventListener(key as string, value as EventListener);
+        element.addEventListener(key as string, value as EventListener);
       });
       eventsSet.current = true;
     }
@@ -102,20 +104,17 @@ const ImageCompare = ({
 
     // cleanup listeners
     return () => {
-      if (el && el.current) {
+      if (element) {
         sicRef.current?.removeEventListener();
         if (useDomEvents) {
           domEvents.forEach(([key, value]) => {
-            el.current?.removeEventListener(
-              key as string,
-              value as EventListener
-            );
+            element.removeEventListener(key as string, value as EventListener);
           });
           eventsSet.current = false;
         }
       }
     };
-  }, [el, options]);
+  }, [el, options, useDomEvents, callbacks, domEvents]);
 
   return (
     <div
