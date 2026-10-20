@@ -114,8 +114,8 @@ importers:
         specifier: ^18.3.1 || ^19.0.0
         version: 19.3.1(react@19.3.1)
       slick-image-compare:
-        specifier: ^0.4.12
-        version: 0.4.12
+        specifier: ^0.4.13
+        version: 0.4.13
       typescript:
         specifier: ^7.0.2
         version: 7.0.2
@@ -4285,6 +4285,9 @@ packages:
 
   slick-image-compare@0.4.12:
     resolution: {integrity: sha512-7S8MGTw4IZ9T3+VLmXdSV80X2KKtSF/Og9yHDHTA10Z1cOnPyerbZLeVIuwzb+4LKYH/zw9xYuendbs9+PRXFw==}
+
+  slick-image-compare@0.4.13:
+    resolution: {integrity: sha512-6QSUBjDHlyNL0+44iYRqfhTEZJ5b8zLhuDtw40o9cusRyH+4gtFVTxa22QUM5D0C5e5rsTkRZ9CgCBfIxckJbA==}
 
   smob@1.6.2:
     resolution: {integrity: sha512-RQsvleCbF8cVHEv+xuDGaA4pOizFqJ0GgjtMSRo6oP8pnN7WsigHgVGey6aILRBKv4W2YOMHLqbKdnB6hpB9fw==}
@@ -9299,6 +9302,8 @@ snapshots:
       is-fullwidth-code-point: 3.0.0
 
   slick-image-compare@0.4.12: {}
+
+  slick-image-compare@0.4.13: {}
 
   smob@1.6.2: {}
 
