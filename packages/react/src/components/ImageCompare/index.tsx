@@ -1,13 +1,22 @@
-import { useEffect, useRef, useState } from 'react';
-import SlickImageCompare from 'slick-image-compare';
+import { useEffect, useRef } from 'react';
+import SlickImageCompare, {
+  type SlickImageCompareOptions,
+} from 'slick-image-compare';
 import 'slick-image-compare/style';
 
-export interface ImageCompareProps extends React.ComponentProps<'div'> {
-  options?: object;
-  animateTo?: string | number;
-  onViewchange?: (evt: CustomEvent) => void;
+export interface ImageCompareProps {
+  //extends React.ComponentProps<'div'> {
+  options?: SlickImageCompareOptions;
+  mounted?: (obj: SlickImageCompare) => void;
+  onInit?: (evt: CustomEvent) => void;
+  onDrag?: (evt: CustomEvent) => void;
   onUpdate?: (evt: CustomEvent) => void;
-  init?: (obj: SlickImageCompare) => void;
+  onViewchange?: (evt: CustomEvent) => void;
+  onBeforeshown?: (evt: CustomEvent) => void;
+  onAftershown?: (evt: CustomEvent) => void;
+  onInteractionstart?: (evt: CustomEvent) => void;
+  onInteractionend?: (evt: CustomEvent) => void;
+  useDomEvents?: boolean;
 }
 
 const isEqual = (
@@ -18,77 +27,105 @@ const isEqual = (
 };
 
 // const ImageCompare = ({ options, init, ...props }: ImageCompareProps) => {
-const ImageCompare: React.FC<ImageCompareProps> = ({
+//const ImageCompare: React.FC<ImageCompareProps> = ({
+const ImageCompare = ({
   options,
-  init,
+  mounted,
+  onInit,
+  onDrag,
+  onUpdate,
+  onViewchange,
+  onBeforeshown,
+  onAftershown,
+  onInteractionstart,
+  onInteractionend,
+  useDomEvents = false,
+  children,
   ...props
-}) => {
+}: ImageCompareProps & React.ComponentProps<'div'>) => {
+  // all available events
+  const events = {
+    onInit,
+    onDrag,
+    onUpdate,
+    onViewchange,
+    onBeforeshown,
+    onAftershown,
+    onInteractionstart,
+    onInteractionend,
+  };
+
   const el = useRef<HTMLDivElement>(null);
-  const prevOptionsRef = useRef<SlickImageCompare['options'] | null>(null);
-  const sicInit = useRef<boolean>(false);
-  const updated = useRef<number>(0);
-  const [sic, setSic] = useState<SlickImageCompare | null>(null);
+  const isMounted = useRef<boolean>(false); // track if component is mounted
+  const sicRef = useRef<SlickImageCompare | null>(null);
+  const prevOptions = useRef<SlickImageCompare['options'] | null>(null);
+  const eventsSet = useRef<boolean>(false);
 
-  const inlineEvents = Object.entries(props).reduce(
-    (acc, [key, value]) => {
-      if (key.startsWith('on')) acc.push([key, value]);
-      return acc;
-    },
-    [] as [string, () => CustomEvent][]
-  );
+  const domEvents = Object.entries(events)
+    .filter(([, value]) => typeof value === 'function')
+    .map(([eventName, fun]) => [eventName.slice(2).toLowerCase(), fun]);
 
-  const allDom = Object.entries(props).reduce(
-    (acc, [key, value]) => {
-      if (!key.startsWith('on')) acc.push([key, value]);
-      return acc;
-    },
-    [] as [string, string][]
-  );
+  const callbacks = Object.fromEntries(domEvents);
 
   useEffect(() => {
-    if (!sicInit.current) {
-      sicInit.current = true;
-      const opt = Array.isArray(options) ? options[0] : options;
-      if (!el.current) return;
-      const obj: SlickImageCompare = new SlickImageCompare(el.current, opt);
-      setSic(obj);
+    if (!el.current || isMounted.current) return;
+    isMounted.current = true;
+    let finalOptions = Array.isArray(options) ? options[0] : options;
 
-      if (init && typeof init === 'function') init(obj);
+    if (!useDomEvents) {
+      finalOptions = { ...finalOptions, ...callbacks };
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    sicRef.current = new SlickImageCompare(el.current, finalOptions);
+    if (mounted && typeof mounted === 'function') mounted(sicRef.current);
+    prevOptions.current = { ...finalOptions };
+  }, [el, options]);
 
   useEffect(() => {
-    if (el && el.current) {
-      inlineEvents.forEach(([eventName, fun]) => {
-        // sic.addEventListener(eventName.substring(2).toLowerCase(), fun);
-        el.current?.addEventListener(eventName.substring(2).toLowerCase(), fun);
+    if (el && el.current && useDomEvents && !eventsSet.current) {
+      domEvents.forEach(([key, value]) => {
+        el.current?.addEventListener(key as string, value as EventListener);
       });
+      eventsSet.current = true;
     }
 
-    if (sic) {
-      if (!isEqual(prevOptionsRef.current, options)) {
-        if (updated.current > 0) {
-          sic.destroy();
-          const opt = Array.isArray(options) ? options[0] : options;
-          sic.init(opt);
+    if (sicRef && !isEqual(prevOptions.current, options)) {
+      sicRef.current?.destroy();
+      let finalOptions = Array.isArray(options) ? options[0] : options;
 
-          // Store a COPY of the object to track changes properly
-          prevOptionsRef.current = { ...options };
-        }
-        updated.current += 1;
+      if (!useDomEvents) {
+        finalOptions = { ...finalOptions, ...callbacks };
       }
+      sicRef.current?.init(finalOptions);
+      // store a copy of the options to track changes
+      prevOptions.current = { ...options };
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [el, sic, options]);
+
+    // cleanup listeners
+    return () => {
+      if (el && el.current) {
+        sicRef.current?.removeEventListener();
+        if (useDomEvents) {
+          domEvents.forEach(([key, value]) => {
+            el.current?.removeEventListener(
+              key as string,
+              value as EventListener
+            );
+          });
+          eventsSet.current = false;
+        }
+      }
+    };
+  }, [el, options]);
 
   return (
     <div
-      {...Object.fromEntries(allDom)}
-      ref={el}
       role='presentation'
-    ></div>
+      ref={el}
+      {...props}
+    >
+      {children}
+    </div>
   );
 };
 
-export { ImageCompare };
+export { ImageCompare, SlickImageCompare };

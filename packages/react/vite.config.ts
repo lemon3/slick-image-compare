@@ -65,9 +65,9 @@ export default defineConfig({
       staticImport: true,
       tsconfigPath: './tsconfig.app.json',
       exclude: [
-        './src/App.tsx',
-        './src/main.tsx',
+        './demo/**',
         './src/components/ImageCompare/ImageCompare.test.tsx',
+        './src/components/ImageCompare/styles.module.css',
         './src/test/**',
       ],
     }),

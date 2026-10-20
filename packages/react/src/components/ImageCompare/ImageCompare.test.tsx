@@ -1,7 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { expect, beforeEach, test, describe, vi } from 'vitest';
 import { ImageCompare } from '.';
-// import { ImageCompare } from './components/ImageCompare';
 import SlickImageCompare from 'slick-image-compare';
 
 // Mock SlickImageCompare class using Vitest
@@ -11,7 +10,6 @@ const { mockSlickInstance } = vi.hoisted(() => ({
     addEventListener: vi.fn(),
     destroy: vi.fn(),
     init: vi.fn(),
-    art: vi.fn(),
   },
 }));
 
@@ -54,7 +52,7 @@ describe('ImageCompare Component', () => {
     render(
       <ImageCompare
         options={options}
-        init={mockInit}
+        mounted={mockInit}
         onUpdate={mockOnUpdate}
         onViewchange={mockOnViewChange}
       />
@@ -69,7 +67,7 @@ describe('ImageCompare Component', () => {
     });
   });
 
-  test('should call onUpdate when update event is triggered', async () => {
+  test('should call onUpdate when update DOM event is triggered', async () => {
     const options = {
       beforeImage: '01_before.png',
       afterImage: '01_after.png',
@@ -77,10 +75,11 @@ describe('ImageCompare Component', () => {
 
     render(
       <ImageCompare
+        mounted={mockInit}
         options={options}
-        init={mockInit}
         onUpdate={mockOnUpdate}
         onViewchange={mockOnViewChange}
+        useDomEvents={true} // register DOM events
       />
     );
 
@@ -107,9 +106,10 @@ describe('ImageCompare Component', () => {
     render(
       <ImageCompare
         options={options}
-        init={mockInit}
+        mounted={mockInit}
         onUpdate={mockOnUpdate}
         onViewchange={mockOnViewChange}
+        useDomEvents={true} // register DOM events
       />
     );
 
@@ -136,7 +136,7 @@ describe('ImageCompare Component', () => {
       <>
         <ImageCompare
           options={options}
-          init={mockInit}
+          mounted={mockInit}
           onUpdate={mockOnUpdate}
           onViewchange={mockOnViewChange}
         />
