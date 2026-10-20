@@ -9,7 +9,7 @@ import {
   isTrue,
 } from '@/js/utils';
 
-import { easing } from './easing';
+import { easing } from '@/js/easing';
 import { defaults } from '@/js/defaults';
 import { Emitter } from '@/js/emitter';
 
@@ -27,6 +27,17 @@ const BEFORESHOWN = 'beforeshown';
 const AFTERSHOWN = 'aftershown';
 const INTERACTIONSTART = 'interactionstart';
 const INTERACTIONEND = 'interactionend';
+
+const allowedEvents = [
+  INIT,
+  DRAG,
+  UPDATE,
+  BEFORESHOWN,
+  AFTERSHOWN,
+  INTERACTIONSTART,
+  INTERACTIONEND,
+  VIEWCHANGE,
+];
 
 // app event name
 const MOUSEDOWN = 'mousedown';
@@ -76,19 +87,10 @@ class SlickImageCompare extends Emitter {
     }
     element.dataset.sicinitialized = true;
 
-    this.allowedEvents = [
-      INIT,
-      DRAG,
-      UPDATE,
-      BEFORESHOWN,
-      AFTERSHOWN,
-      INTERACTIONSTART,
-      INTERACTIONEND,
-      VIEWCHANGE,
-    ];
-
+    this.allowedEvents = allowedEvents;
     this.element = element;
     this.settings = this._createSettings(element, options);
+    this.options = options;
 
     if (this.settings.autoInit) {
       return this.init();
@@ -139,7 +141,7 @@ class SlickImageCompare extends Emitter {
 
     const clipEl = createEl(
       div,
-      { class: 'sic-clip' },
+      { className: 'sic-clip' },
       {
         position: 'absolute',
         left: 0,
@@ -191,7 +193,7 @@ class SlickImageCompare extends Emitter {
     const drag = createEl(
       div,
       {
-        class: 'sic-handle',
+        className: 'sic-handle',
       },
       {
         position: 'absolute',
@@ -209,13 +211,21 @@ class SlickImageCompare extends Emitter {
         transformOrigin: 'top center',
       };
     }
-    this._line1 = createEl(div, { class: 'sic-line sic-line-1' }, line1Style);
-    this._line2 = createEl(div, { class: 'sic-line sic-line-2' }, line2Style);
+    this._line1 = createEl(
+      div,
+      { className: 'sic-line sic-line-1' },
+      line1Style
+    );
+    this._line2 = createEl(
+      div,
+      { className: 'sic-line sic-line-2' },
+      line2Style
+    );
 
-    const arrows = createEl(div, { class: 'sic-arrows' });
-    const arrow1 = createEl(div, { class: 'sic-arrow sic-arrow-1' });
-    const arrow2 = createEl(div, { class: 'sic-arrow sic-arrow-2' });
-    const dragHandle = createEl(div, { class: 'sic-circle' });
+    const arrows = createEl(div, { className: 'sic-arrows' });
+    const arrow1 = createEl(div, { className: 'sic-arrow sic-arrow-1' });
+    const arrow2 = createEl(div, { className: 'sic-arrow sic-arrow-2' });
+    const dragHandle = createEl(div, { className: 'sic-circle' });
 
     arrow1.innerHTML = getArrow(false);
     arrow2.innerHTML = getArrow();
@@ -229,7 +239,7 @@ class SlickImageCompare extends Emitter {
 
     // create labels
     if ('' !== s.beforeLabel) {
-      this.info1 = createEl(div, { class: 'sic-label sic-label-one' });
+      this.info1 = createEl(div, { className: 'sic-label sic-label-one' });
       this.info1.innerHTML = decodeURIComponent(
         this._ltr ? s.beforeLabel : s.afterLabel
       );
@@ -238,7 +248,7 @@ class SlickImageCompare extends Emitter {
     }
 
     if ('' !== s.afterLabel) {
-      this.info2 = createEl(div, { class: 'sic-label sic-label-two' });
+      this.info2 = createEl(div, { className: 'sic-label sic-label-two' });
       this.info2.innerHTML = decodeURIComponent(
         this._ltr ? s.afterLabel : s.beforeLabel
       );
@@ -755,8 +765,8 @@ class SlickImageCompare extends Emitter {
 
     if (options) {
       this.settings = this._createSettings(this.element, options);
+      this.options = options;
     }
-    this.options = options; // user options
 
     const s = this.settings;
 
@@ -845,6 +855,9 @@ class SlickImageCompare extends Emitter {
 
     imageDimensions(this._firstImageSrc)
       .then(() => {
+        this._appEvents();
+        this._triggerEvent(INIT);
+
         this._dimensions(null, true);
         this.element.style.opacity = 1;
 
@@ -864,8 +877,6 @@ class SlickImageCompare extends Emitter {
           );
         }
 
-        this._appEvents();
-        this._triggerEvent(INIT);
         this._triggerEvent(VIEWCHANGE);
       })
       .catch((error) => {
@@ -936,6 +947,22 @@ class SlickImageCompare extends Emitter {
     };
     this.element.classList.add('playing');
     render();
+  }
+
+  setBeforeLabel(label) {
+    this.settings.beforeLabel = label;
+  }
+
+  setAfterLabel(label) {
+    this.settings.afterLabel = label;
+  }
+
+  getBeforeLabel() {
+    return this.settings.beforeLabel ?? '';
+  }
+
+  getAfterLabel() {
+    return this.settings.afterLabel ?? '';
   }
 
   animateTo(
@@ -1064,7 +1091,11 @@ class SlickImageCompare extends Emitter {
     this._appEvents(false);
     this._initialized = false;
 
-    // TODO: remove from dataStorage
+    // destroy all registered events at once
+    this._eventCallbacks = {};
+
+    // remove from dataStorage
+    dataStorage.remove(this.element, 'instance');
   }
 }
 
@@ -1102,10 +1133,13 @@ BeforeAfter.getInstances = () => {
 };
 
 BeforeAfter.getInstance = (el) => {
-  // TODO: if el is a string ...
-  dataStorage.get(el, 'instance');
+  var _el = typeof el === 'string' ? document.querySelector(el) : el;
+  if (null !== _el || 0 !== _el.length) {
+    dataStorage.get(_el, 'instance');
+  }
 };
 BeforeAfter.getDefaults = () => BeforeAfter.defaults;
 
 // docReady(BeforeAfter.init);
 export default BeforeAfter;
+export { allowedEvents };

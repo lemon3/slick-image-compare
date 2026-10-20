@@ -273,23 +273,15 @@ export const wrap = (el, wrapper) => {
  * @return {object} HTML object with the applied properties and styles
  */
 export const addProps = (el, properties, style, innerHTML) => {
-  if (properties) {
-    for (let prop in properties) {
-      if (Object.prototype.hasOwnProperty.call(properties, prop)) {
-        el.setAttribute(prop, properties[prop]);
-      }
-    }
-  }
-  if (style) {
-    for (let s in style) {
-      if (Object.prototype.hasOwnProperty.call(style, s)) {
-        el.style[s] = style[s];
-      }
-    }
-  }
-  if (innerHTML) {
-    el.innerHTML = innerHTML;
-  }
+  if (properties)
+    Object.entries(properties).forEach(([key, value]) => {
+      // console.log(key);
+      el[key] = value;
+      //el.setAttribute(key, value);
+    });
+  if (style)
+    Object.entries(style).forEach(([key, value]) => (el.style[key] = value));
+  if (innerHTML) el.innerHTML = innerHTML;
   return el;
 };
 
@@ -302,3 +294,6 @@ export const addProps = (el, properties, style, innerHTML) => {
  */
 export const createEl = (el, properties, style, innerHTML) =>
   addProps(document.createElement(el), properties, style, innerHTML);
+
+export const createElObj = ({ el, props, style, innerHTML }) =>
+  addProps(document.createElement(el), props, style, innerHTML);

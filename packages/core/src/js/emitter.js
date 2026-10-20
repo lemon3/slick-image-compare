@@ -87,6 +87,7 @@ export class Emitter {
   removeEventListener(eventName, listener) {
     // clear all
     if (!this._eventCallbacks || 0 === arguments.length) {
+      // console.log('clear all');
       this._eventCallbacks = {};
       return this;
     }
@@ -94,11 +95,13 @@ export class Emitter {
     // early exit, eventName not found
     let eventCallbacks = this._eventCallbacks[eventName];
     if (!eventCallbacks) {
+      // console.log('no registered event found');
       return this;
     }
 
     // remove handlers for a specific event
     if (1 === arguments.length) {
+      // console.log('remove handlers for a specific event');
       delete this._eventCallbacks[eventName];
       return this;
     }

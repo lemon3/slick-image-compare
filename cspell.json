@@ -21,6 +21,7 @@
     "mouseleave",
     "mousemove",
     "mouseup",
+    "onclick",
     "ontouchstart",
     "pingpong",
     "PLUGINNAME",
@@ -35,7 +36,10 @@
     "viewchange",
     "VIEWCHANGED"
   ],
-  "dictionaries": ["lorem-ipsum", "!typescript"],
+  "dictionaries": [
+    "lorem-ipsum",
+    "!typescript"
+  ],
   "ignorePaths": [
     "node_modules",
     ".gitignore",

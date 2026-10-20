@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.4.13
+
+### added
+
+- methods:
+
+  - setBeforeLabel(label)
+  - setAfterLabel(label)
+  - getBeforeLabel() // returns the current before label
+  - getAfterLabel() // returns the current after label
+
+- demo
+  - added new demos ./packages/core/demo (pnpm run dev)
+
 ## v0.4.12
 
 ### Changed

@@ -1,6 +1,6 @@
 {
   "name": "slick-image-compare",
-  "version": "0.4.12",
+  "version": "0.4.13",
   "packageManager": "pnpm@12.11.2",
   "description": "before and after image comparison slider",
   "author": "wolfgang jungmayer",
@@ -26,6 +26,7 @@
     "dev": "vite",
     "build": "vite build",
     "docs": "vite build --config vite.config.pages.js && mv ../../docs/docs.html ../../docs/index.html",
+    "docs:preview": "npm run docs && vite preview --config vite.config.pages.js",
     "preview": "vite preview",
     "lint": "eslint 'src/**/*.js'",
     "lint:fix": "eslint --fix 'src/**/*.js'",
