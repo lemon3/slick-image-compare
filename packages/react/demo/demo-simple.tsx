@@ -13,11 +13,12 @@ const style = {
   margin: '0 auto',
 };
 
-export function DemoSimple() {
+export function DemoSimple({ ...props }) {
   return (
     <ImageCompare
       options={options}
       style={style}
+      {...props}
     />
   );
 }

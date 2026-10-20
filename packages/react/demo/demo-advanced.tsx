@@ -23,7 +23,7 @@ const simpleStyle = {
   aspectRatio: 3 / 2,
 };
 
-export function DemoAdvanced() {
+export function DemoAdvanced({ ...props }) {
   const sic = useRef<SlickImageCompare | null>(null);
   const currentSetId = useRef<string>('set1');
   const [message, setMessage] = useState<string>('');
@@ -87,6 +87,7 @@ export function DemoAdvanced() {
         options={options}
         useDomEvents={true}
         style={simpleStyle}
+        {...props}
       ></ImageCompare>
 
       <div style={{ marginBottom: '1em' }}>{message}</div>

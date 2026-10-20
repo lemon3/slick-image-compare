@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.0.9
+
+### Changed
+
+- component update
+- demo update
+
 ## v0.0.8
 
 ### Changed

@@ -22,14 +22,12 @@ install the package
 pnpm add slick-image-compare-react
 ```
 
-use it in your code
+use in your code
 
 ```jsx
-import React from 'react';
-import SlickImageCompare from 'slick-image-compare-react';
-import 'slick-image-compare/style';
+import { ImageCompare } from 'slick-image-compare-react';
 
-function App() {
+export function Demo({ ...props }) {
   const options = {
     beforeImage: '01_before.png',
     afterImage: '01_before.png',
@@ -38,10 +36,13 @@ function App() {
   return (
     <>
       {/* 1) use with the defined option object */}
-      <SlickImageCompare options={options} />
+      <ImageCompare
+        options={options}
+        {...props}
+      />
 
       {/* 2) use with img child nodes and default settings */}
-      <SlickImageCompare>
+      <ImageCompare {...props}>
         <img
           src='01_before.png'
           alt='before'
@@ -50,12 +51,10 @@ function App() {
           src='01_after.png'
           alt='after'
         />
-      </SlickImageCompare>
+      </ImageCompare>
     </>
   );
 }
-
-export default App;
 ```
 
 <!-- MARKDOWN LINKS & IMAGES -->

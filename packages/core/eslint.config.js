@@ -23,6 +23,9 @@ export default defineConfig([
     plugins: { markdown },
     language: 'markdown/gfm',
     extends: ['markdown/recommended'],
+    rules: {
+      siblings_only: true,
+    },
   },
   {
     files: ['**/*.css'],
